@@ -75,8 +75,8 @@ namespace My2Cents.DatabaseManagement
         public async Task<ActionResult<IEnumerable<UserProfileDto>>> GetUserInfo(int UserId)
         {
             return await (from ic in _context.UserProfiles
-                          join io in _context.UserLogins
-                          on ic.UserId equals io.UserId
+                          join io in _context.Users
+                          on ic.UserId equals io.Id
                           where ic.UserId == UserId
                           select new UserProfileDto
                           {
