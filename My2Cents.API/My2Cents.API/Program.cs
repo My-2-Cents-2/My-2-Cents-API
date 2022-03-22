@@ -1,6 +1,10 @@
 using My2Cents.DataInfrastructure;
 using Microsoft.EntityFrameworkCore;
 using My2Cents.DatabaseManagement;
+using My2Cents.DatabaseManagement.Interfaces;
+using My2Cents.DatabaseManagement.Implements;
+using My2Cents.Logic.Implements;
+using My2Cents.Logic.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,7 +23,11 @@ builder.Services.AddDbContext<My2CentsContext>(options =>
     options.UseSqlServer(connectionString, b => b.MigrationsAssembly("My2Cents.API"));
 });
 
+
 builder.Services.AddScoped<IRepository, EfRepository>();
+builder.Services.AddScoped<IStockPortfolioManagementDL, StockPortfolioManagementDL>();
+
+builder.Services.AddScoped<IStockPortfolioManagementBL, StockPortfolioManagementBL>();
 
 
 builder.Services.AddCors(options =>
