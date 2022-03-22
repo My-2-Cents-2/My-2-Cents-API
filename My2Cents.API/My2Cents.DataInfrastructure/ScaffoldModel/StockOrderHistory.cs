@@ -14,6 +14,6 @@ namespace My2Cents.DataInfrastructure
         public DateTime OrderTime { get; set; }
 
         public virtual Stock Stock { get; set; } = null!;
-        public virtual UserLogin User { get; set; } = null!;
+        public virtual ApplicationUser User { get; set; } = null!;
     }
 }
