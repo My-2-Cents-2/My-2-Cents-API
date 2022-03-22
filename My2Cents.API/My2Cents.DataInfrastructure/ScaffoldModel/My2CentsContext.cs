@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace My2Cents.DataInfrastructure
 {
-    public partial class My2CentsContext : DbContext
+    public partial class My2CentsContext : IdentityDbContext<ApplicationUser, ApplicationRole, int,
+                                            IdentityUserClaim<int>, ApplicationUserRole, IdentityUserLogin<int>,
+                                            IdentityRoleClaim<int>, IdentityUserToken<int>>
     {
         public My2CentsContext()
         {
@@ -25,11 +29,12 @@ namespace My2Cents.DataInfrastructure
         public virtual DbSet<StockAsset> StockAssets { get; set; } = null!;
         public virtual DbSet<StockOrderHistory> StockOrderHistories { get; set; } = null!;
         public virtual DbSet<Transaction> Transactions { get; set; } = null!;
-        public virtual DbSet<UserLogin> UserLogins { get; set; } = null!;
         public virtual DbSet<UserProfile> UserProfiles { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<Account>(entity =>
             {
                 entity.ToTable("Account");
@@ -69,6 +74,18 @@ namespace My2Cents.DataInfrastructure
                     .HasMaxLength(40)
                     .HasColumnName("AccountType");
             });
+
+            modelBuilder.Entity<ApplicationUser>()
+                .HasMany(ur => ur.UserRoles)
+                .WithOne(u => u.User)
+                .HasForeignKey(ur => ur.UserId)
+                .IsRequired();
+
+            modelBuilder.Entity<ApplicationRole>()
+                .HasMany(ur => ur.UserRoles)
+                .WithOne(u => u.Role)
+                .HasForeignKey(ur => ur.RoleId)
+                .IsRequired();
 
             modelBuilder.Entity<Crypto>(entity =>
             {
@@ -258,29 +275,6 @@ namespace My2Cents.DataInfrastructure
                     .WithMany(p => p.Transactions)
                     .HasForeignKey(d => d.AccountId)
                     .HasConstraintName("Ts_FK_AccID");
-            });
-
-            modelBuilder.Entity<UserLogin>(entity =>
-            {
-                entity.HasKey(e => e.UserId)
-                    .HasName("PK__User_Log__1788CCAC16385041");
-
-                entity.ToTable("User_Login");
-
-                entity.HasIndex(e => e.UserName, "UQ__User_Log__C9F284560BC6EAFF")
-                    .IsUnique();
-
-                entity.Property(e => e.UserId).HasColumnName("UserID");
-
-                entity.Property(e => e.Email).HasMaxLength(255);
-
-                entity.Property(e => e.EmailVerified)
-                    .HasMaxLength(10)
-                    .HasColumnName("Email_Verified");
-
-                entity.Property(e => e.Password).HasMaxLength(255);
-
-                entity.Property(e => e.UserName).HasMaxLength(255);
             });
 
             modelBuilder.Entity<UserProfile>(entity =>
