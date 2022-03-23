@@ -22,7 +22,7 @@ namespace My2Cents.DataInfrastructure
         public string WorkAddress { get; set; } = null!;
         public string WorkPhone { get; set; } = null!;
 
-        public virtual UserLogin User { get; set; } = null!;
+        public virtual ApplicationUser User { get; set; } = null!;
         public virtual ICollection<Account> Accounts { get; set; }
     }
 }
