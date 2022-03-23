@@ -22,6 +22,94 @@ namespace My2Cents.API.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetRoleClaims", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserClaims", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
+                {
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ProviderKey")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ProviderDisplayName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("LoginProvider", "ProviderKey");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserLogins", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
+                {
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("UserId", "LoginProvider", "Name");
+
+                    b.ToTable("AspNetUserTokens", (string)null);
+                });
+
             modelBuilder.Entity("My2Cents.DataInfrastructure.Account", b =>
                 {
                     b.Property<int>("AccountId")
@@ -47,9 +135,9 @@ namespace My2Cents.API.Migrations
 
                     b.HasKey("AccountId");
 
-                    b.HasIndex("AccountTypeId");
+                    b.HasIndex(new[] { "AccountTypeId" }, "IX_Account_AccountTypeID");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex(new[] { "UserId" }, "IX_Account_UserID");
 
                     b.ToTable("Account", (string)null);
                 });
@@ -72,6 +160,343 @@ namespace My2Cents.API.Migrations
                     b.HasKey("AccountTypeId");
 
                     b.ToTable("AccountType", (string)null);
+                });
+
+            modelBuilder.Entity("My2Cents.DataInfrastructure.ApplicationRole", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasDatabaseName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
+
+                    b.ToTable("AspNetRoles", (string)null);
+                });
+
+            modelBuilder.Entity("My2Cents.DataInfrastructure.ApplicationUser", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("My2Cents.DataInfrastructure.ApplicationUserRole", b =>
+                {
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId", "RoleId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetUserRoles", (string)null);
+                });
+
+            modelBuilder.Entity("My2Cents.DataInfrastructure.Crypto", b =>
+                {
+                    b.Property<int>("CryptoId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("CryptoID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CryptoId"), 1L, 1);
+
+                    b.Property<decimal>("CurrentPrice")
+                        .HasColumnType("decimal(18,0)");
+
+                    b.Property<DateTime>("LastUpdate")
+                        .HasColumnType("smalldatetime");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("ShortenedName")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.HasKey("CryptoId");
+
+                    b.ToTable("Crypto", (string)null);
+                });
+
+            modelBuilder.Entity("My2Cents.DataInfrastructure.CryptoAsset", b =>
+                {
+                    b.Property<int>("CryptoAssetId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("CryptoAssetID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CryptoAssetId"), 1L, 1);
+
+                    b.Property<DateTime>("BuyDate")
+                        .HasColumnType("smalldatetime");
+
+                    b.Property<decimal>("BuyPrice")
+                        .HasColumnType("decimal(18,0)");
+
+                    b.Property<int>("CryptoId")
+                        .HasColumnType("int")
+                        .HasColumnName("CryptoID");
+
+                    b.Property<decimal>("Quantity")
+                        .HasColumnType("decimal(18,0)");
+
+                    b.Property<decimal>("StopLoss")
+                        .HasColumnType("decimal(18,0)");
+
+                    b.Property<decimal>("TakeProfit")
+                        .HasColumnType("decimal(18,0)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int")
+                        .HasColumnName("UserID");
+
+                    b.HasKey("CryptoAssetId");
+
+                    b.HasIndex("CryptoId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("CryptoAsset", (string)null);
+                });
+
+            modelBuilder.Entity("My2Cents.DataInfrastructure.CryptoOrderHistory", b =>
+                {
+                    b.Property<int>("CryptoOrderId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("CryptoOrderID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CryptoOrderId"), 1L, 1);
+
+                    b.Property<int>("CryptoId")
+                        .HasColumnType("int")
+                        .HasColumnName("CryptoID");
+
+                    b.Property<decimal>("OrderPrice")
+                        .HasColumnType("decimal(18,0)");
+
+                    b.Property<DateTime>("OrderTime")
+                        .HasColumnType("smalldatetime");
+
+                    b.Property<string>("OrderType")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<decimal>("Quantity")
+                        .HasColumnType("decimal(18,0)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int")
+                        .HasColumnName("UserID");
+
+                    b.HasKey("CryptoOrderId")
+                        .HasName("PK__CryptoOr__48E76F306D355A0A");
+
+                    b.HasIndex("CryptoId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("CryptoOrderHistory", (string)null);
+                });
+
+            modelBuilder.Entity("My2Cents.DataInfrastructure.Stock", b =>
+                {
+                    b.Property<int>("StockId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("StockID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StockId"), 1L, 1);
+
+                    b.Property<decimal>("CurrentPrice")
+                        .HasColumnType("decimal(18,0)");
+
+                    b.Property<DateTime>("LastUpdate")
+                        .HasColumnType("smalldatetime");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("ShortenedName")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.HasKey("StockId");
+
+                    b.ToTable("Stock", (string)null);
+                });
+
+            modelBuilder.Entity("My2Cents.DataInfrastructure.StockAsset", b =>
+                {
+                    b.Property<int>("StockAssetId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("StockAssetID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StockAssetId"), 1L, 1);
+
+                    b.Property<DateTime>("BuyDate")
+                        .HasColumnType("smalldatetime");
+
+                    b.Property<decimal>("BuyPrice")
+                        .HasColumnType("decimal(18,0)");
+
+                    b.Property<decimal>("Quantity")
+                        .HasColumnType("decimal(18,0)");
+
+                    b.Property<int>("StockId")
+                        .HasColumnType("int")
+                        .HasColumnName("StockID");
+
+                    b.Property<decimal>("StopLoss")
+                        .HasColumnType("decimal(18,0)");
+
+                    b.Property<decimal>("TakeProfit")
+                        .HasColumnType("decimal(18,0)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int")
+                        .HasColumnName("UserID");
+
+                    b.HasKey("StockAssetId");
+
+                    b.HasIndex("StockId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("StockAsset", (string)null);
+                });
+
+            modelBuilder.Entity("My2Cents.DataInfrastructure.StockOrderHistory", b =>
+                {
+                    b.Property<int>("StockOrderId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("StockOrderID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StockOrderId"), 1L, 1);
+
+                    b.Property<decimal>("OrderPrice")
+                        .HasColumnType("decimal(18,0)");
+
+                    b.Property<DateTime>("OrderTime")
+                        .HasColumnType("smalldatetime");
+
+                    b.Property<string>("OrderType")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<decimal>("Quantity")
+                        .HasColumnType("decimal(18,0)");
+
+                    b.Property<int>("StockId")
+                        .HasColumnType("int")
+                        .HasColumnName("StockID");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int")
+                        .HasColumnName("UserID");
+
+                    b.HasKey("StockOrderId")
+                        .HasName("PK__StockOrd__928D048E6F9F4C1E");
+
+                    b.HasIndex("StockId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("StockOrderHistory", (string)null);
                 });
 
             modelBuilder.Entity("My2Cents.DataInfrastructure.Transaction", b =>
@@ -110,48 +535,9 @@ namespace My2Cents.API.Migrations
 
                     b.HasKey("TransactionId");
 
-                    b.HasIndex("AccountId");
+                    b.HasIndex(new[] { "AccountId" }, "IX_Transactions_AccountID");
 
                     b.ToTable("Transactions");
-                });
-
-            modelBuilder.Entity("My2Cents.DataInfrastructure.UserLogin", b =>
-                {
-                    b.Property<int>("UserId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("UserID");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserId"), 1L, 1);
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<string>("EmailVerified")
-                        .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)")
-                        .HasColumnName("Email_Verified");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<string>("UserName")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.HasKey("UserId")
-                        .HasName("PK__User_Log__1788CCAC16385041");
-
-                    b.HasIndex(new[] { "UserName" }, "UQ__User_Log__C9F284560BC6EAFF")
-                        .IsUnique();
-
-                    b.ToTable("User_Login", (string)null);
                 });
 
             modelBuilder.Entity("My2Cents.DataInfrastructure.UserProfile", b =>
@@ -215,6 +601,42 @@ namespace My2Cents.API.Migrations
                     b.ToTable("User_Profile", (string)null);
                 });
 
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
+                {
+                    b.HasOne("My2Cents.DataInfrastructure.ApplicationRole", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
+                {
+                    b.HasOne("My2Cents.DataInfrastructure.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
+                {
+                    b.HasOne("My2Cents.DataInfrastructure.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
+                {
+                    b.HasOne("My2Cents.DataInfrastructure.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("My2Cents.DataInfrastructure.Account", b =>
                 {
                     b.HasOne("My2Cents.DataInfrastructure.AccountType", "AccountType")
@@ -236,6 +658,101 @@ namespace My2Cents.API.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("My2Cents.DataInfrastructure.ApplicationUserRole", b =>
+                {
+                    b.HasOne("My2Cents.DataInfrastructure.ApplicationRole", "Role")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("My2Cents.DataInfrastructure.ApplicationUser", "User")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Role");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("My2Cents.DataInfrastructure.CryptoAsset", b =>
+                {
+                    b.HasOne("My2Cents.DataInfrastructure.Crypto", "Crypto")
+                        .WithMany("CryptoAssets")
+                        .HasForeignKey("CryptoId")
+                        .IsRequired()
+                        .HasConstraintName("FK__CryptoAss__Crypt__00DF2177");
+
+                    b.HasOne("My2Cents.DataInfrastructure.ApplicationUser", "User")
+                        .WithMany("CryptoAssets")
+                        .HasForeignKey("UserId")
+                        .IsRequired()
+                        .HasConstraintName("FK__CryptoAss__UserI__7FEAFD3E");
+
+                    b.Navigation("Crypto");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("My2Cents.DataInfrastructure.CryptoOrderHistory", b =>
+                {
+                    b.HasOne("My2Cents.DataInfrastructure.Crypto", "Crypto")
+                        .WithMany("CryptoOrderHistories")
+                        .HasForeignKey("CryptoId")
+                        .IsRequired()
+                        .HasConstraintName("FK__CryptoOrd__Crypt__7D0E9093");
+
+                    b.HasOne("My2Cents.DataInfrastructure.ApplicationUser", "User")
+                        .WithMany("CryptoOrderHistories")
+                        .HasForeignKey("UserId")
+                        .IsRequired()
+                        .HasConstraintName("FK__CryptoOrd__UserI__7C1A6C5A");
+
+                    b.Navigation("Crypto");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("My2Cents.DataInfrastructure.StockAsset", b =>
+                {
+                    b.HasOne("My2Cents.DataInfrastructure.Stock", "Stock")
+                        .WithMany("StockAssets")
+                        .HasForeignKey("StockId")
+                        .IsRequired()
+                        .HasConstraintName("FK__StockAsse__Stock__7755B73D");
+
+                    b.HasOne("My2Cents.DataInfrastructure.ApplicationUser", "User")
+                        .WithMany("StockAssets")
+                        .HasForeignKey("UserId")
+                        .IsRequired()
+                        .HasConstraintName("FK__StockAsse__UserI__76619304");
+
+                    b.Navigation("Stock");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("My2Cents.DataInfrastructure.StockOrderHistory", b =>
+                {
+                    b.HasOne("My2Cents.DataInfrastructure.Stock", "Stock")
+                        .WithMany("StockOrderHistories")
+                        .HasForeignKey("StockId")
+                        .IsRequired()
+                        .HasConstraintName("FK__StockOrde__Stock__73852659");
+
+                    b.HasOne("My2Cents.DataInfrastructure.ApplicationUser", "User")
+                        .WithMany("StockOrderHistories")
+                        .HasForeignKey("UserId")
+                        .IsRequired()
+                        .HasConstraintName("FK__StockOrde__UserI__72910220");
+
+                    b.Navigation("Stock");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("My2Cents.DataInfrastructure.Transaction", b =>
                 {
                     b.HasOne("My2Cents.DataInfrastructure.Account", "Account")
@@ -250,7 +767,7 @@ namespace My2Cents.API.Migrations
 
             modelBuilder.Entity("My2Cents.DataInfrastructure.UserProfile", b =>
                 {
-                    b.HasOne("My2Cents.DataInfrastructure.UserLogin", "User")
+                    b.HasOne("My2Cents.DataInfrastructure.ApplicationUser", "User")
                         .WithOne("UserProfile")
                         .HasForeignKey("My2Cents.DataInfrastructure.UserProfile", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -270,10 +787,39 @@ namespace My2Cents.API.Migrations
                     b.Navigation("Accounts");
                 });
 
-            modelBuilder.Entity("My2Cents.DataInfrastructure.UserLogin", b =>
+            modelBuilder.Entity("My2Cents.DataInfrastructure.ApplicationRole", b =>
                 {
+                    b.Navigation("UserRoles");
+                });
+
+            modelBuilder.Entity("My2Cents.DataInfrastructure.ApplicationUser", b =>
+                {
+                    b.Navigation("CryptoAssets");
+
+                    b.Navigation("CryptoOrderHistories");
+
+                    b.Navigation("StockAssets");
+
+                    b.Navigation("StockOrderHistories");
+
                     b.Navigation("UserProfile")
                         .IsRequired();
+
+                    b.Navigation("UserRoles");
+                });
+
+            modelBuilder.Entity("My2Cents.DataInfrastructure.Crypto", b =>
+                {
+                    b.Navigation("CryptoAssets");
+
+                    b.Navigation("CryptoOrderHistories");
+                });
+
+            modelBuilder.Entity("My2Cents.DataInfrastructure.Stock", b =>
+                {
+                    b.Navigation("StockAssets");
+
+                    b.Navigation("StockOrderHistories");
                 });
 
             modelBuilder.Entity("My2Cents.DataInfrastructure.UserProfile", b =>
