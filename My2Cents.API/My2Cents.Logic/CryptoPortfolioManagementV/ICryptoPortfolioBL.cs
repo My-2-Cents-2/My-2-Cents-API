@@ -1,8 +1,8 @@
 using My2Cents.DataInfrastructure;
 
-namespace My2Cents.DatabaseManagement.Interfaces
+namespace My2Cents.Logic.Interfaces
 {
-    public interface ICryptoPortfolioDL
+    public interface ICryptoPortfolioBL
     {
         Crypto AddCrypto(Crypto _crypto);
 
@@ -13,7 +13,5 @@ namespace My2Cents.DatabaseManagement.Interfaces
         CryptoOrderHistory AddCryptoOrderHistory(CryptoOrderHistory _cOrderHis);
 
         List<CryptoOrderHistory> GetCryptoOrderHisByUser(int _ID);
-        
-
     }
 }
