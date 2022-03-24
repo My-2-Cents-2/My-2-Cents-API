@@ -10,5 +10,6 @@ namespace My2Cents.DataInfrastructure.Models
         public decimal StopLoss { get; set; }
         public decimal TakeProfit { get; set; }
         public decimal Quantity { get; set; }
+        public int BuyCount { get; set; }
     }
 }
