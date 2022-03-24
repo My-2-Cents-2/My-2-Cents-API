@@ -6,6 +6,8 @@ using Microsoft.IdentityModel.Tokens;
 using My2Cents.API.AuthenticationService.Interfaces;
 using My2Cents.API.AuthenticationService.Implements;
 using My2Cents.API.Middlewares.Implements;
+using My2Cents.Logic.Interfaces;
+using My2Cents.DatabaseManagement.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -55,7 +57,8 @@ builder.Services.AddDbContext<My2CentsContext>(options =>
 });
 
 builder.Services.AddScoped<IRepository, EfRepository>();
-
+builder.Services.AddScoped<ICryptoPortfolioBL, CryptoPortfolioBL>();
+builder.Services.AddScoped<ICryptoPortfolioDL, CryptoPortfolioDL>();
 
 builder.Services.AddCors(options =>
 {
