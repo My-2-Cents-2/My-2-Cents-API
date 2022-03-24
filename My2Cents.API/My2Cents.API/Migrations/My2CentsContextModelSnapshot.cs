@@ -314,6 +314,9 @@ namespace My2Cents.API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CryptoAssetId"), 1L, 1);
 
+                    b.Property<int>("BuyCount")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("BuyDate")
                         .HasColumnType("smalldatetime");
 
@@ -425,6 +428,9 @@ namespace My2Cents.API.Migrations
                         .HasColumnName("StockAssetID");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StockAssetId"), 1L, 1);
+
+                    b.Property<int>("BuyCount")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("BuyDate")
                         .HasColumnType("smalldatetime");
