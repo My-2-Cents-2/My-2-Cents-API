@@ -120,6 +120,8 @@ namespace My2Cents.DataInfrastructure
 
                 entity.Property(e => e.TakeProfit).HasColumnType("decimal(18, 0)");
 
+                entity.Property(e => e.BuyCount).HasColumnType("int");
+
                 entity.Property(e => e.UserId).HasColumnName("UserID");
 
                 entity.HasOne(d => d.Crypto)
@@ -201,6 +203,8 @@ namespace My2Cents.DataInfrastructure
                 entity.Property(e => e.StopLoss).HasColumnType("decimal(18, 0)");
 
                 entity.Property(e => e.TakeProfit).HasColumnType("decimal(18, 0)");
+
+                entity.Property(e => e.BuyCount).HasColumnType("int");
 
                 entity.Property(e => e.UserId).HasColumnName("UserID");
 
