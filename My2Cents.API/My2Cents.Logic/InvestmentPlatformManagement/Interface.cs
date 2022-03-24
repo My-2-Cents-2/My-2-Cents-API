@@ -3,17 +3,17 @@ using My2Cents.DataInfrastructure;
 
 namespace PlatformBL
 {
-    public interface PlatformBL
+    public interface IPlatformBL
     {
         //Need to discuss some functions with Vijhan's team
 
-        //public CryptoOrderHistory PlaceOrderCrypto(CryptoAsset _newAsset, int _userID, int _cryptoID,  decimal _orderPrice)
+        public CryptoOrderHistory PlaceOrderCrypto(CryptoAsset _asset, CryptoOrderHistory _cOrderHis, int _userID, int _cryptoID,  decimal _cryptoPrice, decimal amount);
 
-        //public CryptoOrderHistory SellOrderCrypto(parameters go here but need to discuss this with Vijhan's team)
+        public CryptoOrderHistory SellOrderCrypto(CryptoAsset _asset, CryptoOrderHistory _cOrderHis, int _userID, int _cryptoID, decimal _cryptoPrice, decimal amount);
 
-        //public StockOrderHistory PlaceOrderStock(discuss parameters with Vijhan's team)
+        public StockOrderHistory PlaceOrderStock(StockAsset _asset, StockOrderHistory _sOrderHis, int _userID, int _stockID, decimal _stockPrice, decimal amount);
 
-        //public StockOrderHistory SellOrderStock(discuss parameters with Vijhan's team)
+        public StockOrderHistory SellOrderStock(StockAsset _asset, StockOrderHistory _sOrderHis, int _userID, int _stockID, decimal _stockPrice, decimal amount);
 
 
     }
