@@ -13,6 +13,7 @@ namespace My2Cents.DataInfrastructure
         public decimal StopLoss { get; set; }
         public decimal TakeProfit { get; set; }
         public decimal Quantity { get; set; }
+        public int BuyCount { get; set; }
 
         public virtual Stock Stock { get; set; } = null!;
         public virtual ApplicationUser User { get; set; } = null!;
