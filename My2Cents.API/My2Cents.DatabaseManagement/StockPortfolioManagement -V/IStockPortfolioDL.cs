@@ -55,6 +55,7 @@ namespace My2Cents.DatabaseManagement.Interfaces
         StockAsset AddStockAsset(StockAsset s_stockAsset);
 
         List<StockAsset> GetAllStockAssets();
+        List<StockAsset> GetUserStockAssets(int userId);
         StockAsset UpdateStockAsset(StockAsset s_stockAsset);
 
         StockAsset DeleteStockAsset(int stockAssetId); // need to consider if this should even be a thing because dependencies

@@ -251,5 +251,29 @@ namespace My2Cents.Logic.Implements
         }
         
 
+
+        public List<StockAsset> GetAllStockAssets()
+        {
+            try
+            {
+                return _repo.GetAllStockAssets();
+            }
+            catch(System.Exception exe )
+            {
+                throw new Exception(exe.Message);
+            }
+        }
+        public List<StockAsset> GetUserStockAssets(int userId)
+        {
+            try
+            {
+                return _repo.GetUserStockAssets(userId);
+            }
+            catch(System.Exception exe )
+            {
+                throw new Exception(exe.Message);
+            }
+        }
+
     }
 }
