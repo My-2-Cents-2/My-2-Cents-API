@@ -36,5 +36,28 @@ namespace My2Cents.Logic.Interfaces
         {
             return _repo.UpdateCryptoPrice(_ID, _price);
         }
+
+        public List<CryptoAsset> GetAllCryptoAssets()
+        {
+            try
+            {
+                return _repo.GetAllCryptoAssets();
+            }
+            catch(System.Exception exe )
+            {
+                throw new Exception(exe.Message);
+            }
+        }
+        public List<CryptoAsset> GetUserCryptoAssets(int userId)
+        {
+            try
+            {
+                return _repo.GetUserCryptoAssets(userId);
+            }
+            catch(System.Exception exe )
+            {
+                throw new Exception(exe.Message);
+            }
+        } 
     }
 }

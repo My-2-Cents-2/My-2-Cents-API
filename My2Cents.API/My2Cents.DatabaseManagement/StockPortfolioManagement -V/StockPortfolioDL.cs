@@ -202,7 +202,7 @@ namespace My2Cents.DatabaseManagement.Implements
             List<StockAsset> _result = _context.StockAssets.ToList();
             if(!_result.Any())
             {
-                throw new Exception("Stocks DNE");
+                throw new Exception("Stocks Asset DNE");
             }
             else
             {
@@ -214,7 +214,7 @@ namespace My2Cents.DatabaseManagement.Implements
             List<StockAsset> _result = _context.StockAssets.Where(s => s.UserId == userId).ToList();
             if(!_result.Any())
             {
-                throw new Exception("Stocks DNE");
+                throw new Exception("Stocks Asset DNE");
             }
             else
             {

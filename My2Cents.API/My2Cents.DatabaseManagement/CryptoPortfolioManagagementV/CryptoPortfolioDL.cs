@@ -51,5 +51,34 @@ namespace My2Cents.DatabaseManagement.Interfaces
             _context.SaveChanges();
             return _ucrypto;
         }
+
+
+
+
+
+        public List<CryptoAsset> GetAllCryptoAssets()
+        {
+            List<CryptoAsset> _result = _context.CryptoAssets.ToList();
+            if(!_result.Any())
+            {
+                throw new Exception("Cryptos Asset DNE");
+            }
+            else
+            {
+                return _result;
+            }
+        }
+        public List<CryptoAsset> GetUserCryptoAssets(int userId)
+        {
+            List<CryptoAsset> _result = _context.CryptoAssets.Where(s => s.UserId == userId).ToList();
+            if(!_result.Any())
+            {
+                throw new Exception("Cryptos Asset DNE");
+            }
+            else
+            {
+                return _result;
+            }
+        }
     }
 }

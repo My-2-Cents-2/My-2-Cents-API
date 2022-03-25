@@ -211,5 +211,94 @@ namespace My2Cents.API.Controllers
 //                 return Conflict(exe.Message);
 //             }
 //         }*/
+
+        [HttpGet("TESTING Assets Table")]
+        public IActionResult GetUserStockPortfolioAssetData([FromQuery] int userId)
+        {
+            try
+            {
+                List<StockPortfolioStockInvestmentForm> _result = GetUserStockPortfolioData(userId);
+                //Log.Information("Route: " + RouteConfigs.StockPortfolioStocks);
+                //Log.Information("Get All Stocks);
+                Console.WriteLine( "asjdkflajsdklfjkl");
+                Console.WriteLine( _result[0].Name );
+                Console.WriteLine( _result[0].InitialInvestmentDate );
+                Console.WriteLine( _result[0].CurrentInvestment );
+                Console.WriteLine( _result[0].OwnedShares );
+                Console.WriteLine( _result[0].SharePrice );
+                Console.WriteLine( _result[0].Returns );
+                return Ok(_result);
+            }
+            catch (System.Exception e)
+            {
+                //Log.Warning("Route: " + RouteConfigs.StockPortfolioStocks);
+                //Log.Warning(e.Message);
+                return NotFound(e.Message);
+//                return NotFound(GetUserStockPortfolioData(int userId));
+            }
+        }
+        private List<StockPortfolioStockInvestmentForm> GetUserStockPortfolioData(int userId)
+        {
+            //information from stocks
+            List<StockPortfolioStockInvestmentForm> pleaseLetThisWork = new List<StockPortfolioStockInvestmentForm>(){};
+            Console.WriteLine("Test 1");
+            List<Stock> userStocks = _stockPortfolioBL.GetUserStocksFromOrderHistory(userId);
+            Console.WriteLine(userStocks[0].Name );
+            Console.WriteLine(userStocks[0].StockId );
+            Console.WriteLine("Test 2");
+            List<StockOrderHistory> userStockOrderHistory = _stockPortfolioBL.GetUserStockOrderHistory(userId);
+            Console.WriteLine(userStockOrderHistory[0].StockId );
+            Console.WriteLine("Test 3");
+            foreach(Stock aUserStock in userStocks)
+            {
+                Console.WriteLine("Test 4");
+                decimal tempTotal = 0;
+                // returns = (currentStockPrice - tempCurrentInvestment) / totalInvestment
+                decimal tempCurrentInvestment = 0;
+                decimal tempOwnedShares = 0;
+                foreach(StockOrderHistory order in userStockOrderHistory) {
+                    if(order.StockId == aUserStock.StockId)
+                    {
+                        if(order.OrderType == "buy")
+                        {
+                            //tempTotal = order.OrderPrice * order.Quantity;
+
+                            //tempCurrentInvestment += 
+                            tempOwnedShares += order.Quantity;
+                            tempCurrentInvestment += order.Quantity * order.OrderPrice;
+                        }
+                        else if(order.OrderType == "sell") 
+                        {
+                            tempOwnedShares -= order.Quantity;
+                            tempCurrentInvestment -= order.Quantity * order.OrderPrice;
+                        }
+                        else 
+                        {
+                            throw new Exception("A transaction in the table is neither buy nor sell");
+                        }
+                    }
+                };
+                Console.WriteLine("tempOwnedShares: " + tempOwnedShares);
+                Console.WriteLine("tempCurrentInvestment: " + tempCurrentInvestment);
+                Console.WriteLine("Test 5");
+                StockPortfolioStockInvestmentForm userStockData = new StockPortfolioStockInvestmentForm(){
+                    Name =  aUserStock.Name,
+                    SharePrice = aUserStock.CurrentPrice,
+                    
+                    //information from stockorderhistory
+                    //get user shares owned from a specific company
+                    InitialInvestmentDate = userStockOrderHistory[0].OrderTime,
+                    CurrentInvestment = tempCurrentInvestment,
+                    OwnedShares = tempOwnedShares,
+                    Returns = ((aUserStock.CurrentPrice * tempOwnedShares  - tempCurrentInvestment) / tempCurrentInvestment ) * 100,
+                    StockPrice = tempOwnedShares * aUserStock.CurrentPrice
+                };
+                pleaseLetThisWork.Add(userStockData);
+                Console.WriteLine("Test 6");
+            }
+            Console.WriteLine("Test 7");
+
+            return pleaseLetThisWork;
+        }
     }
 }

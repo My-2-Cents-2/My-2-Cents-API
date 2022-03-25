@@ -16,6 +16,7 @@ namespace My2Cents.Logic.Interfaces
         /// </summary>
         /// <returns></returns>
         List<Stock> GetAllStocks();
+        List<Stock> GetUserStocks(int userId);
         Stock GetAStockFromId(int stockId);
         /*
         /// <summary>
@@ -30,6 +31,7 @@ namespace My2Cents.Logic.Interfaces
         /// </summary>
         /// <param name="s_stock"></param>
         /// <returns></returns>
+        
         Stock UpdateStockPrice(string stockName, decimal stockPrice);
         /// <summary>
         /// deletes the stock
@@ -50,7 +52,7 @@ namespace My2Cents.Logic.Interfaces
         StockOrderHistory DeleteStockOrderHistory(int stockOrderHistoryId);
         
         //StockPortfolioStockInvestmentForm GetUserStockPortfolioData(int userId);
-
+        List<Stock> GetUserStocksFromOrderHistory(int userId);
 
         //StockAssets
         List<StockAsset> GetAllStockAssets();
