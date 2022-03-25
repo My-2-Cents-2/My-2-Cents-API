@@ -158,8 +158,8 @@ namespace My2Cents.API.Controllers
             }
         }
 
-        [HttpGet("RouteConfigs.StockPortfolioOrdersPortfolio")]
-        public IActionResult GetUserStockOrderHistoryInformation([FromQuery] int userId)
+        [HttpGet(RouteConfigs.StockPortfolioOrdersPortfolio)]
+        public IActionResult GetUserStockOrderHistoryInformation(int userId)
         {
             try
             {
@@ -212,21 +212,14 @@ namespace My2Cents.API.Controllers
 //             }
 //         }*/
 
-        [HttpGet("TESTING Assets Table")]
-        public IActionResult GetUserStockPortfolioAssetData([FromQuery] int userId)
+        [HttpGet(RouteConfigs.StockPortfolioAssetsPortfolio)]
+        public IActionResult GetUserStockPortfolioAssetData(int userId)
         {
             try
             {
                 List<StockPortfolioStockInvestmentForm> _result = GetUserStockPortfolioData(userId);
                 //Log.Information("Route: " + RouteConfigs.StockPortfolioStocks);
                 //Log.Information("Get All Stocks);
-                Console.WriteLine( "asjdkflajsdklfjkl");
-                Console.WriteLine( _result[0].Name );
-                Console.WriteLine( _result[0].InitialInvestmentDate );
-                Console.WriteLine( _result[0].CurrentInvestment );
-                Console.WriteLine( _result[0].OwnedShares );
-                Console.WriteLine( _result[0].SharePrice );
-                Console.WriteLine( _result[0].Returns );
                 return Ok(_result);
             }
             catch (System.Exception e)
@@ -241,17 +234,10 @@ namespace My2Cents.API.Controllers
         {
             //information from stocks
             List<StockPortfolioStockInvestmentForm> pleaseLetThisWork = new List<StockPortfolioStockInvestmentForm>(){};
-            Console.WriteLine("Test 1");
             List<Stock> userStocks = _stockPortfolioBL.GetUserStocksFromOrderHistory(userId);
-            Console.WriteLine(userStocks[0].Name );
-            Console.WriteLine(userStocks[0].StockId );
-            Console.WriteLine("Test 2");
             List<StockOrderHistory> userStockOrderHistory = _stockPortfolioBL.GetUserStockOrderHistory(userId);
-            Console.WriteLine(userStockOrderHistory[0].StockId );
-            Console.WriteLine("Test 3");
             foreach(Stock aUserStock in userStocks)
             {
-                Console.WriteLine("Test 4");
                 decimal tempTotal = 0;
                 // returns = (currentStockPrice - tempCurrentInvestment) / totalInvestment
                 decimal tempCurrentInvestment = 0;
@@ -261,9 +247,6 @@ namespace My2Cents.API.Controllers
                     {
                         if(order.OrderType == "buy")
                         {
-                            //tempTotal = order.OrderPrice * order.Quantity;
-
-                            //tempCurrentInvestment += 
                             tempOwnedShares += order.Quantity;
                             tempCurrentInvestment += order.Quantity * order.OrderPrice;
                         }
@@ -278,9 +261,6 @@ namespace My2Cents.API.Controllers
                         }
                     }
                 };
-                Console.WriteLine("tempOwnedShares: " + tempOwnedShares);
-                Console.WriteLine("tempCurrentInvestment: " + tempCurrentInvestment);
-                Console.WriteLine("Test 5");
                 StockPortfolioStockInvestmentForm userStockData = new StockPortfolioStockInvestmentForm(){
                     Name =  aUserStock.Name,
                     SharePrice = aUserStock.CurrentPrice,
@@ -294,9 +274,7 @@ namespace My2Cents.API.Controllers
                     StockPrice = tempOwnedShares * aUserStock.CurrentPrice
                 };
                 pleaseLetThisWork.Add(userStockData);
-                Console.WriteLine("Test 6");
             }
-            Console.WriteLine("Test 7");
 
             return pleaseLetThisWork;
         }
