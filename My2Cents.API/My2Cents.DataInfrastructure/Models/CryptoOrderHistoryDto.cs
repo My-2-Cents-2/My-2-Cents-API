@@ -8,6 +8,6 @@ namespace My2Cents.DataInfrastructure.Models
         public decimal OrderPrice { get; set; }
         public decimal Quantity { get; set; }
         public string OrderType { get; set; } = null!;
-        public DateTime OrderTime { get; set; }
+        public DateTime OrderTime { get; set; } 
     }
-}
+}   
