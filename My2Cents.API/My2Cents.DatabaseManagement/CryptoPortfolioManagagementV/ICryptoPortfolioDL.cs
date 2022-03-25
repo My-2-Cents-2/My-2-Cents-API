@@ -13,7 +13,10 @@ namespace My2Cents.DatabaseManagement.Interfaces
         CryptoOrderHistory AddCryptoOrderHistory(CryptoOrderHistory _cOrderHis);
 
         List<CryptoOrderHistory> GetCryptoOrderHisByUser(int _ID);
-        
+
+        List<CryptoAsset> GetAllCryptoAssets();
+
+        List<CryptoAsset> GetCryptoAssetsByUser(int _userID);
 
     }
 }
