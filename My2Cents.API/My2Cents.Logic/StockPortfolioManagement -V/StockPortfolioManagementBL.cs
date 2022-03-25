@@ -41,6 +41,19 @@ namespace My2Cents.Logic.Implements
                 return allStocks;
             }
         }
+
+        public Stock GetAStockFromId(int stockId)
+        {
+            Stock allStocks = _repo.GetAStockFromStockId(stockId);
+            if (allStocks == null)
+            {
+                throw new Exception("No one has any stocks");
+            }
+            else
+            {
+                return allStocks;
+            }
+        }
         public List<Stock> GetUserStocks(int userId) // i have no clue if this actually works
         {
             List<StockAsset> userAssets = _repo.GetAllStockAssets().Where(s => s.UserId == userId).ToList();
