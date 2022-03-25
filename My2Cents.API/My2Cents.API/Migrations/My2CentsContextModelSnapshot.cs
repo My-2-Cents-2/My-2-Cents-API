@@ -22,6 +22,94 @@ namespace My2Cents.API.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetRoleClaims", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserClaims", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
+                {
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ProviderKey")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ProviderDisplayName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("LoginProvider", "ProviderKey");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserLogins", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
+                {
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("UserId", "LoginProvider", "Name");
+
+                    b.ToTable("AspNetUserTokens", (string)null);
+                });
+
             modelBuilder.Entity("My2Cents.DataInfrastructure.Account", b =>
                 {
                     b.Property<int>("AccountId")
@@ -72,6 +160,119 @@ namespace My2Cents.API.Migrations
                     b.HasKey("AccountTypeId");
 
                     b.ToTable("AccountType", (string)null);
+                });
+
+            modelBuilder.Entity("My2Cents.DataInfrastructure.ApplicationRole", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasDatabaseName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
+
+                    b.ToTable("AspNetRoles", (string)null);
+                });
+
+            modelBuilder.Entity("My2Cents.DataInfrastructure.ApplicationUser", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("My2Cents.DataInfrastructure.ApplicationUserRole", b =>
+                {
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId", "RoleId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetUserRoles", (string)null);
                 });
 
             modelBuilder.Entity("My2Cents.DataInfrastructure.Crypto", b =>
@@ -339,45 +540,6 @@ namespace My2Cents.API.Migrations
                     b.ToTable("Transactions");
                 });
 
-            modelBuilder.Entity("My2Cents.DataInfrastructure.UserLogin", b =>
-                {
-                    b.Property<int>("UserId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("UserID");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserId"), 1L, 1);
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<string>("EmailVerified")
-                        .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)")
-                        .HasColumnName("Email_Verified");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<string>("UserName")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.HasKey("UserId")
-                        .HasName("PK__User_Log__1788CCAC16385041");
-
-                    b.HasIndex(new[] { "UserName" }, "UQ__User_Log__C9F284560BC6EAFF")
-                        .IsUnique();
-
-                    b.ToTable("User_Login", (string)null);
-                });
-
             modelBuilder.Entity("My2Cents.DataInfrastructure.UserProfile", b =>
                 {
                     b.Property<int>("UserId")
@@ -439,6 +601,42 @@ namespace My2Cents.API.Migrations
                     b.ToTable("User_Profile", (string)null);
                 });
 
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
+                {
+                    b.HasOne("My2Cents.DataInfrastructure.ApplicationRole", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
+                {
+                    b.HasOne("My2Cents.DataInfrastructure.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
+                {
+                    b.HasOne("My2Cents.DataInfrastructure.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
+                {
+                    b.HasOne("My2Cents.DataInfrastructure.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("My2Cents.DataInfrastructure.Account", b =>
                 {
                     b.HasOne("My2Cents.DataInfrastructure.AccountType", "AccountType")
@@ -460,6 +658,25 @@ namespace My2Cents.API.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("My2Cents.DataInfrastructure.ApplicationUserRole", b =>
+                {
+                    b.HasOne("My2Cents.DataInfrastructure.ApplicationRole", "Role")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("My2Cents.DataInfrastructure.ApplicationUser", "User")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Role");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("My2Cents.DataInfrastructure.CryptoAsset", b =>
                 {
                     b.HasOne("My2Cents.DataInfrastructure.Crypto", "Crypto")
@@ -468,7 +685,7 @@ namespace My2Cents.API.Migrations
                         .IsRequired()
                         .HasConstraintName("FK__CryptoAss__Crypt__00DF2177");
 
-                    b.HasOne("My2Cents.DataInfrastructure.UserLogin", "User")
+                    b.HasOne("My2Cents.DataInfrastructure.ApplicationUser", "User")
                         .WithMany("CryptoAssets")
                         .HasForeignKey("UserId")
                         .IsRequired()
@@ -487,7 +704,7 @@ namespace My2Cents.API.Migrations
                         .IsRequired()
                         .HasConstraintName("FK__CryptoOrd__Crypt__7D0E9093");
 
-                    b.HasOne("My2Cents.DataInfrastructure.UserLogin", "User")
+                    b.HasOne("My2Cents.DataInfrastructure.ApplicationUser", "User")
                         .WithMany("CryptoOrderHistories")
                         .HasForeignKey("UserId")
                         .IsRequired()
@@ -506,7 +723,7 @@ namespace My2Cents.API.Migrations
                         .IsRequired()
                         .HasConstraintName("FK__StockAsse__Stock__7755B73D");
 
-                    b.HasOne("My2Cents.DataInfrastructure.UserLogin", "User")
+                    b.HasOne("My2Cents.DataInfrastructure.ApplicationUser", "User")
                         .WithMany("StockAssets")
                         .HasForeignKey("UserId")
                         .IsRequired()
@@ -525,7 +742,7 @@ namespace My2Cents.API.Migrations
                         .IsRequired()
                         .HasConstraintName("FK__StockOrde__Stock__73852659");
 
-                    b.HasOne("My2Cents.DataInfrastructure.UserLogin", "User")
+                    b.HasOne("My2Cents.DataInfrastructure.ApplicationUser", "User")
                         .WithMany("StockOrderHistories")
                         .HasForeignKey("UserId")
                         .IsRequired()
@@ -550,7 +767,7 @@ namespace My2Cents.API.Migrations
 
             modelBuilder.Entity("My2Cents.DataInfrastructure.UserProfile", b =>
                 {
-                    b.HasOne("My2Cents.DataInfrastructure.UserLogin", "User")
+                    b.HasOne("My2Cents.DataInfrastructure.ApplicationUser", "User")
                         .WithOne("UserProfile")
                         .HasForeignKey("My2Cents.DataInfrastructure.UserProfile", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -570,6 +787,27 @@ namespace My2Cents.API.Migrations
                     b.Navigation("Accounts");
                 });
 
+            modelBuilder.Entity("My2Cents.DataInfrastructure.ApplicationRole", b =>
+                {
+                    b.Navigation("UserRoles");
+                });
+
+            modelBuilder.Entity("My2Cents.DataInfrastructure.ApplicationUser", b =>
+                {
+                    b.Navigation("CryptoAssets");
+
+                    b.Navigation("CryptoOrderHistories");
+
+                    b.Navigation("StockAssets");
+
+                    b.Navigation("StockOrderHistories");
+
+                    b.Navigation("UserProfile")
+                        .IsRequired();
+
+                    b.Navigation("UserRoles");
+                });
+
             modelBuilder.Entity("My2Cents.DataInfrastructure.Crypto", b =>
                 {
                     b.Navigation("CryptoAssets");
@@ -582,20 +820,6 @@ namespace My2Cents.API.Migrations
                     b.Navigation("StockAssets");
 
                     b.Navigation("StockOrderHistories");
-                });
-
-            modelBuilder.Entity("My2Cents.DataInfrastructure.UserLogin", b =>
-                {
-                    b.Navigation("CryptoAssets");
-
-                    b.Navigation("CryptoOrderHistories");
-
-                    b.Navigation("StockAssets");
-
-                    b.Navigation("StockOrderHistories");
-
-                    b.Navigation("UserProfile")
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("My2Cents.DataInfrastructure.UserProfile", b =>
