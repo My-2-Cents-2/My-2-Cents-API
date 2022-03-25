@@ -16,6 +16,19 @@ namespace My2Cents.DatabaseManagement.Interfaces
         /// <returns></returns>
         List<Stock> GetAllStocks();
         /// <summary>
+        /// Retrives the information of the specifed stock from the Id
+        /// </summary>
+        /// <param name="stockId"></param>
+        /// <returns></returns>
+        Stock GetAStockFromStockId(int stockId);
+        /// <summary>
+        /// Gets the information of a specificed stock from the name
+        /// in case of multiple stocks with a similar naming convention 
+        /// </summary>
+        /// <param name="stockName"></param>
+        /// <returns></returns>
+        Stock GetAStockFromStockName (string stockName);
+        /// <summary
         /// Updates the information of the Stock in the database
         /// </summary>
         /// <param name="s_stock"></param>
@@ -26,12 +39,14 @@ namespace My2Cents.DatabaseManagement.Interfaces
         /// </summary>
         /// <param name="s_stock"></param>
         /// <returns></returns>
+        Stock UpdateStockPrice(int stockId, decimal stockPrice);
         Stock DeleteStock(int stockId);
 
         // Stock Order Histories
 
         StockOrderHistory AddStockOrderHistory(StockOrderHistory s_stockOrderHistory);
         List<StockOrderHistory> GetAllStockOrderHistory();
+        List<StockOrderHistory> GetUserStockOrders(int userId);
         StockOrderHistory UpdateStockOrderHistory(StockOrderHistory s_stockOrderHistory);
         StockOrderHistory DeleteStockOrderHistory(int stockOrderId);
         

@@ -70,13 +70,13 @@ namespace My2Cents.API.Controllers
             }
         }
 
-        // PUT: api/Stock
+        //PUT: api/Stock
         [HttpPut(RouteConfigs.StockPortfolioStocks)]
-        public IActionResult UpdateStock([FromBody] Stock s_stock)
+        public IActionResult UpdateStockPrice([FromQuery] string stockName, [FromQuery] decimal stockPrice)
         {
             try
             {
-                var _result = _stockPortfolioBL.UpdateStockInformation(s_stock);
+                var _result = _stockPortfolioBL.UpdateStockPrice(stockName, stockPrice);
                 //Log.Information("Stock Successfully updated");
                 return Ok("Stock Updated");
             }
@@ -108,5 +108,110 @@ namespace My2Cents.API.Controllers
 //                 return Conflict(exe.Message);
 //             }
 //         }
+
+
+
+
+        // POST: api/Stock
+        [HttpPost( RouteConfigs.StockPortfolioOrders )] 
+        public IActionResult AddNewStockOrder([FromQuery] StockPortfolioStockOrderForm s_stockOrder)
+        {
+            try
+            {
+                //_stockBL.ValidStockName(stockName);
+                //get userId
+                //Get stockid
+                StockOrderHistory _newStockOrderHistory = new StockOrderHistory()
+                {
+                    // UserId = s_stockOrder.GetUserId(s_stockOrder.userName);
+                    // StockId = s_stockOrder.GetStockId(asdfjkl;);
+                    OrderPrice = s_stockOrder.OrderPrice,
+                    Quantity = s_stockOrder.Quantity,
+                    OrderType = s_stockOrder.OrderType
+                };
+                var _result = _stockPortfolioBL.AddNewStockOrderHistory(_newStockOrderHistory);
+                //Log.Information("Stock Successfully created");
+                return Created("Has created ", _result);
+            }
+            catch (System.Exception exe)
+            {
+                //Log.Warning("Route:" + RouteConfigs.Stock + ": " + exe.Message);
+                return BadRequest(exe.Message);
+            }
+        }
+
+        // GET: api/GroupPost
+        [HttpGet(RouteConfigs.StockPortfolioOrders)]
+        public IActionResult GetAllStockOrders()
+        {
+            try
+            {
+                var _result = _stockPortfolioBL.GetAllStockOrderHistories();
+                //Log.Information("Route: " + RouteConfigs.StockPortfolioStocks);
+                //Log.Information("Get All Stocks);
+
+                return Ok(_result);
+            }
+            catch (System.Exception e)
+            {
+                //Log.Warning("Route: " + RouteConfigs.StockPortfolioStocks);
+                //Log.Warning(e.Message);
+                return NotFound("Cannot find any post belongs in this group!");
+            }
+        }
+
+        [HttpGet("RouteConfigs.StockPortfolioOrdersPortfolio")]
+        public IActionResult GetUserStockOrderHistoryInformation([FromQuery] int userId)
+        {
+            try
+            {
+                
+                var _result = _stockPortfolioBL.GetUserStockOrderHistory(userId);
+                //Log.Information("Route: " + RouteConfigs.StockPortfolioStocks);
+                //Log.Information("Get All Stocks);
+
+                return Ok(_result);
+            }
+            catch (System.Exception e)
+            {
+                //Log.Warning("Route: " + RouteConfigs.StockPortfolioStocks);
+                //Log.Warning(e.Message);
+                return NotFound("Cannot find any post belongs in this group!");
+            }
+        }
+/*
+        //PUT: api/Stock
+        [HttpPut(RouteConfigs.StockPortfolioOrders)]
+        public IActionResult UpdateStockOrders([FromBody] Stock s_stock)
+        {
+            try
+            {
+                var _result = _stockPortfolioBL.UpdateStockOrderInformation(s_stock);
+                //Log.Information("Stock Successfully updated");
+                return Ok("Stock Updated");
+            }
+            catch (System.Exception exe)
+            {
+                //Log.Warning("Route:" + RouteConfigs.Stock + ": " + exe.Message);
+                return BadRequest(exe.Message);
+            }
+        }
+
+//         // DELETE: api/Stock/5
+//         [HttpDelete(RouteConfigs.Stock)]
+//         public IActionResult DeleteStockOrders(int StockOrderID)
+//         {
+//             try
+//             {
+//                 _stockBL.DeleteStockOrderHistory(StockOrderID);
+//                 Log.Information("Stock Successfully deleted");
+//                 return Ok("Stock Deleted");
+//             }
+//             catch (System.Exception exe)
+//             {
+//                 Log.Warning("Route:" + RouteConfigs.Stock + ": " + exe.Message);
+//                 return Conflict(exe.Message);
+//             }
+//         }*/
     }
 }

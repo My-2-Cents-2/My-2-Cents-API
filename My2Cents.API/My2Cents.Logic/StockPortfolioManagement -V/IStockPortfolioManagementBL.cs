@@ -1,4 +1,5 @@
 using My2Cents.DataInfrastructure;
+// using My2Cents.API.DataTransferObjects;
 
 namespace My2Cents.Logic.Interfaces
 {
@@ -28,7 +29,7 @@ namespace My2Cents.Logic.Interfaces
         /// </summary>
         /// <param name="s_stock"></param>
         /// <returns></returns>
-        Stock UpdateStockInformation(Stock s_stock);
+        Stock UpdateStockPrice(string stockName, decimal stockPrice);
         /// <summary>
         /// deletes the stock
         /// </summary>
@@ -41,5 +42,12 @@ namespace My2Cents.Logic.Interfaces
 
         // Stock User
 
+        StockOrderHistory AddNewStockOrderHistory(StockOrderHistory s_stockOrder);
+        List<StockOrderHistory> GetAllStockOrderHistories();
+        List<StockOrderHistory> GetUserStockOrderHistory(int userId);
+        StockOrderHistory UpdateStockOrderInformation(StockOrderHistory s_stockOrder);
+        StockOrderHistory DeleteStockOrderHistory(int stockOrderHistoryId);
+        
+        //StockPortfolioStockInvestmentForm GetUserStockPortfolioData(int userId);
     }
 }

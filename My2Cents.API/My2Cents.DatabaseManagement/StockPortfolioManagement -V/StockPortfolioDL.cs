@@ -34,6 +34,16 @@ namespace My2Cents.DatabaseManagement.Implements
             return _context.Stocks.ToList();
         }
 
+        public Stock GetAStockFromStockId(int stockId)
+        {
+            return _context.Stocks.FirstOrDefault(s => s.StockId == stockId );
+        }
+
+        public Stock GetAStockFromStockName(string stockName)
+        {
+            return _context.Stocks.FirstOrDefault(s => s.Name == stockName );
+        }
+
 
         public Stock UpdateStock(Stock s_stock)
         {
@@ -44,8 +54,36 @@ namespace My2Cents.DatabaseManagement.Implements
                     stockToUpdate.LastUpdate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time"));
                 if (s_stock.CurrentPrice != null)
                     stockToUpdate.CurrentPrice = s_stock.CurrentPrice;
-                stockToUpdate.Name = s_stock.Name;
-                stockToUpdate.ShortenedName = s_stock.ShortenedName;
+                //if (s_stock.Name != "")
+                //    stockToUpdate.Name = s_stock.Name;
+                //stockToUpdate.ShortenedName = s_stock.ShortenedName;
+            }
+            else
+            {
+                throw new Exception("No stock able to update");
+            }
+
+            _context.SaveChanges();
+            return stockToUpdate;
+        }
+        public Stock UpdateStockPrice(int stockId, decimal stockPrice)
+        {
+            Stock stockToUpdate = _context.Stocks.Where(g => g.StockId == stockId).FirstOrDefault();
+            if (stockToUpdate != null)
+            {
+                if(stockPrice == 0)
+                {
+                    throw new Exception("price cannot be changed to 0");
+                }
+                if(stockPrice < 0)
+                {
+                    throw new Exception("price cannot be less than 0");
+                }
+                if (stockToUpdate.CurrentPrice != stockPrice)
+                    stockToUpdate.LastUpdate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time"));
+                if (stockPrice != 0)
+                    stockToUpdate.CurrentPrice = stockPrice;
+                
             }
             else
             {
@@ -93,6 +131,11 @@ namespace My2Cents.DatabaseManagement.Implements
             return _context.StockOrderHistories.ToList();
         }
 
+        public List<StockOrderHistory> GetUserStockOrders(int userId)
+        {
+            return _context.StockOrderHistories.Where(s => s.UserId == userId).ToList();
+        }
+
         public StockOrderHistory UpdateStockOrderHistory(StockOrderHistory s_stockOrderHistory)
         {
             StockOrderHistory stockToUpdate = _context.StockOrderHistories.Where(s => s.StockOrderId == s_stockOrderHistory.StockOrderId).FirstOrDefault();
@@ -117,6 +160,7 @@ namespace My2Cents.DatabaseManagement.Implements
             _context.SaveChanges();
             return stockToUpdate;
         }
+        
 
         public StockOrderHistory DeleteStockOrderHistory(int stockOrderId)
         {
