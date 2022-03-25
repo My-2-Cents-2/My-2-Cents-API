@@ -114,18 +114,16 @@ namespace My2Cents.API.Controllers
 
         // POST: api/Stock
         [HttpPost( RouteConfigs.StockPortfolioOrders )] 
-        public IActionResult AddNewStockOrder([FromQuery] StockPortfolioStockOrderForm s_stockOrder)
+        public IActionResult AddNewStockOrder([FromQuery] StockPortfolioStockOrderForm s_stockOrder, int userId)
         {
             try
             {
-                //_stockBL.ValidStockName(stockName);
-                //get userId
-                //Get stockid
+                Stock exampleStock = _stockPortfolioBL.GetAStockFromId(_stockPortfolioBL.GetStockIdFromName(s_stockOrder.StockName));
                 StockOrderHistory _newStockOrderHistory = new StockOrderHistory()
                 {
-                    // UserId = s_stockOrder.GetUserId(s_stockOrder.userName);
-                    // StockId = s_stockOrder.GetStockId(asdfjkl;);
-                    OrderPrice = s_stockOrder.OrderPrice,
+                    UserId = userId,
+                    StockId = _stockPortfolioBL.GetStockIdFromName(s_stockOrder.StockName),
+                    OrderPrice = exampleStock.CurrentPrice,
                     Quantity = s_stockOrder.Quantity,
                     OrderType = s_stockOrder.OrderType
                 };
