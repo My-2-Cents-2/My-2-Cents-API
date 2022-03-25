@@ -32,6 +32,16 @@ namespace My2Cents.DatabaseManagement.Interfaces
             return _context.Cryptos.ToList();
         }
 
+        public List<CryptoAsset> GetAllCryptoAssets()
+        {
+            return _context.CryptoAssets.ToList();
+        }
+
+        public List<CryptoAsset> GetCryptoAssetsByUser(int _userID)
+        {
+            return _context.CryptoAssets.Where(g => g.UserId == _userID).ToList();
+        }
+
         public List<CryptoOrderHistory> GetCryptoOrderHisByUser(int _ID)
         {
             return _context.CryptoOrderHistories.Where(g => g.UserId == _ID).ToList();
