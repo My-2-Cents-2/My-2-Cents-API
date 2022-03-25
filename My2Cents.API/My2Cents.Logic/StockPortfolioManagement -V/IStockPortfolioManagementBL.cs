@@ -50,5 +50,10 @@ namespace My2Cents.Logic.Interfaces
         StockOrderHistory DeleteStockOrderHistory(int stockOrderHistoryId);
         
         //StockPortfolioStockInvestmentForm GetUserStockPortfolioData(int userId);
+
+
+        //StockAssets
+        List<StockAsset> GetAllStockAssets();
+        List<StockAsset> GetUserStockAssets(int userId);
     }
 }
