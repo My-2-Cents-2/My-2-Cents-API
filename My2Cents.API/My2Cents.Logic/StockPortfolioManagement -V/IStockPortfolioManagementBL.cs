@@ -16,6 +16,7 @@ namespace My2Cents.Logic.Interfaces
         /// </summary>
         /// <returns></returns>
         List<Stock> GetAllStocks();
+        Stock GetAStockFromId(int stockId);
         /*
         /// <summary>
         /// gets stock info from the stock's name
@@ -38,7 +39,7 @@ namespace My2Cents.Logic.Interfaces
         Stock DeleteStock(int stockId);
         bool CheckDuplicateStock(string stockName);
         Stock CheckStockId(int stockId);
-
+        int GetStockIdFromName(string stockName);
 
         // Stock User
 
