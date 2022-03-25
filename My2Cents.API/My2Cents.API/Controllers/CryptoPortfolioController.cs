@@ -15,7 +15,7 @@ namespace My2Cents.API.Controllers
             _cryptoBL = cryptoBL;
         }
 
-        [HttpPost("Add Crypto")]
+        [HttpPost("AddCrypto")]
         public IActionResult AddNewCrypto(string cryptoName, string shtName, decimal price)
         {
             try
@@ -58,7 +58,7 @@ namespace My2Cents.API.Controllers
         
         }
 
-        [HttpPut("Update Crypto Price")]
+        [HttpPut("UpdateCryptoPrice")]
         public IActionResult ChangeCryptoPrice(int _ID, decimal _price)
         {
             try
@@ -73,7 +73,7 @@ namespace My2Cents.API.Controllers
             
         }
 
-        [HttpPost("Add CryptoOrderHistory")]
+        [HttpPost("AddCryptoOrderHistory")]
         public IActionResult AddCryptoOrderHistory(int userID, int cryptoID, decimal orderPrice, decimal quantity)
         {
             try
