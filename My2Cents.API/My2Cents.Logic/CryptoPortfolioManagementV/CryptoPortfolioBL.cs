@@ -46,5 +46,6 @@ namespace My2Cents.Logic.Interfaces
         {
             return _repo.UpdateCryptoPrice(_ID, _price);
         }
+
     }
 }
