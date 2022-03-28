@@ -70,6 +70,23 @@ namespace My2Cents.Logic.Implements
                 return userStocks.ToList();
             }
         }
+
+        public List<Stock> GetUserStocksFromOrderHistory(int userId) // i have no clue if this actually works
+        {
+            List<StockOrderHistory> userAssets = _repo.GetAllStockOrderHistory().Where(s => s.UserId == userId).ToList();
+            HashSet<Stock> userStocks = new HashSet<Stock> ();
+            foreach (StockOrderHistory asset in userAssets){
+                userStocks.Add( _repo.GetAStockFromStockId(asset.StockId));
+            }
+            if (!userStocks.Any())
+            {
+                throw new Exception("No one has any stocks");
+            }
+            else
+            {
+                return userStocks.ToList();
+            }
+        }
         public Stock UpdateStockPrice(string stockName, decimal stockPrice)
         {
             try
@@ -250,6 +267,28 @@ namespace My2Cents.Logic.Implements
             }
         }
         
+        public List<StockAsset> GetAllStockAssets()
+        {
+            try
+            {
+                return _repo.GetAllStockAssets();
+            }
+            catch(System.Exception exe )
+            {
+                throw new Exception(exe.Message);
+            }
+        }
+        public List<StockAsset> GetUserStockAssets(int userId)
+        {
+            try
+            {
+                return _repo.GetUserStockAssets(userId);
+            }
+            catch(System.Exception exe )
+            {
+                throw new Exception(exe.Message);
+            }
+        } 
 
     }
 }

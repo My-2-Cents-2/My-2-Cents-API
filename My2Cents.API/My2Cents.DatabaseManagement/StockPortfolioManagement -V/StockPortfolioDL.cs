@@ -199,8 +199,29 @@ namespace My2Cents.DatabaseManagement.Implements
 
         public List<StockAsset> GetAllStockAssets()
         {
-            return _context.StockAssets.ToList();
+            List<StockAsset> _result = _context.StockAssets.ToList();
+            if(!_result.Any())
+            {
+                throw new Exception("Stocks Asset DNE");
+            }
+            else
+            {
+                return _result;
+            }
         }
+        public List<StockAsset> GetUserStockAssets(int userId)
+        {
+            List<StockAsset> _result = _context.StockAssets.Where(s => s.UserId == userId).ToList();
+            if(!_result.Any())
+            {
+                throw new Exception("Stocks Asset DNE");
+            }
+            else
+            {
+                return _result;
+            }
+        }
+
 
         public StockAsset UpdateStockAsset(StockAsset s_stockAsset)
         {
@@ -242,6 +263,8 @@ namespace My2Cents.DatabaseManagement.Implements
                 throw new Exception("Stock asset not found. Stock asset could not be deleted.");
             }
         }
+
+
 
     }
 }

@@ -27,6 +27,16 @@ namespace My2Cents.Logic.Interfaces
             return _repo.GetAllCrypto();
         }
 
+        public List<CryptoAsset> GetAllCryptoAssets()
+        {
+            return _repo.GetAllCryptoAssets();
+        }
+
+        public List<CryptoAsset> GetCryptoAssetsByUser(int _userID)
+        {
+            return _repo.GetCryptoAssetsByUser(_userID);
+        }
+
         public List<CryptoOrderHistory> GetCryptoOrderHisByUser(int _ID)
         {
             return _repo.GetCryptoOrderHisByUser(_ID);
@@ -36,5 +46,6 @@ namespace My2Cents.Logic.Interfaces
         {
             return _repo.UpdateCryptoPrice(_ID, _price);
         }
+
     }
 }
