@@ -217,7 +217,7 @@ namespace My2Cents.API.Controllers
         {
             try
             {
-                List<StockPortfolioStockInvestmentForm> _result = GetUserStockPortfolioData(userId);
+                List<StockPortfolioStockInvestmentForm> _result = GetUserStockPortfolioDataFromAssets(userId);
                 //Log.Information("Route: " + RouteConfigs.StockPortfolioStocks);
                 //Log.Information("Get All Stocks);
                 return Ok(_result);
@@ -230,7 +230,7 @@ namespace My2Cents.API.Controllers
 //                return NotFound(GetUserStockPortfolioData(int userId));
             }
         }
-        private List<StockPortfolioStockInvestmentForm> GetUserStockPortfolioData(int userId)
+        private List<StockPortfolioStockInvestmentForm> GetUserStockPortfolioDataFromOrderHistory(int userId)
         {
             //information from stocks
             List<StockPortfolioStockInvestmentForm> pleaseLetThisWork = new List<StockPortfolioStockInvestmentForm>(){};
@@ -278,5 +278,37 @@ namespace My2Cents.API.Controllers
 
             return pleaseLetThisWork;
         }
+        
+        private List<StockPortfolioStockInvestmentForm> GetUserStockPortfolioDataFromAssets(int userId)
+        {
+            //information from stocks
+            List<StockPortfolioStockInvestmentForm> assetTableInformation = new List<StockPortfolioStockInvestmentForm>(){};
+            List<StockAsset> userStocks = _stockPortfolioBL.GetUserStockAssets(userId);
+            foreach(StockAsset aUserStock in userStocks)
+            {
+                // Convert stockId to stock
+                Stock tempStock = _stockPortfolioBL.GetAStockFromId(aUserStock.StockId);
+                decimal _currentPrice = tempStock.CurrentPrice;
+                decimal _quantity = aUserStock.Quantity;
+                decimal _currentInvestment = aUserStock.BuyPrice;
+                decimal _totalStockPrice = _quantity * _currentPrice;
+                StockPortfolioStockInvestmentForm userStockData = new StockPortfolioStockInvestmentForm(){
+                    Name =  tempStock.Name,
+                    SharePrice = _currentPrice,
+                    
+                    //information from stockorderhistory
+                    //get user shares owned from a specific company
+                    InitialInvestmentDate = aUserStock.BuyDate,
+                    CurrentInvestment = aUserStock.BuyPrice,
+                    OwnedShares = _quantity,
+                    Returns = ((_currentPrice) / (_currentInvestment) ) * 100,
+                    StockPrice = _totalStockPrice
+                };
+                assetTableInformation.Add(userStockData);
+            }
+
+            return assetTableInformation;
+        }
+        
     }
 }
