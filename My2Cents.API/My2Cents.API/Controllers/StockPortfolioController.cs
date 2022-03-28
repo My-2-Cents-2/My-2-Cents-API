@@ -301,7 +301,7 @@ namespace My2Cents.API.Controllers
                     InitialInvestmentDate = aUserStock.BuyDate,
                     CurrentInvestment = aUserStock.BuyPrice,
                     OwnedShares = _quantity,
-                    Returns = ((_currentPrice) / (_currentInvestment) ) * 100,
+                    Returns = ((_currentPrice - _currentInvestment) / (_currentInvestment) ) * 100,
                     StockPrice = _totalStockPrice
                 };
                 assetTableInformation.Add(userStockData);
