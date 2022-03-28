@@ -15,8 +15,8 @@ namespace My2Cents.DatabaseManagement.Interfaces
         List<CryptoOrderHistory> GetCryptoOrderHisByUser(int _ID);
 
         List<CryptoAsset> GetAllCryptoAssets();
-        List<CryptoAsset> GetUserCryptoAssets(int userId);
-        
+
+        List<CryptoAsset> GetCryptoAssetsByUser(int _userID);
 
     }
 }
