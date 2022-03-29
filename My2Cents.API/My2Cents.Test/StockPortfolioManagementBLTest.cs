@@ -9,7 +9,7 @@ using My2Cents.DatabaseManagement.Implements;
 using My2Cents.Logic.Implements;
 using My2Cents.Logic.Interfaces;
 using My2Cents.DataInfrastructure;
-/*
+
 namespace StockPortfolioManagementTest
 {
     public class DbContextRepositoryTest
@@ -46,13 +46,30 @@ namespace StockPortfolioManagementTest
                     }
                 );
 
-                context.     .AddRange(
+                context.StockOrderHistory.AddRange(
                     new Account{
+                        StockOrderId = 1,
+                        UserId = 1,
+                        StockId = 1,
+                        OrderPrice = 172,
+                        Quantity = 2,
+                        OrderType = "buy",
+                        OrderTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time"))
+                    }
+                );
 
+                context.StockOrderHistory.AddRange(
+                    new Account{
+                        StockOrderId = 1,
+                        UserId = 1,
+                        StockId = 1,
+                        OrderPrice = 172,
+                        Quantity = 2,
+                        OrderType = "buy",
+                        OrderTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time"))
                     }
                 );
             }
         }
     }
 }
-*/

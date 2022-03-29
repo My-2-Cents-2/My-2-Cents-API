@@ -12,6 +12,7 @@ using My2Cents.Logic.Interfaces;
 using My2Cents.DataInfrastructure;
 using My2Cents.API.Consts;
 using My2Cents.API.DataTransferObjects;
+using My2Cents.DataInfrastructure.Models;
 
 namespace My2Cents.API.Controllers
 {
@@ -25,30 +26,7 @@ namespace My2Cents.API.Controllers
             _stockPortfolioBL = s_stockPortfolioBL;
         }
 
-        // POST: api/Stock
-        [HttpPost( RouteConfigs.StockPortfolioStocks )]
-        public IActionResult AddNewStock([FromQuery] StockPortfolioStockForm s_stock)
-        {
-            try
-            {
-                //_stockBL.ValidStockName(stockName);
-                Stock _newStock = new Stock()
-                {
-                    CurrentPrice = s_stock.CurrentPrice,
-                    LastUpdate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time")),
-                    Name = s_stock.Name,
-                    ShortenedName = s_stock.ShortenedName
-                };
-                var _result = _stockPortfolioBL.AddNewStock(_newStock);
-                //Log.Information("Stock Successfully created");
-                return Created("Has created ", _result);
-            }
-            catch (System.Exception exe)
-            {
-                //Log.Warning("Route:" + RouteConfigs.Stock + ": " + exe.Message);
-                return BadRequest(exe.Message);
-            }
-        }
+        
 
         // GET: api/GroupPost
         [HttpGet(RouteConfigs.StockPortfolioStocks)]
@@ -112,31 +90,7 @@ namespace My2Cents.API.Controllers
 
 
 
-        // POST: api/Stock
-        [HttpPost( RouteConfigs.StockPortfolioOrders )] 
-        public IActionResult AddNewStockOrder([FromQuery] StockPortfolioStockOrderForm s_stockOrder, int userId)
-        {
-            try
-            {
-                Stock exampleStock = _stockPortfolioBL.GetAStockFromId(_stockPortfolioBL.GetStockIdFromName(s_stockOrder.StockName));
-                StockOrderHistory _newStockOrderHistory = new StockOrderHistory()
-                {
-                    UserId = userId,
-                    StockId = _stockPortfolioBL.GetStockIdFromName(s_stockOrder.StockName),
-                    OrderPrice = exampleStock.CurrentPrice,
-                    Quantity = s_stockOrder.Quantity,
-                    OrderType = s_stockOrder.OrderType
-                };
-                var _result = _stockPortfolioBL.AddNewStockOrderHistory(_newStockOrderHistory);
-                //Log.Information("Stock Successfully created");
-                return Created("Has created ", _result);
-            }
-            catch (System.Exception exe)
-            {
-                //Log.Warning("Route:" + RouteConfigs.Stock + ": " + exe.Message);
-                return BadRequest(exe.Message);
-            }
-        }
+        
 
         // GET: api/GroupPost
         [HttpGet(RouteConfigs.StockPortfolioOrders)]
@@ -163,8 +117,7 @@ namespace My2Cents.API.Controllers
         {
             try
             {
-                
-                var _result = _stockPortfolioBL.GetUserStockOrderHistory(userId);
+                var _result = ConvertOrderHistoryToForm(_stockPortfolioBL.GetUserStockOrderHistory(userId));
                 //Log.Information("Route: " + RouteConfigs.StockPortfolioStocks);
                 //Log.Information("Get All Stocks);
 
@@ -177,40 +130,6 @@ namespace My2Cents.API.Controllers
                 return NotFound("Cannot find any post belongs in this group!");
             }
         }
-/*
-        //PUT: api/Stock
-        [HttpPut(RouteConfigs.StockPortfolioOrders)]
-        public IActionResult UpdateStockOrders([FromBody] Stock s_stock)
-        {
-            try
-            {
-                var _result = _stockPortfolioBL.UpdateStockOrderInformation(s_stock);
-                //Log.Information("Stock Successfully updated");
-                return Ok("Stock Updated");
-            }
-            catch (System.Exception exe)
-            {
-                //Log.Warning("Route:" + RouteConfigs.Stock + ": " + exe.Message);
-                return BadRequest(exe.Message);
-            }
-        }
-
-//         // DELETE: api/Stock/5
-//         [HttpDelete(RouteConfigs.Stock)]
-//         public IActionResult DeleteStockOrders(int StockOrderID)
-//         {
-//             try
-//             {
-//                 _stockBL.DeleteStockOrderHistory(StockOrderID);
-//                 Log.Information("Stock Successfully deleted");
-//                 return Ok("Stock Deleted");
-//             }
-//             catch (System.Exception exe)
-//             {
-//                 Log.Warning("Route:" + RouteConfigs.Stock + ": " + exe.Message);
-//                 return Conflict(exe.Message);
-//             }
-//         }*/
 
         [HttpGet(RouteConfigs.StockPortfolioAssetsPortfolio)]
         public IActionResult GetUserStockPortfolioAssetData(int userId)
@@ -234,15 +153,15 @@ namespace My2Cents.API.Controllers
         {
             //information from stocks
             List<StockPortfolioStockInvestmentForm> pleaseLetThisWork = new List<StockPortfolioStockInvestmentForm>(){};
-            List<Stock> userStocks = _stockPortfolioBL.GetUserStocksFromOrderHistory(userId);
-            List<StockOrderHistory> userStockOrderHistory = _stockPortfolioBL.GetUserStockOrderHistory(userId);
-            foreach(Stock aUserStock in userStocks)
+            List<StockDto> userStocks = _stockPortfolioBL.GetUserStocksFromOrderHistory(userId);
+            List<StockOrderHistoryDto> userStockOrderHistory = _stockPortfolioBL.GetUserStockOrderHistory(userId);
+            foreach(StockDto aUserStock in userStocks)
             {
                 decimal tempTotal = 0;
                 // returns = (currentStockPrice - tempCurrentInvestment) / totalInvestment
                 decimal tempCurrentInvestment = 0;
                 decimal tempOwnedShares = 0;
-                foreach(StockOrderHistory order in userStockOrderHistory) {
+                foreach(StockOrderHistoryDto order in userStockOrderHistory) {
                     if(order.StockId == aUserStock.StockId)
                     {
                         if(order.OrderType == "buy")
@@ -283,11 +202,11 @@ namespace My2Cents.API.Controllers
         {
             //information from stocks
             List<StockPortfolioStockInvestmentForm> assetTableInformation = new List<StockPortfolioStockInvestmentForm>(){};
-            List<StockAsset> userStocks = _stockPortfolioBL.GetUserStockAssets(userId);
-            foreach(StockAsset aUserStock in userStocks)
+            List<StockAssetDto> userStocks = _stockPortfolioBL.GetUserStockAssets(userId);
+            foreach(StockAssetDto aUserStock in userStocks)
             {
                 // Convert stockId to stock
-                Stock tempStock = _stockPortfolioBL.GetAStockFromId(aUserStock.StockId);
+                StockDto tempStock = _stockPortfolioBL.GetAStockFromId(aUserStock.StockId);
                 decimal _currentPrice = tempStock.CurrentPrice;
                 decimal _quantity = aUserStock.Quantity;
                 decimal _currentInvestment = aUserStock.BuyPrice;
@@ -310,5 +229,23 @@ namespace My2Cents.API.Controllers
             return assetTableInformation;
         }
         
+        private List<OrderHistoryPortfolioForm> ConvertOrderHistoryToForm(List<StockOrderHistoryDto> o_OrderHistory)
+        {
+            List<OrderHistoryPortfolioForm> _result = new List<OrderHistoryPortfolioForm>(){};
+            foreach(StockOrderHistoryDto _orderHistory in o_OrderHistory)
+            {
+                OrderHistoryPortfolioForm tempOrderHistoryPortfolioForm = new OrderHistoryPortfolioForm()
+                {
+                    Name = _stockPortfolioBL.GetAStockFromId(_orderHistory.StockId).Name,
+                    CurrentInvestment = _orderHistory.OrderPrice * _orderHistory.Quantity,
+                    InitialInvestmentDate = _orderHistory.OrderTime,
+                    OwnedShares = _orderHistory.Quantity,
+                    TransactionType = _orderHistory.OrderType
+                };
+                Console.WriteLine(tempOrderHistoryPortfolioForm.Name);
+                _result.Add(tempOrderHistoryPortfolioForm);
+            }
+            return _result;
+        }
     }
 }
