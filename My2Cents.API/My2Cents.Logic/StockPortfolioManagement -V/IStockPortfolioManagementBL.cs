@@ -1,23 +1,14 @@
 using My2Cents.DataInfrastructure;
+using My2Cents.DataInfrastructure.Models;
 // using My2Cents.API.DataTransferObjects;
 
 namespace My2Cents.Logic.Interfaces
 {
     public interface IStockPortfolioManagementBL
     {
-        /// <summary>
-        /// creates a new stock request
-        /// </summary>
-        /// <param name="s_stock"></param>
-        /// <returns></returns>
-        Stock AddNewStock(Stock s_stock);
-        /// <summary>
-        /// returns the list of ALL of the stocks
-        /// </summary>
-        /// <returns></returns>
-        List<Stock> GetAllStocks();
-        List<Stock> GetUserStocks(int userId);
-        Stock GetAStockFromId(int stockId);
+        List<StockDto> GetAllStocks();
+        List<StockDto> GetUserStocks(int userId);
+        StockDto GetAStockFromId(int stockId);
         /*
         /// <summary>
         /// gets stock info from the stock's name
@@ -32,30 +23,24 @@ namespace My2Cents.Logic.Interfaces
         /// <param name="s_stock"></param>
         /// <returns></returns>
         
-        Stock UpdateStockPrice(string stockName, decimal stockPrice);
+        StockDto UpdateStockPrice(string stockName, decimal stockPrice);
         /// <summary>
         /// deletes the stock
         /// </summary>
         /// <param name="stockId"></param>
         /// <returns></returns>
-        Stock DeleteStock(int stockId);
         bool CheckDuplicateStock(string stockName);
-        Stock CheckStockId(int stockId);
+        StockDto CheckStockId(int stockId);
         int GetStockIdFromName(string stockName);
 
         // Stock User
 
-        StockOrderHistory AddNewStockOrderHistory(StockOrderHistory s_stockOrder);
-        List<StockOrderHistory> GetAllStockOrderHistories();
-        List<StockOrderHistory> GetUserStockOrderHistory(int userId);
-        StockOrderHistory UpdateStockOrderInformation(StockOrderHistory s_stockOrder);
-        StockOrderHistory DeleteStockOrderHistory(int stockOrderHistoryId);
-        
-        //StockPortfolioStockInvestmentForm GetUserStockPortfolioData(int userId);
-        List<Stock> GetUserStocksFromOrderHistory(int userId);
+        List<StockOrderHistoryDto> GetAllStockOrderHistories();
+        List<StockOrderHistoryDto> GetUserStockOrderHistory(int userId);
+        List<StockDto> GetUserStocksFromOrderHistory(int userId);
 
         //StockAssets
-        List<StockAsset> GetAllStockAssets();
-        List<StockAsset> GetUserStockAssets(int userId);
+        List<StockAssetDto> GetAllStockAssets();
+        List<StockAssetDto> GetUserStockAssets(int userId);
     }
 }
