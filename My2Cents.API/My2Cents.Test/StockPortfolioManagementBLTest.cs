@@ -33,10 +33,16 @@ namespace StockPortfolioManagementTest
                 IStockPortfolioManagementDL repo = new DbContextRepositoryTest(context);
 
                 //Act
-                List<Stock> listOfStocks = repo.GetAllStocks();
+                List<StockDto> listOfStocks = repo.GetAllStocks();
 
                 //Assert
-                Assert.Equal(2, ListOfStocks)
+                Assert.Equal(2, listOfStocks.Count);
+                Assert.Equal(1, listOfStocks[0].StockId);
+                Assert.Equal(1, listOfStocks[0].CurrentPrice);
+                Assert.Equal("Rhongobongo", listOfStocks[0].Name);
+                Assert.Equal("VeryFunDragonsactions", listOfStocks[0].ShortenedName);
+
+
             }
         }
 
