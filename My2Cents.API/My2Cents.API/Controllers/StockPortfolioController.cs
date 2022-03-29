@@ -186,7 +186,7 @@ namespace My2Cents.API.Controllers
                     
                     //information from stockorderhistory
                     //get user shares owned from a specific company
-                    InitialInvestmentDate = userStockOrderHistory[0].OrderTime,
+                    InitialInvestmentDate = userStockOrderHistory[0].OrderTime.ToString("MM/dd/yyyy"),
                     CurrentInvestment = tempCurrentInvestment,
                     OwnedShares = tempOwnedShares,
                     Returns = ((aUserStock.CurrentPrice * tempOwnedShares  - tempCurrentInvestment) / tempCurrentInvestment ) * 100,
@@ -217,7 +217,7 @@ namespace My2Cents.API.Controllers
                     
                     //information from stockorderhistory
                     //get user shares owned from a specific company
-                    InitialInvestmentDate = aUserStock.BuyDate,
+                    InitialInvestmentDate = aUserStock.BuyDate.ToString("MM/dd/yyyy"),
                     CurrentInvestment = aUserStock.BuyPrice,
                     OwnedShares = _quantity,
                     Returns = ((_currentPrice - _currentInvestment) / (_currentInvestment) ) * 100,
@@ -238,7 +238,7 @@ namespace My2Cents.API.Controllers
                 {
                     Name = _stockPortfolioBL.GetAStockFromId(_orderHistory.StockId).Name,
                     CurrentInvestment = _orderHistory.OrderPrice * _orderHistory.Quantity,
-                    InitialInvestmentDate = _orderHistory.OrderTime,
+                    InitialInvestmentDate = _orderHistory.OrderTime.ToString("MM/dd/yyyy") ,
                     OwnedShares = _orderHistory.Quantity,
                     TransactionType = _orderHistory.OrderType
                 };
