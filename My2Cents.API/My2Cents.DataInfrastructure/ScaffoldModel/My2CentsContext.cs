@@ -47,9 +47,9 @@ namespace My2Cents.DataInfrastructure
 
                 entity.Property(e => e.AccountTypeId).HasColumnName("AccountTypeID");
 
-                entity.Property(e => e.Interest).HasColumnType("decimal(18, 0)");
+                entity.Property(e => e.Interest).HasColumnType("decimal(18, 8)");
 
-                entity.Property(e => e.TotalBalance).HasColumnType("decimal(18, 0)");
+                entity.Property(e => e.TotalBalance).HasColumnType("decimal(18, 8)");
 
                 entity.Property(e => e.UserId).HasColumnName("UserID");
 
@@ -93,9 +93,11 @@ namespace My2Cents.DataInfrastructure
 
                 entity.Property(e => e.CryptoId).HasColumnName("CryptoID");
 
-                entity.Property(e => e.CurrentPrice).HasColumnType("decimal(18, 0)");
+                entity.Property(e => e.CurrentPrice).HasColumnType("decimal(18, 8)");
 
                 entity.Property(e => e.LastUpdate).HasColumnType("smalldatetime");
+
+                entity.Property(e => e.ImageURL).HasMaxLength(255);
 
                 entity.Property(e => e.Name).HasMaxLength(255);
 
@@ -110,15 +112,17 @@ namespace My2Cents.DataInfrastructure
 
                 entity.Property(e => e.BuyDate).HasColumnType("smalldatetime");
 
-                entity.Property(e => e.BuyPrice).HasColumnType("decimal(18, 0)");
+                entity.Property(e => e.BuyPrice).HasColumnType("decimal(18, 8)");
 
                 entity.Property(e => e.CryptoId).HasColumnName("CryptoID");
 
-                entity.Property(e => e.Quantity).HasColumnType("decimal(18, 0)");
+                entity.Property(e => e.Quantity).HasColumnType("decimal(18, 8)");
 
-                entity.Property(e => e.StopLoss).HasColumnType("decimal(18, 0)");
+                entity.Property(e => e.StopLoss).HasColumnType("decimal(18, 8)");
 
-                entity.Property(e => e.TakeProfit).HasColumnType("decimal(18, 0)");
+                entity.Property(e => e.TakeProfit).HasColumnType("decimal(18, 8)");
+
+                entity.Property(e => e.BuyCount).HasColumnType("int");
 
                 entity.Property(e => e.UserId).HasColumnName("UserID");
 
@@ -146,13 +150,13 @@ namespace My2Cents.DataInfrastructure
 
                 entity.Property(e => e.CryptoId).HasColumnName("CryptoID");
 
-                entity.Property(e => e.OrderPrice).HasColumnType("decimal(18, 0)");
+                entity.Property(e => e.OrderPrice).HasColumnType("decimal(18, 8)");
 
                 entity.Property(e => e.OrderTime).HasColumnType("smalldatetime");
 
                 entity.Property(e => e.OrderType).HasMaxLength(255);
 
-                entity.Property(e => e.Quantity).HasColumnType("decimal(18, 0)");
+                entity.Property(e => e.Quantity).HasColumnType("decimal(18, 8)");
 
                 entity.Property(e => e.UserId).HasColumnName("UserID");
 
@@ -175,7 +179,7 @@ namespace My2Cents.DataInfrastructure
 
                 entity.Property(e => e.StockId).HasColumnName("StockID");
 
-                entity.Property(e => e.CurrentPrice).HasColumnType("decimal(18, 0)");
+                entity.Property(e => e.CurrentPrice).HasColumnType("decimal(18, 8)");
 
                 entity.Property(e => e.LastUpdate).HasColumnType("smalldatetime");
 
@@ -192,15 +196,17 @@ namespace My2Cents.DataInfrastructure
 
                 entity.Property(e => e.BuyDate).HasColumnType("smalldatetime");
 
-                entity.Property(e => e.BuyPrice).HasColumnType("decimal(18, 0)");
+                entity.Property(e => e.BuyPrice).HasColumnType("decimal(18, 8)");
 
-                entity.Property(e => e.Quantity).HasColumnType("decimal(18, 0)");
+                entity.Property(e => e.Quantity).HasColumnType("decimal(18, 8)");
 
                 entity.Property(e => e.StockId).HasColumnName("StockID");
 
-                entity.Property(e => e.StopLoss).HasColumnType("decimal(18, 0)");
+                entity.Property(e => e.StopLoss).HasColumnType("decimal(18, 8)");
 
-                entity.Property(e => e.TakeProfit).HasColumnType("decimal(18, 0)");
+                entity.Property(e => e.TakeProfit).HasColumnType("decimal(18, 8)");
+
+                entity.Property(e => e.BuyCount).HasColumnType("int");
 
                 entity.Property(e => e.UserId).HasColumnName("UserID");
 
@@ -226,13 +232,13 @@ namespace My2Cents.DataInfrastructure
 
                 entity.Property(e => e.StockOrderId).HasColumnName("StockOrderID");
 
-                entity.Property(e => e.OrderPrice).HasColumnType("decimal(18, 0)");
+                entity.Property(e => e.OrderPrice).HasColumnType("decimal(18, 8)");
 
                 entity.Property(e => e.OrderTime).HasColumnType("smalldatetime");
 
                 entity.Property(e => e.OrderType).HasMaxLength(255);
 
-                entity.Property(e => e.Quantity).HasColumnType("decimal(18, 0)");
+                entity.Property(e => e.Quantity).HasColumnType("decimal(18, 8)");
 
                 entity.Property(e => e.StockId).HasColumnName("StockID");
 
@@ -259,11 +265,11 @@ namespace My2Cents.DataInfrastructure
 
                 entity.Property(e => e.AccountId).HasColumnName("AccountID");
 
-                entity.Property(e => e.Amount).HasColumnType("decimal(18, 0)");
+                entity.Property(e => e.Amount).HasColumnType("decimal(18, 8)");
 
                 entity.Property(e => e.Authorized).HasMaxLength(20);
 
-                entity.Property(e => e.LineAmount).HasColumnType("decimal(18, 0)");
+                entity.Property(e => e.LineAmount).HasColumnType("decimal(18, 8)");
 
                 entity.Property(e => e.TransactionDate)
                     .HasColumnType("datetime")

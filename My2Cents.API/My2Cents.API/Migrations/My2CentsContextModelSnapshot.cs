@@ -124,10 +124,10 @@ namespace My2Cents.API.Migrations
                         .HasColumnName("AccountTypeID");
 
                     b.Property<decimal>("Interest")
-                        .HasColumnType("decimal(18,0)");
+                        .HasColumnType("decimal(18,8)");
 
                     b.Property<decimal>("TotalBalance")
-                        .HasColumnType("decimal(18,0)");
+                        .HasColumnType("decimal(18,8)");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int")
@@ -285,7 +285,12 @@ namespace My2Cents.API.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CryptoId"), 1L, 1);
 
                     b.Property<decimal>("CurrentPrice")
-                        .HasColumnType("decimal(18,0)");
+                        .HasColumnType("decimal(18,8)");
+
+                    b.Property<string>("ImageURL")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
                     b.Property<DateTime>("LastUpdate")
                         .HasColumnType("smalldatetime");
@@ -314,24 +319,27 @@ namespace My2Cents.API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CryptoAssetId"), 1L, 1);
 
+                    b.Property<int>("BuyCount")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("BuyDate")
                         .HasColumnType("smalldatetime");
 
                     b.Property<decimal>("BuyPrice")
-                        .HasColumnType("decimal(18,0)");
+                        .HasColumnType("decimal(18,8)");
 
                     b.Property<int>("CryptoId")
                         .HasColumnType("int")
                         .HasColumnName("CryptoID");
 
                     b.Property<decimal>("Quantity")
-                        .HasColumnType("decimal(18,0)");
+                        .HasColumnType("decimal(18,8)");
 
                     b.Property<decimal>("StopLoss")
-                        .HasColumnType("decimal(18,0)");
+                        .HasColumnType("decimal(18,8)");
 
                     b.Property<decimal>("TakeProfit")
-                        .HasColumnType("decimal(18,0)");
+                        .HasColumnType("decimal(18,8)");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int")
@@ -360,7 +368,7 @@ namespace My2Cents.API.Migrations
                         .HasColumnName("CryptoID");
 
                     b.Property<decimal>("OrderPrice")
-                        .HasColumnType("decimal(18,0)");
+                        .HasColumnType("decimal(18,8)");
 
                     b.Property<DateTime>("OrderTime")
                         .HasColumnType("smalldatetime");
@@ -371,7 +379,7 @@ namespace My2Cents.API.Migrations
                         .HasColumnType("nvarchar(255)");
 
                     b.Property<decimal>("Quantity")
-                        .HasColumnType("decimal(18,0)");
+                        .HasColumnType("decimal(18,8)");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int")
@@ -397,7 +405,7 @@ namespace My2Cents.API.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StockId"), 1L, 1);
 
                     b.Property<decimal>("CurrentPrice")
-                        .HasColumnType("decimal(18,0)");
+                        .HasColumnType("decimal(18,8)");
 
                     b.Property<DateTime>("LastUpdate")
                         .HasColumnType("smalldatetime");
@@ -426,24 +434,27 @@ namespace My2Cents.API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StockAssetId"), 1L, 1);
 
+                    b.Property<int>("BuyCount")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("BuyDate")
                         .HasColumnType("smalldatetime");
 
                     b.Property<decimal>("BuyPrice")
-                        .HasColumnType("decimal(18,0)");
+                        .HasColumnType("decimal(18,8)");
 
                     b.Property<decimal>("Quantity")
-                        .HasColumnType("decimal(18,0)");
+                        .HasColumnType("decimal(18,8)");
 
                     b.Property<int>("StockId")
                         .HasColumnType("int")
                         .HasColumnName("StockID");
 
                     b.Property<decimal>("StopLoss")
-                        .HasColumnType("decimal(18,0)");
+                        .HasColumnType("decimal(18,8)");
 
                     b.Property<decimal>("TakeProfit")
-                        .HasColumnType("decimal(18,0)");
+                        .HasColumnType("decimal(18,8)");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int")
@@ -468,7 +479,7 @@ namespace My2Cents.API.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StockOrderId"), 1L, 1);
 
                     b.Property<decimal>("OrderPrice")
-                        .HasColumnType("decimal(18,0)");
+                        .HasColumnType("decimal(18,8)");
 
                     b.Property<DateTime>("OrderTime")
                         .HasColumnType("smalldatetime");
@@ -479,7 +490,7 @@ namespace My2Cents.API.Migrations
                         .HasColumnType("nvarchar(255)");
 
                     b.Property<decimal>("Quantity")
-                        .HasColumnType("decimal(18,0)");
+                        .HasColumnType("decimal(18,8)");
 
                     b.Property<int>("StockId")
                         .HasColumnType("int")
@@ -513,7 +524,7 @@ namespace My2Cents.API.Migrations
                         .HasColumnName("AccountID");
 
                     b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(18,0)");
+                        .HasColumnType("decimal(18,8)");
 
                     b.Property<string>("Authorized")
                         .IsRequired()
@@ -521,7 +532,7 @@ namespace My2Cents.API.Migrations
                         .HasColumnType("nvarchar(20)");
 
                     b.Property<decimal>("LineAmount")
-                        .HasColumnType("decimal(18,0)");
+                        .HasColumnType("decimal(18,8)");
 
                     b.Property<DateTime>("TransactionDate")
                         .ValueGeneratedOnAdd()
