@@ -418,7 +418,8 @@ namespace My2Cents.DatabaseManagement
                 CurrentPrice = p.CurrentPrice,
                 LastUpdate = p.LastUpdate,
                 Name = p.Name,
-                ShortenedName = p.ShortenedName
+                ShortenedName = p.ShortenedName,
+                ImageURL = p.ImageURL
             }).ToList();
 
             return _CryptoData;
