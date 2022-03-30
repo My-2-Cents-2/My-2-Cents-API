@@ -1,22 +1,24 @@
 using My2Cents.DataInfrastructure;
+using My2Cents.DataInfrastructure.Models;
 
 namespace My2Cents.DatabaseManagement.Interfaces
 {
     public interface ICryptoPortfolioDL
     {
-        Crypto AddCrypto(Crypto _crypto);
+        CryptoDto AddCrypto(Crypto _crypto);
 
-        List<Crypto> GetAllCrypto();
+        List<CryptoDto> GetAllCrypto();
+        CryptoDto GetCryptoById(int _cryptoId);
 
-        Crypto UpdateCryptoPrice(int _ID, decimal _price);
+        CryptoDto UpdateCryptoPrice(int _ID, decimal _price);
 
-        CryptoOrderHistory AddCryptoOrderHistory(CryptoOrderHistory _cOrderHis);
+        CryptoOrderHistoryDto AddCryptoOrderHistory(CryptoOrderHistory _cOrderHis);
 
-        List<CryptoOrderHistory> GetCryptoOrderHisByUser(int _ID);
+        List<CryptoOrderHistoryDto> GetCryptoOrderHisByUser(int _ID);
 
-        List<CryptoAsset> GetAllCryptoAssets();
+        List<CryptoAssetDto> GetAllCryptoAssets();
 
-        List<CryptoAsset> GetCryptoAssetsByUser(int _userID);
+        List<CryptoAssetDto> GetCryptoAssetsByUser(int _userID);
 
     }
 }
