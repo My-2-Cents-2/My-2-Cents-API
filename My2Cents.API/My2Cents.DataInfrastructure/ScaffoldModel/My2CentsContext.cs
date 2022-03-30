@@ -97,6 +97,10 @@ namespace My2Cents.DataInfrastructure
 
                 entity.Property(e => e.LastUpdate).HasColumnType("smalldatetime");
 
+                entity.Property(e => e.PriceChange).HasColumnType("decimal(18, 8)");
+
+                entity.Property(e => e.PriceChangePercentage).HasColumnName("PriceChangePercentage");
+
                 entity.Property(e => e.ImageURL).HasMaxLength(255);
 
                 entity.Property(e => e.Name).HasMaxLength(255);
@@ -182,6 +186,10 @@ namespace My2Cents.DataInfrastructure
                 entity.Property(e => e.CurrentPrice).HasColumnType("decimal(18, 8)");
 
                 entity.Property(e => e.LastUpdate).HasColumnType("smalldatetime");
+
+                entity.Property(e => e.PriceChange).HasColumnType("decimal(18, 8)");
+
+                entity.Property(e => e.PriceChangePercentage).HasColumnName("PriceChangePercentage");
 
                 entity.Property(e => e.Name).HasMaxLength(255);
 
