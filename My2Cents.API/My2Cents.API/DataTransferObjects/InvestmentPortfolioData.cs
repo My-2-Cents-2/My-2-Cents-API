@@ -8,6 +8,6 @@ namespace My2Cents.API.DataTransferObjects
         public decimal OwnedShares { get; set; }
         public decimal SharePrice { get; set; }
         public decimal Returns { get; set; }
-        public decimal CryptoPrice { get; set; }
+        public decimal StockPrice { get; set; }
     }
 }

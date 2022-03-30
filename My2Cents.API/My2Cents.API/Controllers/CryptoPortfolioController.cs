@@ -217,7 +217,7 @@ namespace My2Cents.API.Controllers
                     CurrentInvestment = item.BuyPrice,
                     OwnedShares = _quantity,
                     Returns = ((_currentPrice - _currentInvestment) / (_currentInvestment) ) * 100,
-                    StockPrice = _totalStockPrice
+                    CryptoPrice = _totalStockPrice
                 };
                 assetTable.Add(_userCryptoData);
             }
