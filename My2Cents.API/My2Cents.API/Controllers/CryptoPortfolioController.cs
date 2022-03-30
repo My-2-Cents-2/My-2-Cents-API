@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
+using My2Cents.API.DataTransferObjects;
 using My2Cents.DataInfrastructure;
+using My2Cents.DataInfrastructure.Models;
 using My2Cents.Logic.Interfaces;
 
 namespace My2Cents.API.Controllers
@@ -15,7 +17,7 @@ namespace My2Cents.API.Controllers
             _cryptoBL = cryptoBL;
         }
 
-        [HttpPost("AddCrypto")]
+        /*[HttpPost("AddCrypto")]
         public IActionResult AddNewCrypto(string cryptoName, string shtName, decimal price)
         {
             try
@@ -37,7 +39,7 @@ namespace My2Cents.API.Controllers
                 //Log.Warning("Route:" + RouteConfigs.Stock + ": " + exe.Message);
                 return BadRequest(exe.Message);
             }
-        }
+        }*/
 
         [HttpGet("GetAllCrypto")]
         public IActionResult GetAllCrypto()
@@ -73,7 +75,7 @@ namespace My2Cents.API.Controllers
             
         }
 
-        [HttpPost("AddCryptoOrderHistory")]
+        /*[HttpPost("AddCryptoOrderHistory")]
         public IActionResult AddCryptoOrderHistory(int userID, int cryptoID, decimal orderPrice, decimal quantity)
         {
             try
@@ -97,7 +99,7 @@ namespace My2Cents.API.Controllers
                 //Log.Warning(exe.Message);
                 return BadRequest(exe.Message);
             }
-        }
+        }*/
 
         [HttpGet("GetCryptoOrderhistorybyUser")]
         public IActionResult GetCryptoOrderHistorybyUser(int _userID)
@@ -116,6 +118,130 @@ namespace My2Cents.API.Controllers
                 return NotFound("Failed to get CryptoOrderHistory");
             }
         
+        }
+
+        /*[HttpGet("GetCryptoAssetsbyUser")]
+        public IActionResult GetCryptoAssetsbyUser(int _userID)
+        {
+            try
+            {
+                var _result = _cryptoBL.GetCryptoAssetsByUser(_userID);
+                //Log.Information("Getting all crypto.");
+
+                return Ok(_result);
+            }
+            catch (System.Exception e)
+            {
+                
+                //Log.Warning(e.Message);
+                return NotFound("Failed to get CryptoAssets");
+            }
+        
+        }
+
+        [HttpGet("GetAllCryptoAssets")]
+        public IActionResult GetAllCryptoAssets()
+        {
+            try
+            {
+                var _result = _cryptoBL.GetAllCryptoAssets();
+                //Log.Information("Getting all crypto.");
+
+                return Ok(_result);
+            }
+            catch (System.Exception e)
+            {
+                
+                //Log.Warning(e.Message);
+                return NotFound("Failed to get all CryptoAssets");
+            }
+        
+        }*/
+
+        [HttpGet("GetCryptoAssetTable")]
+        public IActionResult GetCryptoAssetTable(int _userID)
+        {
+            try
+            {
+                var _result = GetAssetsTable(_userID);
+                //Log.Information("Getting all crypto.");
+
+                return Ok(_result);
+            }
+            catch (System.Exception e)
+            {
+                
+                //Log.Warning(e.Message);
+                return NotFound("Failed to get CryptoAssets");
+            }
+        
+        }
+        
+        [HttpGet("GetCryptoOrderhistoryTable")]
+        public IActionResult GetCryptoOrderHistoryTable(int _userID)
+        {
+            try
+            {
+                var _result = GetOrderHisTable(_cryptoBL.GetCryptoOrderHisByUser(_userID));
+                //Log.Information("Getting all crypto.");
+
+                return Ok(_result);
+            }
+            catch (System.Exception e)
+            {
+                
+                //Log.Warning(e.Message);
+                return NotFound("Failed to get CryptoOrderHistory");
+            }
+        
+        }
+
+        private List<CryptoAssetTable> GetAssetsTable(int _userID)
+        {
+            List<CryptoAssetTable> assetTable = new List<CryptoAssetTable>();
+            List<CryptoAssetDto> _realCryptoAsset = _cryptoBL.GetCryptoAssetsByUser(_userID);
+
+            foreach (CryptoAssetDto item in _realCryptoAsset)
+            {
+                CryptoDto _tempCrypto = _cryptoBL.GetCryptoById(item.CryptoId);
+                decimal _currentPrice = _tempCrypto.CurrentPrice;
+                decimal _quantity = item.Quantity;
+                decimal _currentInvestment = item.BuyPrice;
+                decimal _totalStockPrice = _quantity * _currentPrice;
+
+                CryptoAssetTable _userCryptoData = new CryptoAssetTable()
+                {
+                    Name = _tempCrypto.Name,
+                    SharePrice = _currentPrice,
+                    InitialInvestmentDate = item.BuyDate.ToString("MM/dd/yyyy"),
+                    CurrentInvestment = item.BuyPrice,
+                    OwnedShares = _quantity,
+                    Returns = ((_currentPrice - _currentInvestment) / (_currentInvestment) ) * 100,
+                    StockPrice = _totalStockPrice
+                };
+                assetTable.Add(_userCryptoData);
+            }
+            return assetTable;
+        }
+
+        private List<CryptoOrderHisT> GetOrderHisTable(List<CryptoOrderHistoryDto> oList)
+        {
+            List<CryptoOrderHisT> _result = new List<CryptoOrderHisT>();
+            foreach (CryptoOrderHistoryDto item in oList)
+            {
+                CryptoOrderHisT _tempOrderHis = new CryptoOrderHisT()
+                {
+                    Name = _cryptoBL.GetCryptoById(item.CryptoId).Name,
+                    CurrentInvestment = item.OrderPrice * item.Quantity,
+                    InitialInvestmentDate = item.OrderTime.ToString("MM/dd/yyyy"),
+                    OwnedShares = item.Quantity,
+                    TransactionType = item.OrderType
+                };
+                _result.Add(_tempOrderHis);
+            }
+
+            return _result;
+
         }
 
     }
