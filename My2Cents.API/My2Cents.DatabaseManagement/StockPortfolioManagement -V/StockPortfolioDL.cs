@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using My2Cents.DatabaseManagement.Interfaces;
 using My2Cents.DataInfrastructure;
+using My2Cents.DataInfrastructure.Models;
 
 namespace My2Cents.DatabaseManagement.Implements
 {
@@ -13,7 +14,7 @@ namespace My2Cents.DatabaseManagement.Implements
             _context = context;
         }
 
-        public Stock AddStock(Stock s_stock)
+        public StockDto AddStock(Stock s_stock)
         {
             Stock newStock = new Stock()
             {
@@ -26,26 +27,75 @@ namespace My2Cents.DatabaseManagement.Implements
             _context.Stocks.Add(newStock);
             _context.SaveChanges();
 
-            return newStock;
+            StockDto newStockDto= StockToDto(newStock);
+            return newStockDto;
         }
 
-        public List<Stock> GetAllStocks()
+        public List<StockDto> GetAllStocks()
         {
-            return _context.Stocks.ToList();
+            List<StockDto> _result = _context.Stocks
+                                            .Select(p => new StockDto
+                                            {
+                                                StockId = p.StockId,
+                                                CurrentPrice = p.CurrentPrice,
+                                                LastUpdate = p.LastUpdate,
+                                                Name = p.Name,
+                                                ShortenedName = p.ShortenedName
+                                            }).ToList();
+            if(!_result.Any())
+            {
+                throw new Exception("Stocks Asset DNE");
+            }
+            else
+            {
+                return _result;
+            }
         }
 
-        public Stock GetAStockFromStockId(int stockId)
+        public StockDto GetAStockFromStockId(int stockId)
         {
-            return _context.Stocks.FirstOrDefault(s => s.StockId == stockId );
+            StockDto _result = _context.Stocks
+                                        .Select(p => new StockDto
+                                        {
+                                            StockId = p.StockId,
+                                            CurrentPrice = p.CurrentPrice,
+                                            LastUpdate = p.LastUpdate,
+                                            Name = p.Name,
+                                            ShortenedName = p.ShortenedName
+                                        }).FirstOrDefault(s => s.StockId == stockId);
+            if(_result == null)
+            {
+                throw new Exception("Stocks Asset DNE");
+            }
+            else
+            {
+                return _result;
+            }
         }
 
-        public Stock GetAStockFromStockName(string stockName)
+        public StockDto GetAStockFromStockName(string stockName)
         {
-            return _context.Stocks.FirstOrDefault(s => s.Name == stockName );
+            StockDto _result = _context.Stocks
+                                        .Select(p => new StockDto
+                                        {
+                                            StockId = p.StockId,
+                                            CurrentPrice = p.CurrentPrice,
+                                            LastUpdate = p.LastUpdate,
+                                            Name = p.Name,
+                                            ShortenedName = p.ShortenedName
+                                        }).FirstOrDefault(s => s.Name == stockName);
+            if(_result == null)
+            {
+                throw new Exception("Stocks Asset DNE");
+            }
+            else
+            {
+                return _result;
+            }
         }
 
 
-        public Stock UpdateStock(Stock s_stock)
+        public StockDto UpdateStock(Stock s_stock)
         {
             Stock stockToUpdate = _context.Stocks.Where(g => g.StockId == s_stock.StockId).FirstOrDefault();
             if (stockToUpdate != null)
@@ -62,11 +112,12 @@ namespace My2Cents.DatabaseManagement.Implements
             {
                 throw new Exception("No stock able to update");
             }
-
             _context.SaveChanges();
-            return stockToUpdate;
+
+            StockDto _result = StockToDto(stockToUpdate);
+            return _result;
         }
-        public Stock UpdateStockPrice(int stockId, decimal stockPrice)
+        public StockDto UpdateStockPrice(int stockId, decimal stockPrice)
         {
             Stock stockToUpdate = _context.Stocks.Where(g => g.StockId == stockId).FirstOrDefault();
             if (stockToUpdate != null)
@@ -91,151 +142,116 @@ namespace My2Cents.DatabaseManagement.Implements
             }
 
             _context.SaveChanges();
-            return stockToUpdate;
+
+            StockDto _result = StockToDto(stockToUpdate);
+            return _result;
         }
 
-        public Stock DeleteStock(int stockId)
+
+        public List<StockOrderHistoryDto> GetAllStockOrderHistory()
         {
-            Stock stockToRemove = _context.Stocks.Where(s => (s.StockId == stockId)).FirstOrDefault();
-            if (stockToRemove != null)
+            List<StockOrderHistoryDto> _result = _context.StockOrderHistories
+                                                        .Select(p => new StockOrderHistoryDto()
+                                                        {
+                                                            StockOrderId = p.StockOrderId,
+                                                            UserId = p.UserId,
+                                                            StockId = p.StockId,
+                                                            OrderPrice = p.OrderPrice,
+                                                            Quantity = p.Quantity,
+                                                            OrderType = p.OrderType,
+                                                            OrderTime = p.OrderTime
+                                                        }).ToList();
+            if(!_result.Any())
             {
-                _context.Remove(stockToRemove);
-                _context.SaveChanges();
-                return stockToRemove;
+                throw new Exception("Stocks Asset DNE");
             }
             else
             {
-                throw new Exception("Stock not found. Stock could not be deleted.");
+                return _result;
             }
         }
 
-        public StockOrderHistory AddStockOrderHistory(StockOrderHistory s_stockOrderHistory)
+        public List<StockOrderHistoryDto> GetUserStockOrders(int userId)
         {
-            StockOrderHistory stockOrderHistory = new StockOrderHistory()
+            List<StockOrderHistoryDto> _result = _context.StockOrderHistories
+                                                        .Where(s => s.UserId == userId)
+                                                        .Select(p => new StockOrderHistoryDto()
+                                                        {
+                                                            StockOrderId = p.StockOrderId,
+                                                            UserId = p.UserId,
+                                                            StockId = p.StockId,
+                                                            OrderPrice = p.OrderPrice,
+                                                            Quantity = p.Quantity,
+                                                            OrderType = p.OrderType,
+                                                            OrderTime = p.OrderTime
+                                                        }).ToList();
+            if(!_result.Any())
             {
-                UserId = s_stockOrderHistory.UserId,
-                StockId = s_stockOrderHistory.StockId,
-                OrderPrice = s_stockOrderHistory.OrderPrice,
-                Quantity = s_stockOrderHistory.Quantity,
-                OrderType = s_stockOrderHistory.OrderType,
-                OrderTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time"))
-            };
-            _context.StockOrderHistories.Add(stockOrderHistory);
-            _context.SaveChanges();
-
-            return stockOrderHistory;
-        }
-
-        public List<StockOrderHistory> GetAllStockOrderHistory()
-        {
-            return _context.StockOrderHistories.ToList();
-        }
-
-        public List<StockOrderHistory> GetUserStockOrders(int userId)
-        {
-            return _context.StockOrderHistories.Where(s => s.UserId == userId).ToList();
-        }
-
-        public StockOrderHistory UpdateStockOrderHistory(StockOrderHistory s_stockOrderHistory)
-        {
-            StockOrderHistory stockToUpdate = _context.StockOrderHistories.Where(s => s.StockOrderId == s_stockOrderHistory.StockOrderId).FirstOrDefault();
-            if (stockToUpdate != null)
-            {
-                stockToUpdate.UserId = s_stockOrderHistory.UserId;
-                stockToUpdate.StockId = s_stockOrderHistory.StockId;
-                if(stockToUpdate.OrderPrice != null)
-                    stockToUpdate.OrderPrice = s_stockOrderHistory.OrderPrice;
-                if(stockToUpdate.Quantity != null)
-                    stockToUpdate.Quantity = s_stockOrderHistory.Quantity;
-                if(stockToUpdate.OrderType != null)
-                    stockToUpdate.OrderType = s_stockOrderHistory.OrderType;
-                if(stockToUpdate.OrderTime != null)
-                    stockToUpdate.OrderTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time"));
+                throw new Exception("Stocks Asset DNE");
             }
             else
             {
-                throw new Exception("No stock able to update");
+                return _result;
             }
-
-            _context.SaveChanges();
-            return stockToUpdate;
         }
-        
 
-        public StockOrderHistory DeleteStockOrderHistory(int stockOrderId)
+        public List<StockAssetDto> GetAllStockAssets()
         {
-            StockOrderHistory stockOrderHistoryToRemove = _context.StockOrderHistories.Where(s => (s.StockOrderId == stockOrderId)).FirstOrDefault();
-            if (stockOrderHistoryToRemove != null)
+            List<StockAssetDto> _result = _context.StockAssets
+                                                    .Select(p => new StockAssetDto()
+                                                    {
+                                                        StockAssetId = p.StockAssetId,
+                                                        StockId = p.StockId,
+                                                        UserId = p.UserId,
+                                                        BuyPrice = p.BuyPrice,
+                                                        BuyDate = p.BuyDate,
+                                                        StopLoss = p.StopLoss,
+                                                        TakeProfit = p.TakeProfit,
+                                                        Quantity = p.Quantity
+                                                    }).ToList();
+            if(!_result.Any())
             {
-                _context.Remove(stockOrderHistoryToRemove);
-                _context.SaveChanges();
-                return stockOrderHistoryToRemove;
+                throw new Exception("Stocks Asset DNE");
             }
             else
             {
-                throw new Exception("Stock order history not found. Stock order history could not be deleted.");
+                return _result;
             }
         }
-    
-        public StockAsset AddStockAsset(StockAsset s_stockAsset)
+        public List<StockAssetDto> GetUserStockAssets(int userId)
         {
-            StockAsset newStockAsset = new StockAsset()
+            List<StockAssetDto> _result = _context.StockAssets
+                                                    .Where(s => s.UserId == userId)
+                                                    .Select(p => new StockAssetDto()
+                                                    {
+                                                        StockAssetId = p.StockAssetId,
+                                                        StockId = p.StockId,
+                                                        UserId = p.UserId,
+                                                        BuyPrice = p.BuyPrice,
+                                                        BuyDate = p.BuyDate,
+                                                        StopLoss = p.StopLoss,
+                                                        TakeProfit = p.TakeProfit,
+                                                        Quantity = p.Quantity
+                                                    }).ToList();
+            if(!_result.Any())
             {
-                // add logic to avoid duplicate?
-                StockId = s_stockAsset.StockId,
-                UserId = s_stockAsset.UserId,
-                BuyPrice = s_stockAsset.BuyPrice,
-                BuyDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time")),
-                StopLoss = s_stockAsset.StopLoss,
-                TakeProfit = s_stockAsset.TakeProfit,
-                Quantity = s_stockAsset.Quantity
-                
-            };
-            _context.StockAssets.Add(newStockAsset);
-            _context.SaveChanges();
-
-            return newStockAsset;
-        }
-
-        public List<StockAsset> GetAllStockAssets()
-        {
-            return _context.StockAssets.ToList();
-        }
-
-        public StockAsset UpdateStockAsset(StockAsset s_stockAsset)
-        {
-            StockAsset stockAssetToUpdate = _context.StockAssets.Where(g => g.StockAssetId == s_stockAsset.StockAssetId).FirstOrDefault();
-            if (stockAssetToUpdate != null)
-            {
-                // StockId = s_stockAsset.StockId,
-                // UserId = s_stockAsset.UserId,
-                // if(s_stockAsset.BuyPrice != null)
-                //    stockAssetToUpdate.BuyPrice = s_stockAsset.BuyPrice;
-                // BuyDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time")),
-                if(s_stockAsset.StopLoss != null)
-                   stockAssetToUpdate.StopLoss = s_stockAsset.StopLoss;
-                if(s_stockAsset.TakeProfit != null)
-                    stockAssetToUpdate.TakeProfit = s_stockAsset.TakeProfit;
-                if(s_stockAsset.Quantity != null)
-                    stockAssetToUpdate.Quantity = s_stockAsset.Quantity;
+                throw new Exception("Stocks Asset DNE");
             }
             else
             {
-                throw new Exception("Unavailable assets to update");
+                return _result;
             }
-
-            _context.SaveChanges();
-            return stockAssetToUpdate;
         }
 
-        public StockAsset DeleteStockAsset(int stockAssetId)
+        public StockAssetDto DeleteStockAsset(int stockAssetId)
         {
             StockAsset stockAssetToRemove = _context.StockAssets.Where(s => (s.StockAssetId == stockAssetId)).FirstOrDefault();
             if (stockAssetToRemove != null)
             {
                 _context.Remove(stockAssetToRemove);
                 _context.SaveChanges();
-                return stockAssetToRemove;
+                StockAssetDto _result = StockAssetToDto(stockAssetToRemove);
+                return _result;
             }
             else
             {
@@ -243,5 +259,46 @@ namespace My2Cents.DatabaseManagement.Implements
             }
         }
 
+
+        private StockDto StockToDto(Stock c_crypto)
+        {
+            StockDto _cryptoDto = new StockDto(){
+                StockId = c_crypto.StockId,
+                CurrentPrice = c_crypto.CurrentPrice,
+                LastUpdate = c_crypto.LastUpdate,
+                Name = c_crypto.Name,
+                ShortenedName = c_crypto.ShortenedName
+
+            };
+            return _cryptoDto;
+        }
+        private StockOrderHistoryDto OrderHistoryToDto(StockOrderHistory c_cryptoOrderHistory)
+        {
+            StockOrderHistoryDto _cryptoOrderHistoryDto = new StockOrderHistoryDto(){
+                StockOrderId = c_cryptoOrderHistory.StockOrderId,
+                UserId = c_cryptoOrderHistory.UserId,
+                OrderPrice = c_cryptoOrderHistory.OrderPrice,
+                Quantity = c_cryptoOrderHistory.Quantity,
+                OrderType = c_cryptoOrderHistory.OrderType,
+                OrderTime = c_cryptoOrderHistory.OrderTime
+
+            };
+            return _cryptoOrderHistoryDto;
+        }
+
+        private StockAssetDto StockAssetToDto(StockAsset a_stockAsset)
+        {
+            StockAssetDto _cryptoAssetDto = new StockAssetDto(){
+                StockAssetId = a_stockAsset.StockAssetId,
+                StockId = a_stockAsset.StockId,
+                UserId = a_stockAsset.UserId,
+                BuyPrice = a_stockAsset.BuyPrice,
+                BuyDate = a_stockAsset.BuyDate,
+                StopLoss = a_stockAsset.StopLoss,
+                TakeProfit = a_stockAsset.TakeProfit,
+                Quantity = a_stockAsset.Quantity
+            };
+            return _cryptoAssetDto;
+        }
     }
 }
