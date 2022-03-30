@@ -54,7 +54,7 @@ namespace My2Cents.DatabaseManagement.Implements
 
         public StockDto GetAStockFromStockId(int stockId)
         {
-            StockDto _result = _context.Stocks
+            StockDto? _result = _context.Stocks
                                         .Select(p => new StockDto
                                         {
                                             StockId = p.StockId,

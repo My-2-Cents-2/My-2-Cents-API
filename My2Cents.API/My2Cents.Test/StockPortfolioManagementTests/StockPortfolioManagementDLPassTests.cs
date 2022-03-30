@@ -11,7 +11,7 @@ using My2Cents.Logic.Interfaces;
 using My2Cents.DataInfrastructure;
 using My2Cents.DataInfrastructure.Models ;
 using My2Cents.DatabaseManagement;
-/*
+
 namespace StockPortfolioManagementTest
 {
     public class DbContextRepositoryTest
@@ -20,38 +20,67 @@ namespace StockPortfolioManagementTest
 
         public DbContextRepositoryTest()
         {
-            options = new DbContextOptionsBuilder<My2CentsContext>().UseSqlite("Filename = Test.db").Options;
-            Seed();
+            options = new DbContextOptionsBuilder<My2CentsContext>().UseSqlite("Filename = TestStockPortfolio.db").Options;
+            SeedStockPortfolioDL();
         }
 
         [Fact]
-        void GetAllStocks()
+        void Get_All_Stocks()
         {
             using (My2CentsContext context = new My2CentsContext(options))
             {
                 //Arrange
-                IStockPortfolioManagementDL repo = new DbContextRepositoryTest(context);
+                IStockPortfolioManagementDL _repo = new StockPortfolioManagementDL(context);
 
                 //Act
-                List<StockDto> listOfStocks = repo.GetAllStocks();
+                List<StockDto> listOfStocks = _repo.GetAllStocks();
 
                 //Assert
                 Assert.Equal(2, listOfStocks.Count);
                 Assert.Equal(1, listOfStocks[0].StockId);
-                Assert.Equal(1, listOfStocks[0].CurrentPrice);
+                Assert.Equal(100, listOfStocks[0].CurrentPrice);
                 Assert.Equal("Rhongobongo", listOfStocks[0].Name);
-                Assert.Equal("VeryFunDragonsactions", listOfStocks[0].ShortenedName);
-
-
+                Assert.Equal("VFDS", listOfStocks[1].ShortenedName);
             }
         }
+/*
+        [Fact]
+        void Get_All_Stocks()
+        {
+            using (My2CentsContext context = new My2CentsContext(options))
+            {
+                //Arrange
+                IStockPortfolioManagementDL _repo = new StockPortfolioManagementDL(context);
 
-        private void Seed()
+                //Act
+                List<StockDto> listOfStocks = _repo.GetAllStocks();
+
+                //Assert
+                Assert.Equal(2, listOfStocks.Count);
+                Assert.Equal(1, listOfStocks[0].StockId);
+                Assert.Equal(100, listOfStocks[0].CurrentPrice);
+                Assert.Equal("Rhongobongo", listOfStocks[0].Name);
+                Assert.Equal("VFDS", listOfStocks[1].ShortenedName);
+            }
+        } */
+
+        private void SeedStockPortfolioDL()
         {
             using(My2CentsContext context = new My2CentsContext(options))
             {
                 context.Database.EnsureDeleted();
                 context.Database.EnsureCreated();
+                context.Users.Add(
+                    new ApplicationUser{
+                        Id = 1,
+                        UserName = "TestUserName",
+                        EmailConfirmed = true,
+                        PhoneNumberConfirmed = true,
+                        TwoFactorEnabled = true,
+                        LockoutEnabled = true,
+                        AccessFailedCount = 0
+                    }
+                );
 
                 context.Stocks.AddRange(
                     new Stock{
@@ -93,9 +122,9 @@ namespace StockPortfolioManagementTest
                         TakeProfit = 9001,
                         Quantity = 2                        
                     }
-                );
+                ); 
+                context.SaveChanges();
             }
         }
     }
 }
-*/

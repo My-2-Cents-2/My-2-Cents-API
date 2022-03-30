@@ -242,7 +242,6 @@ namespace My2Cents.API.Controllers
                     OwnedShares = _orderHistory.Quantity,
                     TransactionType = _orderHistory.OrderType
                 };
-                Console.WriteLine(tempOrderHistoryPortfolioForm.Name);
                 _result.Add(tempOrderHistoryPortfolioForm);
             }
             return _result;
