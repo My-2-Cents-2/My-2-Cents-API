@@ -398,6 +398,8 @@ namespace My2Cents.DatabaseManagement
                         CurrentPrice = crypto.CurrentPrice,
                         LastUpdate = _dateTime.DateTime,
                         Name = crypto.Name,
+                        PriceChange = crypto.PriceChange24H,
+                        PriceChangePercentage = crypto.PriceChangePercentage24H,
                         ImageURL = crypto.Image.ToString(),
                         ShortenedName = crypto.Symbol
                     });
@@ -406,7 +408,9 @@ namespace My2Cents.DatabaseManagement
                 else
                 {
                     _currentcryto.CurrentPrice = crypto.CurrentPrice;
-                    _currentcryto.LastUpdate = _dateTime.DateTime; 
+                    _currentcryto.LastUpdate = _dateTime.DateTime;
+                    _currentcryto.PriceChange = crypto.PriceChange24H;
+                    _currentcryto.PriceChangePercentage = crypto.PriceChangePercentage24H; 
                     _currentcryto.ImageURL = crypto.Image.ToString();
                     _context.SaveChanges();
                 }
@@ -418,7 +422,10 @@ namespace My2Cents.DatabaseManagement
                 CurrentPrice = p.CurrentPrice,
                 LastUpdate = p.LastUpdate,
                 Name = p.Name,
-                ShortenedName = p.ShortenedName
+                ShortenedName = p.ShortenedName,
+                ImageURL = p.ImageURL,
+                PriceChange = p.PriceChange,
+                PriceChangePercentage = p.PriceChangePercentage
             }).ToList();
 
             return _CryptoData;

@@ -8,10 +8,10 @@ namespace My2Cents.DatabaseManagement.Models
         public long? MarketCapRank { get; set; }
 
         [JsonProperty("price_change_24h")]
-        public decimal? PriceChange24H { get; set; }
+        public decimal PriceChange24H { get; set; }
 
         [JsonProperty("price_change_percentage_24h")]
-        public double? PriceChangePercentage24H { get; set; }
+        public double PriceChangePercentage24H { get; set; }
 
         [JsonProperty("market_cap_change_24h")]
         public decimal? MarketCapChange24H { get; set; }
