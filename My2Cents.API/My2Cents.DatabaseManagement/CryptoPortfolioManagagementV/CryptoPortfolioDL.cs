@@ -20,7 +20,8 @@ namespace My2Cents.DatabaseManagement.Interfaces
             CurrentPrice = _crypto.CurrentPrice,
             LastUpdate = _crypto.LastUpdate,
             Name = _crypto.Name,
-            ShortenedName = _crypto.ShortenedName
+            ShortenedName = _crypto.ShortenedName,
+            
         };
 
            _context.Cryptos.Add(_crypto);
@@ -54,7 +55,8 @@ namespace My2Cents.DatabaseManagement.Interfaces
                 CurrentPrice = p.CurrentPrice,
                 LastUpdate = p.LastUpdate,
                 Name = p.Name,
-                ShortenedName = p.ShortenedName
+                ShortenedName = p.ShortenedName,
+                ImageURL = p.ImageURL
             }).ToList();
         }
 
@@ -99,7 +101,8 @@ namespace My2Cents.DatabaseManagement.Interfaces
                 CurrentPrice = p.CurrentPrice,
                 LastUpdate = p.LastUpdate,
                 Name = p.Name,
-                ShortenedName = p.ShortenedName
+                ShortenedName = p.ShortenedName,
+                ImageURL = p.ImageURL
             }).FirstOrDefault();
         }
 
