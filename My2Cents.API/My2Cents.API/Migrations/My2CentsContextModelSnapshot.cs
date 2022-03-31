@@ -300,6 +300,13 @@ namespace My2Cents.API.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
+                    b.Property<decimal>("PriceChange")
+                        .HasColumnType("decimal(18,8)");
+
+                    b.Property<double>("PriceChangePercentage")
+                        .HasColumnType("float")
+                        .HasColumnName("PriceChangePercentage");
+
                     b.Property<string>("ShortenedName")
                         .IsRequired()
                         .HasMaxLength(255)
@@ -414,6 +421,13 @@ namespace My2Cents.API.Migrations
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
+
+                    b.Property<decimal>("PriceChange")
+                        .HasColumnType("decimal(18,8)");
+
+                    b.Property<double>("PriceChangePercentage")
+                        .HasColumnType("float")
+                        .HasColumnName("PriceChangePercentage");
 
                     b.Property<string>("ShortenedName")
                         .IsRequired()
