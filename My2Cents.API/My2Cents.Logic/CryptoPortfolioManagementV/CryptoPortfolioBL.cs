@@ -1,5 +1,6 @@
 using My2Cents.DataInfrastructure;
 using My2Cents.DatabaseManagement.Interfaces;
+using My2Cents.DataInfrastructure.Models;
 
 namespace My2Cents.Logic.Interfaces
 {
@@ -12,37 +13,42 @@ namespace My2Cents.Logic.Interfaces
             _repo = repo;
         }
 
-        public Crypto AddCrypto(Crypto _crypto)
+        public CryptoDto AddCrypto(Crypto _crypto)
         {
             return _repo.AddCrypto(_crypto);
         }
 
-        public CryptoOrderHistory AddCryptoOrderHistory(CryptoOrderHistory _cOrderHis)
+        public CryptoOrderHistoryDto AddCryptoOrderHistory(CryptoOrderHistory _cOrderHis)
         {
             return _repo.AddCryptoOrderHistory(_cOrderHis);
         }
 
-        public List<Crypto> GetAllCrypto()
+        public List<CryptoDto> GetAllCrypto()
         {
             return _repo.GetAllCrypto();
         }
 
-        public List<CryptoAsset> GetAllCryptoAssets()
+        public List<CryptoAssetDto> GetAllCryptoAssets()
         {
             return _repo.GetAllCryptoAssets();
         }
 
-        public List<CryptoAsset> GetCryptoAssetsByUser(int _userID)
+        public List<CryptoAssetDto> GetCryptoAssetsByUser(int _userID)
         {
             return _repo.GetCryptoAssetsByUser(_userID);
         }
 
-        public List<CryptoOrderHistory> GetCryptoOrderHisByUser(int _ID)
+        public CryptoDto GetCryptoById(int _cryptoId)
+        {
+            return _repo.GetCryptoById(_cryptoId);
+        }
+
+        public List<CryptoOrderHistoryDto> GetCryptoOrderHisByUser(int _ID)
         {
             return _repo.GetCryptoOrderHisByUser(_ID);
         }
 
-        public Crypto UpdateCryptoPrice(int _ID, decimal _price)
+        public CryptoDto UpdateCryptoPrice(int _ID, decimal _price)
         {
             return _repo.UpdateCryptoPrice(_ID, _price);
         }
