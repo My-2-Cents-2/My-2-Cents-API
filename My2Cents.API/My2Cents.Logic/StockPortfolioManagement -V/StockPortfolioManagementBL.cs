@@ -74,7 +74,7 @@ namespace My2Cents.Logic.Implements
                 return userStocks.ToList();
             }
         }
-        public StockDto UpdateStockPrice(string stockName, decimal stockPrice)
+/*        public StockDto UpdateStockPrice(string stockName, decimal stockPrice)
         {
             try
             {
@@ -85,7 +85,7 @@ namespace My2Cents.Logic.Implements
             {
                 throw new Exception(exe.Message);
             }
-        }
+        }*/
         public bool CheckDuplicateStock(string stockName)
         {
             List<StockDto> _result = _repo.GetAllStocks();
@@ -176,7 +176,12 @@ namespace My2Cents.Logic.Implements
             {
                 throw new Exception(exe.Message);
             }
-        } 
+        }
+
+        public decimal GetUserStockInvestmentSum(int userId)
+        {
+            return _repo.GetUserStockInvestmentSum(userId);
+        }
 
     }
 }

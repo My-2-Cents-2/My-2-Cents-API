@@ -14,22 +14,6 @@ namespace My2Cents.DatabaseManagement.Implements
             _context = context;
         }
 
-        public StockDto AddStock(Stock s_stock)
-        {
-            Stock newStock = new Stock()
-            {
-                // should i check for duplicate here or the BL?
-                CurrentPrice = s_stock.CurrentPrice,
-                LastUpdate = s_stock.LastUpdate,
-                Name = s_stock.Name,
-                ShortenedName = s_stock.ShortenedName
-            };
-            _context.Stocks.Add(newStock);
-            _context.SaveChanges();
-
-            StockDto newStockDto= StockToDto(newStock);
-            return newStockDto;
-        }
 
         public List<StockDto> GetAllStocks()
         {
@@ -39,6 +23,8 @@ namespace My2Cents.DatabaseManagement.Implements
                                                 StockId = p.StockId,
                                                 CurrentPrice = p.CurrentPrice,
                                                 LastUpdate = p.LastUpdate,
+                                                PriceChange = p.PriceChange,
+                                                PriceChangePercentage = p.PriceChangePercentage,
                                                 Name = p.Name,
                                                 ShortenedName = p.ShortenedName
                                             }).ToList();
@@ -60,6 +46,8 @@ namespace My2Cents.DatabaseManagement.Implements
                                             StockId = p.StockId,
                                             CurrentPrice = p.CurrentPrice,
                                             LastUpdate = p.LastUpdate,
+                                            PriceChange = p.PriceChange,
+                                            PriceChangePercentage = p.PriceChangePercentage,
                                             Name = p.Name,
                                             ShortenedName = p.ShortenedName
                                         }).FirstOrDefault(s => s.StockId == stockId);
@@ -75,12 +63,14 @@ namespace My2Cents.DatabaseManagement.Implements
 
         public StockDto GetAStockFromStockName(string stockName)
         {
-            StockDto _result = _context.Stocks
+            StockDto? _result = _context.Stocks
                                         .Select(p => new StockDto
                                         {
                                             StockId = p.StockId,
                                             CurrentPrice = p.CurrentPrice,
                                             LastUpdate = p.LastUpdate,
+                                            PriceChange = p.PriceChange,
+                                            PriceChangePercentage = p.PriceChangePercentage,
                                             Name = p.Name,
                                             ShortenedName = p.ShortenedName
                                         }).FirstOrDefault(s => s.Name == stockName);
@@ -94,7 +84,7 @@ namespace My2Cents.DatabaseManagement.Implements
             }
         }
 
-
+/*
         public StockDto UpdateStock(Stock s_stock)
         {
             Stock stockToUpdate = _context.Stocks.Where(g => g.StockId == s_stock.StockId).FirstOrDefault();
@@ -147,7 +137,7 @@ namespace My2Cents.DatabaseManagement.Implements
             return _result;
         }
 
-
+*/
         public List<StockOrderHistoryDto> GetAllStockOrderHistory()
         {
             List<StockOrderHistoryDto> _result = _context.StockOrderHistories
@@ -243,21 +233,21 @@ namespace My2Cents.DatabaseManagement.Implements
             }
         }
 
-        public StockAssetDto DeleteStockAsset(int stockAssetId)
-        {
-            StockAsset stockAssetToRemove = _context.StockAssets.Where(s => (s.StockAssetId == stockAssetId)).FirstOrDefault();
-            if (stockAssetToRemove != null)
-            {
-                _context.Remove(stockAssetToRemove);
-                _context.SaveChanges();
-                StockAssetDto _result = StockAssetToDto(stockAssetToRemove);
-                return _result;
-            }
-            else
-            {
-                throw new Exception("Stock asset not found. Stock asset could not be deleted.");
-            }
-        }
+        // public StockAssetDto DeleteStockAsset(int stockAssetId)
+        // {
+        //     StockAsset stockAssetToRemove = _context.StockAssets.Where(s => (s.StockAssetId == stockAssetId)).FirstOrDefault();
+        //     if (stockAssetToRemove != null)
+        //     {
+        //         _context.Remove(stockAssetToRemove);
+        //         _context.SaveChanges();
+        //         StockAssetDto _result = StockAssetToDto(stockAssetToRemove);
+        //         return _result;
+        //     }
+        //     else
+        //     {
+        //         throw new Exception("Stock asset not found. Stock asset could not be deleted.");
+        //     }
+        // }
 
 
         private StockDto StockToDto(Stock c_crypto)
@@ -300,5 +290,21 @@ namespace My2Cents.DatabaseManagement.Implements
             };
             return _cryptoAssetDto;
         }
+
+        public decimal GetUserStockInvestmentSum(int userId)
+        {
+            decimal _result = _context.StockAssets
+                                            .Where(s => s.UserId == userId)
+                                            .Sum(i => i.BuyPrice);
+            if(_result == 0)
+            {
+                throw new Exception("Stocks Asset DNE");
+            }
+            else
+            {
+                return _result;
+            }
+        }
+        
     }
 }
