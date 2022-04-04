@@ -218,6 +218,10 @@ namespace My2Cents.DatabaseManagement
 
         public CryptoOrderHistoryDto SellCrypto(int _userID, int _cryptoID, decimal amount)
         {
+            var _AccountTypeId = _context.AccountTypes.FirstOrDefault(p => p.AccountType1.Equals("Checking")).AccountTypeId;
+            var _CurrentAccount = _context.Accounts.FirstOrDefault(p => p.UserId.Equals(_userID)
+            && p.AccountTypeId.Equals(_AccountTypeId));
+            
             //Try to get the current Crypto if available
             var _currentCrypto = _context.CryptoAssets.FirstOrDefault(p => p.CryptoId.Equals(_cryptoID)
                                                                         && p.UserId.Equals(_userID));
@@ -239,6 +243,7 @@ namespace My2Cents.DatabaseManagement
 
                 //Subtract the amount out of the CryptoAsset
                 _currentCrypto.Quantity -= amount;
+                //_CurrentAccount.TotalBalance += amount;
 
                 //Add a new order history in the CryptoOrderHistory
                 CryptoOrderHistory _newOrder = new CryptoOrderHistory()
@@ -256,6 +261,9 @@ namespace My2Cents.DatabaseManagement
                 var checkingacountID = _context.AccountTypes.FirstOrDefault(p => p.AccountType1.Equals("Checking"));
                 var _currentCheckingAccount = _context.Accounts.FirstOrDefault(p => p.UserId.Equals(_userID)
                                                                                     && p.AccountTypeId.Equals(checkingacountID));
+                var _MoneySpent = amount * _context.Cryptos.FirstOrDefault(p => p.CryptoId == _cryptoID).CurrentPrice;
+                _CurrentAccount.TotalBalance += _MoneySpent;
+                
 
                 //COMMIT TRANSACTIONS
                 _context.Database.CommitTransaction();
@@ -300,6 +308,11 @@ namespace My2Cents.DatabaseManagement
 
         public StockOrderHistoryDto SellStock(int p_userID, int p_stockID, decimal amount)
         {
+            var _AccountTypeId = _context.AccountTypes.FirstOrDefault(p => p.AccountType1.Equals("Checking")).AccountTypeId;
+            var _CurrentAccount = _context.Accounts.FirstOrDefault(p => p.UserId.Equals(p_userID)
+            && p.AccountTypeId.Equals(_AccountTypeId));
+            var _MoneySpent = amount * _context.Stocks.FirstOrDefault(p => p.StockId == p_stockID).CurrentPrice;
+
             //Try to get the current Stock if available
             var _currentStock = _context.StockAssets.FirstOrDefault(p => p.StockId.Equals(p_stockID)
                                                                         && p.UserId.Equals(p_userID));
@@ -338,6 +351,7 @@ namespace My2Cents.DatabaseManagement
                 var checkingacountID = _context.AccountTypes.FirstOrDefault(p => p.AccountType1.Equals("Checking"));
                 var _currentCheckingAccount = _context.Accounts.FirstOrDefault(p => p.UserId.Equals(p_userID)
                                                                                     && p.AccountTypeId.Equals(checkingacountID));
+                _CurrentAccount.TotalBalance += _MoneySpent;
 
                 //COMMIT TRANSACTIONS
                 _context.Database.CommitTransaction();
