@@ -250,35 +250,35 @@ namespace My2Cents.DatabaseManagement.Implements
         // }
 
 
-        private StockDto StockToDto(Stock c_crypto)
+        private StockDto StockToDto(Stock c_stock)
         {
-            StockDto _cryptoDto = new StockDto(){
-                StockId = c_crypto.StockId,
-                CurrentPrice = c_crypto.CurrentPrice,
-                LastUpdate = c_crypto.LastUpdate,
-                Name = c_crypto.Name,
-                ShortenedName = c_crypto.ShortenedName
+            StockDto _stockDto = new StockDto(){
+                StockId = c_stock.StockId,
+                CurrentPrice = c_stock.CurrentPrice,
+                LastUpdate = c_stock.LastUpdate,
+                Name = c_stock.Name,
+                ShortenedName = c_stock.ShortenedName
 
             };
-            return _cryptoDto;
+            return _stockDto;
         }
-        private StockOrderHistoryDto OrderHistoryToDto(StockOrderHistory c_cryptoOrderHistory)
+        private StockOrderHistoryDto OrderHistoryToDto(StockOrderHistory c_stockOrderHistory)
         {
-            StockOrderHistoryDto _cryptoOrderHistoryDto = new StockOrderHistoryDto(){
-                StockOrderId = c_cryptoOrderHistory.StockOrderId,
-                UserId = c_cryptoOrderHistory.UserId,
-                OrderPrice = c_cryptoOrderHistory.OrderPrice,
-                Quantity = c_cryptoOrderHistory.Quantity,
-                OrderType = c_cryptoOrderHistory.OrderType,
-                OrderTime = c_cryptoOrderHistory.OrderTime
+            StockOrderHistoryDto _stockOrderHistoryDto = new StockOrderHistoryDto(){
+                StockOrderId = c_stockOrderHistory.StockOrderId,
+                UserId = c_stockOrderHistory.UserId,
+                OrderPrice = c_stockOrderHistory.OrderPrice,
+                Quantity = c_stockOrderHistory.Quantity,
+                OrderType = c_stockOrderHistory.OrderType,
+                OrderTime = c_stockOrderHistory.OrderTime
 
             };
-            return _cryptoOrderHistoryDto;
+            return _stockOrderHistoryDto;
         }
 
         private StockAssetDto StockAssetToDto(StockAsset a_stockAsset)
         {
-            StockAssetDto _cryptoAssetDto = new StockAssetDto(){
+            StockAssetDto _stockAssetDto = new StockAssetDto(){
                 StockAssetId = a_stockAsset.StockAssetId,
                 StockId = a_stockAsset.StockId,
                 UserId = a_stockAsset.UserId,
@@ -288,7 +288,7 @@ namespace My2Cents.DatabaseManagement.Implements
                 TakeProfit = a_stockAsset.TakeProfit,
                 Quantity = a_stockAsset.Quantity
             };
-            return _cryptoAssetDto;
+            return _stockAssetDto;
         }
 
         public decimal GetUserStockInvestmentSum(int userId)
@@ -296,14 +296,7 @@ namespace My2Cents.DatabaseManagement.Implements
             decimal _result = _context.StockAssets
                                             .Where(s => s.UserId == userId)
                                             .Sum(i => i.BuyPrice);
-            if(_result == 0)
-            {
-                throw new Exception("Stocks Asset DNE");
-            }
-            else
-            {
-                return _result;
-            }
+            return _result; 
         }
         
     }

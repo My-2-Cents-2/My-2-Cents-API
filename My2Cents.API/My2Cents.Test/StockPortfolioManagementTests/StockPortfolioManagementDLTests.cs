@@ -268,6 +268,50 @@ namespace StockPortfolioManagementTest
                 Assert.Throws<Exception>( () => _repo.GetUserStockAssets(2));
             }
         }       
+        
+        /*
+        [Fact]
+        void Pass_Stock_To_Dto()
+        {
+            using(My2CentsContext context = new My2CentsContext(options2))
+            {
+                //Act
+                Stock testStock = new Stock()
+                {
+                    StockId = 2,
+                    CurrentPrice = 200,
+                    LastUpdate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time")),
+                    PriceChange = 2,
+                    PriceChangePercentage = 2,
+                    Name = "VeryFunDragonsactions",
+                    ShortenedName = "VFDS"
+                };
+
+                //Act
+                IStockPortfolioManagementDL _repo = new StockPortfolioManagementDL(context);
+                StockDto _result =  _repo.StockToDto(testStock);
+
+                //Assert
+                Assert.IsType(StockDto, _result);
+            }
+        }*/
+/*
+        [Fact]
+        void Get_User_Investment_Sum()
+        {
+            using (My2CentsContext context = new My2CentsContext(options))
+            {
+                //Arrange
+                IStockPortfolioManagementDL _repo = new StockPortfolioManagementDL(context);
+
+                //Act
+                decimal _result = _repo.GetUserStockInvestmentSum(1);
+
+                //Assert
+                Assert.Equal(2,_result);
+            }
+        }
+*/
         private void SeedStockPortfolioDL()
         {
             using(My2CentsContext context = new My2CentsContext(options))
