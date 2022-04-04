@@ -41,7 +41,7 @@ namespace My2Cents.Logic.Implements
                 return allStocks;
             }
         }
-        public List<StockDto> GetUserStocks(int userId) // i have no clue if this actually works
+        public List<StockDto> GetUserStocks(int userId)
         {
             List<StockAssetDto> userAssets = _repo.GetUserStockAssets(userId);
             HashSet<StockDto> userStocks = new HashSet<StockDto> ();
@@ -58,7 +58,7 @@ namespace My2Cents.Logic.Implements
             }
         }
 
-        public List<StockDto> GetUserStocksFromOrderHistory(int userId) // i have no clue if this actually works
+        public List<StockDto> GetUserStocksFromOrderHistory(int userId) 
         {
             List<StockOrderHistoryDto> userAssets = _repo.GetUserStockOrders(userId);
             HashSet<StockDto> userStocks = new HashSet<StockDto> ();
@@ -74,7 +74,7 @@ namespace My2Cents.Logic.Implements
                 return userStocks.ToList();
             }
         }
-        public StockDto UpdateStockPrice(string stockName, decimal stockPrice)
+/*        public StockDto UpdateStockPrice(string stockName, decimal stockPrice)
         {
             try
             {
@@ -85,7 +85,7 @@ namespace My2Cents.Logic.Implements
             {
                 throw new Exception(exe.Message);
             }
-        }
+        }*/
         public bool CheckDuplicateStock(string stockName)
         {
             List<StockDto> _result = _repo.GetAllStocks();
@@ -95,13 +95,13 @@ namespace My2Cents.Logic.Implements
             }
             else
             {
-                throw new Exception(stockName + "Duplicate Stock");
+                throw new Exception(stockName + " is a duplicate Stock");
             }
         }
         public StockDto CheckStockId(int stockId)
         {
             List<StockDto> _result = _repo.GetAllStocks();
-            StockDto stock = _result.FirstOrDefault(s => (s.StockId == stockId));
+            StockDto? stock = _result.FirstOrDefault(s => (s.StockId == stockId));
             if (stock == null)
             {
                 throw new Exception("Stock not found from Id");
@@ -113,18 +113,19 @@ namespace My2Cents.Logic.Implements
         }
         public int GetStockIdFromName(string stockName)
         {
-            int stockId = (_repo.GetAllStocks()
-                            .FirstOrDefault(s => (s.Name == stockName))
-                            .StockId);
-            if( stockId == 0)
+            try
             {
-                Console.WriteLine("Fail: " + stockName + " " + stockId);
-                throw new Exception("Stock Name DNE");
-            }
-            else{
+                int stockId = (_repo.GetAllStocks()
+                                .FirstOrDefault(s => (s.Name == stockName))
+                                .StockId);
                 Console.WriteLine("Test:" + stockName + " " + stockId);
-                return stockId; 
+                return stockId;
             }
+            catch(System.Exception exe)
+            {
+                throw new Exception("Stock Name " + stockName + " DNE");
+            }
+            
         }
 
 
@@ -176,7 +177,12 @@ namespace My2Cents.Logic.Implements
             {
                 throw new Exception(exe.Message);
             }
-        } 
+        }
+
+        public decimal GetUserStockInvestmentSum(int userId)
+        {
+            return _repo.GetUserStockInvestmentSum(userId);
+        }
 
     }
 }

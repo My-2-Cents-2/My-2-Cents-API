@@ -14,22 +14,6 @@ namespace My2Cents.DatabaseManagement.Implements
             _context = context;
         }
 
-        public StockDto AddStock(Stock s_stock)
-        {
-            Stock newStock = new Stock()
-            {
-                // should i check for duplicate here or the BL?
-                CurrentPrice = s_stock.CurrentPrice,
-                LastUpdate = s_stock.LastUpdate,
-                Name = s_stock.Name,
-                ShortenedName = s_stock.ShortenedName
-            };
-            _context.Stocks.Add(newStock);
-            _context.SaveChanges();
-
-            StockDto newStockDto= StockToDto(newStock);
-            return newStockDto;
-        }
 
         public List<StockDto> GetAllStocks()
         {
@@ -39,6 +23,8 @@ namespace My2Cents.DatabaseManagement.Implements
                                                 StockId = p.StockId,
                                                 CurrentPrice = p.CurrentPrice,
                                                 LastUpdate = p.LastUpdate,
+                                                PriceChange = p.PriceChange,
+                                                PriceChangePercentage = p.PriceChangePercentage,
                                                 Name = p.Name,
                                                 ShortenedName = p.ShortenedName
                                             }).ToList();
@@ -54,12 +40,14 @@ namespace My2Cents.DatabaseManagement.Implements
 
         public StockDto GetAStockFromStockId(int stockId)
         {
-            StockDto _result = _context.Stocks
+            StockDto? _result = _context.Stocks
                                         .Select(p => new StockDto
                                         {
                                             StockId = p.StockId,
                                             CurrentPrice = p.CurrentPrice,
                                             LastUpdate = p.LastUpdate,
+                                            PriceChange = p.PriceChange,
+                                            PriceChangePercentage = p.PriceChangePercentage,
                                             Name = p.Name,
                                             ShortenedName = p.ShortenedName
                                         }).FirstOrDefault(s => s.StockId == stockId);
@@ -75,12 +63,14 @@ namespace My2Cents.DatabaseManagement.Implements
 
         public StockDto GetAStockFromStockName(string stockName)
         {
-            StockDto _result = _context.Stocks
+            StockDto? _result = _context.Stocks
                                         .Select(p => new StockDto
                                         {
                                             StockId = p.StockId,
                                             CurrentPrice = p.CurrentPrice,
                                             LastUpdate = p.LastUpdate,
+                                            PriceChange = p.PriceChange,
+                                            PriceChangePercentage = p.PriceChangePercentage,
                                             Name = p.Name,
                                             ShortenedName = p.ShortenedName
                                         }).FirstOrDefault(s => s.Name == stockName);
@@ -94,7 +84,7 @@ namespace My2Cents.DatabaseManagement.Implements
             }
         }
 
-
+/*
         public StockDto UpdateStock(Stock s_stock)
         {
             Stock stockToUpdate = _context.Stocks.Where(g => g.StockId == s_stock.StockId).FirstOrDefault();
@@ -147,7 +137,7 @@ namespace My2Cents.DatabaseManagement.Implements
             return _result;
         }
 
-
+*/
         public List<StockOrderHistoryDto> GetAllStockOrderHistory()
         {
             List<StockOrderHistoryDto> _result = _context.StockOrderHistories
@@ -243,52 +233,52 @@ namespace My2Cents.DatabaseManagement.Implements
             }
         }
 
-        public StockAssetDto DeleteStockAsset(int stockAssetId)
-        {
-            StockAsset stockAssetToRemove = _context.StockAssets.Where(s => (s.StockAssetId == stockAssetId)).FirstOrDefault();
-            if (stockAssetToRemove != null)
-            {
-                _context.Remove(stockAssetToRemove);
-                _context.SaveChanges();
-                StockAssetDto _result = StockAssetToDto(stockAssetToRemove);
-                return _result;
-            }
-            else
-            {
-                throw new Exception("Stock asset not found. Stock asset could not be deleted.");
-            }
-        }
+        // public StockAssetDto DeleteStockAsset(int stockAssetId)
+        // {
+        //     StockAsset stockAssetToRemove = _context.StockAssets.Where(s => (s.StockAssetId == stockAssetId)).FirstOrDefault();
+        //     if (stockAssetToRemove != null)
+        //     {
+        //         _context.Remove(stockAssetToRemove);
+        //         _context.SaveChanges();
+        //         StockAssetDto _result = StockAssetToDto(stockAssetToRemove);
+        //         return _result;
+        //     }
+        //     else
+        //     {
+        //         throw new Exception("Stock asset not found. Stock asset could not be deleted.");
+        //     }
+        // }
 
 
-        private StockDto StockToDto(Stock c_crypto)
+        private StockDto StockToDto(Stock c_stock)
         {
-            StockDto _cryptoDto = new StockDto(){
-                StockId = c_crypto.StockId,
-                CurrentPrice = c_crypto.CurrentPrice,
-                LastUpdate = c_crypto.LastUpdate,
-                Name = c_crypto.Name,
-                ShortenedName = c_crypto.ShortenedName
+            StockDto _stockDto = new StockDto(){
+                StockId = c_stock.StockId,
+                CurrentPrice = c_stock.CurrentPrice,
+                LastUpdate = c_stock.LastUpdate,
+                Name = c_stock.Name,
+                ShortenedName = c_stock.ShortenedName
 
             };
-            return _cryptoDto;
+            return _stockDto;
         }
-        private StockOrderHistoryDto OrderHistoryToDto(StockOrderHistory c_cryptoOrderHistory)
+        private StockOrderHistoryDto OrderHistoryToDto(StockOrderHistory c_stockOrderHistory)
         {
-            StockOrderHistoryDto _cryptoOrderHistoryDto = new StockOrderHistoryDto(){
-                StockOrderId = c_cryptoOrderHistory.StockOrderId,
-                UserId = c_cryptoOrderHistory.UserId,
-                OrderPrice = c_cryptoOrderHistory.OrderPrice,
-                Quantity = c_cryptoOrderHistory.Quantity,
-                OrderType = c_cryptoOrderHistory.OrderType,
-                OrderTime = c_cryptoOrderHistory.OrderTime
+            StockOrderHistoryDto _stockOrderHistoryDto = new StockOrderHistoryDto(){
+                StockOrderId = c_stockOrderHistory.StockOrderId,
+                UserId = c_stockOrderHistory.UserId,
+                OrderPrice = c_stockOrderHistory.OrderPrice,
+                Quantity = c_stockOrderHistory.Quantity,
+                OrderType = c_stockOrderHistory.OrderType,
+                OrderTime = c_stockOrderHistory.OrderTime
 
             };
-            return _cryptoOrderHistoryDto;
+            return _stockOrderHistoryDto;
         }
 
         private StockAssetDto StockAssetToDto(StockAsset a_stockAsset)
         {
-            StockAssetDto _cryptoAssetDto = new StockAssetDto(){
+            StockAssetDto _stockAssetDto = new StockAssetDto(){
                 StockAssetId = a_stockAsset.StockAssetId,
                 StockId = a_stockAsset.StockId,
                 UserId = a_stockAsset.UserId,
@@ -298,7 +288,16 @@ namespace My2Cents.DatabaseManagement.Implements
                 TakeProfit = a_stockAsset.TakeProfit,
                 Quantity = a_stockAsset.Quantity
             };
-            return _cryptoAssetDto;
+            return _stockAssetDto;
         }
+
+        public decimal GetUserStockInvestmentSum(int userId)
+        {
+            decimal _result = _context.StockAssets
+                                            .Where(s => s.UserId == userId)
+                                            .Sum(i => i.BuyPrice);
+            return _result; 
+        }
+        
     }
 }
