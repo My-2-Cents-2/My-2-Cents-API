@@ -113,6 +113,11 @@ namespace My2Cents.Logic
             return await _repo.UpdateCryptosData();
         }
 
+        public async Task<List<StockDto>> UpdateStocksData()
+        {
+            return await _repo.UpdateStocksData();
+        }
+
         // public StockOrderHistory PlaceOrderStock(StockAsset _asset, StockOrderHistory _sOrderHis, Account _balance, int _userID, int _stockID, decimal _stockPrice, decimal amount)
         // {
         //    try

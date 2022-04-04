@@ -12,10 +12,12 @@ namespace My2Cents.API.Controllers
     [ApiController]
     public class InvestmentPlatformController : ControllerBase
     {
-        private IInvesmenentPlatformManagementBL _platformBL;
-        public InvestmentPlatformController(IInvesmenentPlatformManagementBL p_platformBL)
+        private IInvesmenentPlatformManagementBL _platformBL; 
+        private readonly IConfiguration builder;
+        public InvestmentPlatformController(IInvesmenentPlatformManagementBL p_platformBL, IConfiguration builder)
         {
             _platformBL = p_platformBL;
+            this.builder = builder;
         }
 
         // POST: api/InvestmentPlatform/PlaceOrderCrypto
@@ -165,12 +167,24 @@ namespace My2Cents.API.Controllers
             }
         }
 
-        // //GET: api/InvestmentPlatform/GetStocks
-        // [HttpGet("GetStocks")]
+        //GET: api/InvestmentPlatform/GetStocks
+        [HttpGet("GetStocks")]
 
-        // public IActionResult
-        // {
+        public async Task<IActionResult> GetAllStocks()
+        {
+            //StockApi = builder["StockApiKey"];
 
-        // }
+             return Ok(await _platformBL.UpdateStocksData());
+             
+            try
+            {
+               
+            }
+            catch (System.Exception e)
+            {
+                
+                return StatusCode(500, e.Message);
+            }
+        }
     }
 }
