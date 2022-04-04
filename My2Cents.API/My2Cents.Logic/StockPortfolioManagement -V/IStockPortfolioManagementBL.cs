@@ -17,13 +17,14 @@ namespace My2Cents.Logic.Interfaces
         /// <returns></returns>
         Task<Stock> GetStockFromName(string stockName);
         */
-        /// <summary>
-        /// updates the stock status
+        
+/*        /// <summary>
+        /// updates the stock 
         /// </summary>
         /// <param name="s_stock"></param>
         /// <returns></returns>
-        
-        StockDto UpdateStockPrice(string stockName, decimal stockPrice);
+        StockDto UpdateStockPrice(string stockName, decimal stockPrice); */
+
         /// <summary>
         /// deletes the stock
         /// </summary>
@@ -42,5 +43,7 @@ namespace My2Cents.Logic.Interfaces
         //StockAssets
         List<StockAssetDto> GetAllStockAssets();
         List<StockAssetDto> GetUserStockAssets(int userId);
+
+        Decimal GetUserStockInvestmentSum(int userId);
     }
 }

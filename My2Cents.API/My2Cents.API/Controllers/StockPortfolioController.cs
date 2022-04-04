@@ -44,10 +44,10 @@ namespace My2Cents.API.Controllers
             {
                 //Log.Warning("Route: " + RouteConfigs.StockPortfolioStocks);
                 //Log.Warning(e.Message);
-                return NotFound("Cannot find any post belongs in this group!");
+                return NotFound(e.Message);
             }
         }
-
+/*
         //PUT: api/Stock
         [HttpPut(RouteConfigs.StockPortfolioStocks)]
         public IActionResult UpdateStockPrice([FromQuery] string stockName, [FromQuery] decimal stockPrice)
@@ -64,6 +64,7 @@ namespace My2Cents.API.Controllers
                 return BadRequest(exe.Message);
             }
         }
+*/
 
 //         // DELETE: api/Stock/5
 //         [HttpDelete(RouteConfigs.Stock)]
@@ -242,7 +243,6 @@ namespace My2Cents.API.Controllers
                     OwnedShares = _orderHistory.Quantity,
                     TransactionType = _orderHistory.OrderType
                 };
-                Console.WriteLine(tempOrderHistoryPortfolioForm.Name);
                 _result.Add(tempOrderHistoryPortfolioForm);
             }
             return _result;
