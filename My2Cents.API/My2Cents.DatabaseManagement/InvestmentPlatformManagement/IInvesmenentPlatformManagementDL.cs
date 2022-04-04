@@ -28,6 +28,9 @@ namespace My2Cents.DatabaseManagement
 
         //CRYPTO MANAGEMENT
         Task<List<CryptoDto>> UpdateCryptosData();
+
+        //STOCK MANAGEMENT
+        Task<List<StockDto>> UpdateStocksData();
     }
 }
 

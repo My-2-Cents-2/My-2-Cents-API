@@ -22,6 +22,9 @@ namespace My2Cents.Logic
         //CRYPTO MANAGEMENT
         Task<List<CryptoDto>> UpdateCryptosData();
 
+        //STOCK MANAGEMENT
+        Task<List<StockDto>> UpdateStocksData();
+
 
         // public CryptoOrderHistory SellOrderCrypto(CryptoAsset _asset, CryptoOrderHistory _cOrderHis, Account _balance, int _userID, int _cryptoID, decimal _cryptoPrice, decimal amount);
 

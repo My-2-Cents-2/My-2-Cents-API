@@ -116,8 +116,8 @@ namespace My2Cents.DatabaseManagement
 
             //If have enough money
             var _buyingQuantity = amount / _currentCryptoPrice;
-            
-            
+
+
 
             return PlaceOrderCrypto(p_userID, p_cryptoID, _buyingQuantity);
         }
@@ -133,7 +133,7 @@ namespace My2Cents.DatabaseManagement
             var _CurrentAccount = _context.Accounts.FirstOrDefault(p => p.UserId.Equals(p_userID)
             && p.AccountTypeId.Equals(_AccountTypeId));
             var _MoneySpent = amount * _context.Stocks.FirstOrDefault(p => p.StockId == p_stockID).CurrentPrice;
-            
+
 
             if (_CurrentAccount.TotalBalance < _MoneySpent)
             {
@@ -143,8 +143,8 @@ namespace My2Cents.DatabaseManagement
 
             //If you have enough money 
             _CurrentAccount.TotalBalance -= _MoneySpent;
-            
-            
+
+
 
             //Create a new crypto order history
             StockOrderHistoryDto _newOrder = new StockOrderHistoryDto();
@@ -383,7 +383,12 @@ namespace My2Cents.DatabaseManagement
         public async Task<List<CryptoDto>> UpdateCryptosData()
         {
             string[] listCryptoID = { "bitcoin", "ethereum", "tether", "binancecoin" };
+            if (DateTime.UtcNow.Minute % 10 == 0)
+            {
+
+            }
             List<CoinMarkets> _listOfCoinMarkets = await GetCoinMarkets("usd", new string[] { }, "market_cap_desc", 50, 1, false, "1h", null);
+
 
             foreach (var crypto in _listOfCoinMarkets)
             {
@@ -401,7 +406,8 @@ namespace My2Cents.DatabaseManagement
                         PriceChange = crypto.PriceChange24H,
                         PriceChangePercentage = crypto.PriceChangePercentage24H,
                         ImageURL = crypto.Image.ToString(),
-                        ShortenedName = crypto.Symbol
+                        ShortenedName = crypto.Symbol,
+                        CryptoNameId = crypto.Id
                     });
                     _context.SaveChanges();
                 }
@@ -410,7 +416,8 @@ namespace My2Cents.DatabaseManagement
                     _currentcryto.CurrentPrice = crypto.CurrentPrice;
                     _currentcryto.LastUpdate = _dateTime.DateTime;
                     _currentcryto.PriceChange = crypto.PriceChange24H;
-                    _currentcryto.PriceChangePercentage = crypto.PriceChangePercentage24H; 
+                    _currentcryto.PriceChangePercentage = crypto.PriceChangePercentage24H;
+                    _currentcryto.CryptoNameId = crypto.Id;
                     _currentcryto.ImageURL = crypto.Image.ToString();
                     _context.SaveChanges();
                 }
@@ -425,7 +432,8 @@ namespace My2Cents.DatabaseManagement
                 ShortenedName = p.ShortenedName,
                 ImageURL = p.ImageURL,
                 PriceChange = p.PriceChange,
-                PriceChangePercentage = p.PriceChangePercentage
+                PriceChangePercentage = p.PriceChangePercentage,
+                CryptoNameId = p.CryptoNameId
             }).ToList();
 
             return _CryptoData;
@@ -434,7 +442,7 @@ namespace My2Cents.DatabaseManagement
         public async Task<List<CoinMarkets>> GetCoinMarkets(string vsCurrency, string[] ids, string order, int? perPage,
             int? page, bool sparkline, string priceChangePercentage, string category)
         {
-            return await GetAsync<List<CoinMarkets>>(QueryStringService.AppendQueryString("coins/markets",
+            return await GetAsyncCrypto<List<CoinMarkets>>(QueryStringService.AppendQueryString("coins/markets",
                 new Dictionary<string, object>
                 {
                     {"vs_currency", vsCurrency},
@@ -448,11 +456,51 @@ namespace My2Cents.DatabaseManagement
                 })).ConfigureAwait(false);
         }
 
-        public async Task<T> GetAsync<T>(Uri resourceUri)
+        public async Task<T> GetAsyncStock<T>(Uri resourceUri)
         {
             //_httpClient.DefaultRequestHeaders.Add("User-Agent", "your bot 0.1");
             HttpClient _httpClient = new HttpClient();
-            var response = await _httpClient.SendAsync(new HttpRequestMessage(HttpMethod.Get, resourceUri))
+
+            //Adding API Key to request headers in HttpClient Equivalent to C#
+            //Credits to : Stephen Pagdilao, You're welcome
+            HttpRequestMessage request = new HttpRequestMessage();
+            request.RequestUri = resourceUri;
+            request.Method = HttpMethod.Get;
+            request.Headers.Add("X-API-KEY", "aTxpqYkQjC7BYnhL5IqZf2anrmzswvrM1bBb2xG6");
+
+
+
+            var response = await _httpClient.SendAsync(request)
+                .ConfigureAwait(false);
+
+
+            response.EnsureSuccessStatusCode();
+
+            // var responseContent = await response.Content.ReadAsStringAsync();
+            var responseContent = await response.Content.ReadAsStringAsync();
+            try
+            {
+                JsonSerializerSettings _serializerSettings = new JsonSerializerSettings();
+                return JsonConvert.DeserializeObject<T>(responseContent, _serializerSettings);
+            }
+            catch (Exception e)
+            {
+                throw new HttpRequestException(e.Message);
+            }
+        }
+        public async Task<T> GetAsyncCrypto<T>(Uri resourceUri)
+        {
+            //_httpClient.DefaultRequestHeaders.Add("User-Agent", "your bot 0.1");
+            HttpClient _httpClient = new HttpClient();
+
+            //Adding API Key to request headers in HttpClient Equivalent to C#
+            //Credits to : Stephen Pagdilao, You're welcome
+            HttpRequestMessage request = new HttpRequestMessage();
+            request.RequestUri = resourceUri;
+            request.Method = HttpMethod.Get;
+
+
+            var response = await _httpClient.SendAsync(request)
                 .ConfigureAwait(false);
 
             response.EnsureSuccessStatusCode();
@@ -467,6 +515,74 @@ namespace My2Cents.DatabaseManagement
             {
                 throw new HttpRequestException(e.Message);
             }
+        }
+
+        public async Task<List<StockDto>> UpdateStocksData()
+        {
+            //string[] listOfRegions = {"us", "eu", "can", "jpn"};
+            var _lastUpdated = _context.Stocks.FirstOrDefault().LastUpdate;
+            _lastUpdated = _lastUpdated.AddHours(1);
+            var _currentTime = DateTime.UtcNow;
+            //if (DateTime.UtcNow.Minute == 0 || _lastUpdated.CompareTo(_currentTime) == 1){
+            string stockList = "TSLA,AAPL,AMZN,MSFT,NIO,NVDA,MRNA,NKLA,FB,AMD";
+            List<MarketDataStock> _listOfStockMarkets = await GetStockMarket(new string[] { }, new string[] { }, stockList);
+            foreach (var stock in _listOfStockMarkets[0].Datas)
+            {
+                //Check if stock is already in the database
+                var _currentStock = _context.Stocks.FirstOrDefault(p => p.Name.Equals(stock.Attributes.LongName));
+
+                //DateTime _datetime = stock._dateTime;
+                //No LastUpdate time need to discuss what to do/what is needed
+
+                //If not in database, add it
+                if (_currentStock == null)
+                {
+                    _context.Stocks.Add(new Stock()
+                    {
+                        CurrentPrice = stock.Attributes.RegMarketPrice,
+                        Name = stock.Attributes.LongName,
+                        ShortenedName = stock.ID,
+                        PriceChange = stock.Attributes.RegMarketChange,
+                        PriceChangePercentage = stock.Attributes.RegMarketChangePecent,
+                        LastUpdate = DateTime.UtcNow
+                    });
+                    _context.SaveChanges();
+                }
+                else
+                {
+                    _currentStock.CurrentPrice = stock.Attributes.RegMarketPrice;
+                    _currentStock.PriceChange = stock.Attributes.RegMarketChange;
+                    _currentStock.PriceChangePercentage = stock.Attributes.RegMarketChangePecent;
+                    _currentStock.LastUpdate = DateTime.UtcNow;
+                    _context.SaveChanges();
+                }
+            }
+            //}
+
+
+            List<StockDto> _StocksData = _context.Stocks.Select(p => new StockDto
+            {
+                StockId = p.StockId,
+                CurrentPrice = p.CurrentPrice,
+                LastUpdate = p.LastUpdate,
+                Name = p.Name,
+                ShortenedName = p.ShortenedName,
+                PriceChange = p.PriceChange,
+                PriceChangePercentage = p.PriceChangePercentage
+            }).ToList();
+
+            return _StocksData;
+        }
+
+        public async Task<List<MarketDataStock>> GetStockMarket(string[] Region, string[] lang, string symbols)
+        {
+            return new List<MarketDataStock>() {await GetAsyncStock<MarketDataStock>(QueryStringServiceStock.AppendQueryString("market/get-realtime-prices",
+                new Dictionary<string, object>
+                {
+                    // {"region", string.Join(",", Region)},
+                    // {"lang", string.Join(",", lang)},
+                    {"symbols", symbols}
+                })).ConfigureAwait(false)};
         }
 
         public static class QueryStringService
@@ -499,9 +615,41 @@ namespace My2Cents.DatabaseManagement
             }
         }
 
+        public static class QueryStringServiceStock
+        {
+            public static Uri AppendQueryString(string path, Dictionary<string, object> parameter)
+            {
+                return CreateUrl(path, parameter);
+            }
+            public static Uri AppendQueryString(string path)
+            {
+                return CreateUrl(path, new Dictionary<string, object>());
+            }
+            private static Uri CreateUrl(string path, Dictionary<string, object> parameter)
+            {
+                var urlParameters = new List<string>();
+                foreach (var par in parameter)
+                {
+                    urlParameters.Add(par.Value == null || string.IsNullOrWhiteSpace(par.Value.ToString())
+                        ? null
+                        : $"{par.Key}={par.Value.ToString().ToLower()}");
+                }
+
+                var encodedParams = urlParameters
+                    .Where(x => !string.IsNullOrWhiteSpace(x))
+                    .Select(WebUtility.HtmlEncode)
+                    .Select((x, i) => i > 0 ? $"&{x}" : $"?{x}")
+                    .ToArray();
+                var url = encodedParams.Length > 0 ? $"{path}{string.Join(string.Empty, encodedParams)}" : path;
+                return new Uri(BaseApiEndPointUrl.StockEndPoint, url);
+            }
+        }
+
         public static class BaseApiEndPointUrl
         {
             public static readonly Uri ApiEndPoint = new Uri("https://api.coingecko.com/api/v3/");
+            // public static readonly Uri StockEndPoint = new Uri("https://yfapi.net/v6/");
+            public static readonly Uri StockEndPoint = new Uri("https://alpha.financeapi.net/");
         }
 
         // public CryptoAsset BuyExistingCrypto(CryptoAsset _asset)
