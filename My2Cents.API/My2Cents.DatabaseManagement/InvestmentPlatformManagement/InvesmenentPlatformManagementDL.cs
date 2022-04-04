@@ -150,7 +150,7 @@ namespace My2Cents.DatabaseManagement
             StockOrderHistoryDto _newOrder = new StockOrderHistoryDto();
             _newOrder.UserId = p_userID;
             _newOrder.StockId = p_stockID;
-            _newOrder.OrderPrice = _context.Cryptos.FirstOrDefault(p => p.CryptoId.Equals(p_stockID)).CurrentPrice;
+            _newOrder.OrderPrice = _context.Stocks.FirstOrDefault(p => p.StockId.Equals(p_stockID)).CurrentPrice;
             _newOrder.Quantity = amount;
             _newOrder.OrderType = "Buy";
             _newOrder.OrderTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time"));
@@ -179,7 +179,7 @@ namespace My2Cents.DatabaseManagement
             {
                 StockId = p_stockID,
                 UserId = p_userID,
-                BuyPrice = _context.Cryptos.FirstOrDefault(p => p.CryptoId.Equals(p_stockID)).CurrentPrice,
+                BuyPrice = _context.Stocks.FirstOrDefault(p => p.StockId.Equals(p_stockID)).CurrentPrice,
                 BuyDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time")),
                 StopLoss = 0,
                 TakeProfit = 0,
@@ -327,7 +327,7 @@ namespace My2Cents.DatabaseManagement
                 {
                     UserId = p_userID,
                     StockId = p_stockID,
-                    OrderPrice = _context.Cryptos.FirstOrDefault(p => p.CryptoId.Equals(p_stockID)).CurrentPrice,
+                    OrderPrice = _context.Stocks.FirstOrDefault(p => p.StockId.Equals(p_stockID)).CurrentPrice,
                     Quantity = amount,
                     OrderType = "Sell",
                     OrderTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time"))
