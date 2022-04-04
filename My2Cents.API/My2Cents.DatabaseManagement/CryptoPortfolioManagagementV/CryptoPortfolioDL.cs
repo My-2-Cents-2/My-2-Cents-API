@@ -12,22 +12,6 @@ namespace My2Cents.DatabaseManagement.Interfaces
         {
             _context = context;
         }
-        public CryptoDto AddCrypto(Crypto _crypto)
-        {
-        CryptoDto _newc = new CryptoDto()
-        {
-            CryptoId = _crypto.CryptoId,
-            CurrentPrice = _crypto.CurrentPrice,
-            LastUpdate = _crypto.LastUpdate,
-            Name = _crypto.Name,
-            ShortenedName = _crypto.ShortenedName,
-            
-        };
-
-           _context.Cryptos.Add(_crypto);
-           _context.SaveChanges();
-            return _newc;
-        }
 
         public CryptoOrderHistoryDto AddCryptoOrderHistory(CryptoOrderHistory _cOrderHis)
         {
@@ -119,29 +103,6 @@ namespace My2Cents.DatabaseManagement.Interfaces
                 OrderType = p.OrderType,
                 OrderTime = p.OrderTime
             }).ToList();
-        }
-
-        public CryptoDto UpdateCryptoPrice(int _ID, decimal _price)
-        {
-            CryptoDto _ucrypto = _context.Cryptos.Where(g => g.CryptoId == _ID)
-            .Select(p => new CryptoDto
-            {
-                CryptoId = p.CryptoId,
-                CurrentPrice = p.CurrentPrice,
-                LastUpdate = p.LastUpdate,
-                Name = p.Name,
-                ShortenedName = p.ShortenedName
-            }).FirstOrDefault();
-            if (_ucrypto != null)
-            {
-                _ucrypto.CurrentPrice = _price;
-                _ucrypto.LastUpdate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time"));
-            }else
-            {
-                throw new Exception("Crypto not found, cannot update info");
-            }
-            _context.SaveChanges();
-            return _ucrypto;
         }
 
 

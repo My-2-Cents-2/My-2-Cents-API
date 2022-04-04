@@ -13,11 +13,6 @@ namespace My2Cents.Logic.Interfaces
             _repo = repo;
         }
 
-        public CryptoDto AddCrypto(Crypto _crypto)
-        {
-            return _repo.AddCrypto(_crypto);
-        }
-
         public CryptoOrderHistoryDto AddCryptoOrderHistory(CryptoOrderHistory _cOrderHis)
         {
             return _repo.AddCryptoOrderHistory(_cOrderHis);
@@ -48,10 +43,6 @@ namespace My2Cents.Logic.Interfaces
             return _repo.GetCryptoOrderHisByUser(_ID);
         }
 
-        public CryptoDto UpdateCryptoPrice(int _ID, decimal _price)
-        {
-            return _repo.UpdateCryptoPrice(_ID, _price);
-        }
 
     }
 }

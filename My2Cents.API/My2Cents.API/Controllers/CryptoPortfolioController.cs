@@ -60,21 +60,6 @@ namespace My2Cents.API.Controllers
         
         }
 
-        [HttpPut("UpdateCryptoPrice")]
-        public IActionResult ChangeCryptoPrice(int _ID, decimal _price)
-        {
-            try
-            {
-                return Ok(_cryptoBL.UpdateCryptoPrice(_ID, _price));
-            }
-            catch(System.Exception)
-            {
-                return NotFound("Failed to find crypto");
-            }
-        
-            
-        }
-
         /*[HttpPost("AddCryptoOrderHistory")]
         public IActionResult AddCryptoOrderHistory(int userID, int cryptoID, decimal orderPrice, decimal quantity)
         {
@@ -214,10 +199,10 @@ namespace My2Cents.API.Controllers
                     Name = _tempCrypto.Name,
                     SharePrice = _currentPrice,
                     InitialInvestmentDate = item.BuyDate.ToString("MM/dd/yyyy"),
-                    CurrentInvestment = item.BuyPrice,
-                    OwnedShares = _quantity,
-                    Returns = ((_currentPrice - _currentInvestment) / (_currentInvestment) ) * 100,
-                    CryptoPrice = _totalStockPrice
+                    CurrentInvestment = Math.Round(item.BuyPrice, 2, MidpointRounding.ToEven),
+                    OwnedShares = Math.Round(_quantity, 2, MidpointRounding.ToEven),
+                    Returns = Math.Round(((_currentPrice - _currentInvestment) / (_currentInvestment) ) * 100, 2, MidpointRounding.ToEven),
+                    CryptoPrice = Math.Round(_totalStockPrice, 2, MidpointRounding.ToEven)
                 };
                 assetTable.Add(_userCryptoData);
             }
@@ -232,9 +217,9 @@ namespace My2Cents.API.Controllers
                 CryptoOrderHisT _tempOrderHis = new CryptoOrderHisT()
                 {
                     Name = _cryptoBL.GetCryptoById(item.CryptoId).Name,
-                    CurrentInvestment = item.OrderPrice * item.Quantity,
+                    CurrentInvestment = Math.Round(item.OrderPrice * item.Quantity, 2, MidpointRounding.ToEven),
                     InitialInvestmentDate = item.OrderTime.ToString("MM/dd/yyyy"),
-                    OwnedShares = item.Quantity,
+                    OwnedShares = Math.Round(item.Quantity, 2, MidpointRounding.ToEven),
                     TransactionType = item.OrderType
                 };
                 _result.Add(_tempOrderHis);
