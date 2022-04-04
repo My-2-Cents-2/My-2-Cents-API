@@ -36,10 +36,14 @@ namespace My2Cents.API.Controllers
             try
             {
                 decimal _result = _cryptoBL.GetUserCryptoInvestmentSum(userId) + _stockPortfolioBL.GetUserStockInvestmentSum(userId);
+                UserInvestmentInfoForm _userInvestmentResult = new UserInvestmentInfoForm()
+                {
+                    UserInvestmentSum = _result
+                };
                 //Log.Information("Route: " + RouteConfigs.StockPortfolioStocks);
                 //Log.Information("Get All Stocks);
 
-                return Ok(_result);
+                return Ok(_userInvestmentResult);
             }
             catch (System.Exception e)
             {
