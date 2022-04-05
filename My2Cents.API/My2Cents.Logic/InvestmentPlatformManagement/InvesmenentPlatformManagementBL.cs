@@ -117,36 +117,5 @@ namespace My2Cents.Logic
         {
             return await _repo.UpdateStocksData();
         }
-
-        // public StockOrderHistory PlaceOrderStock(StockAsset _asset, StockOrderHistory _sOrderHis, Account _balance, int _userID, int _stockID, decimal _stockPrice, decimal amount)
-        // {
-        //    try
-        //    {
-        //         foreach (var item in ViewAssets(_userID)) //Method not actually there need to discuss with Vijhan team
-        //         {
-        //             if (item.StockName == _stockname)
-        //             {
-        //                 _repo.SubtractFromAccount(_balance);
-        //                 _repo.BuyExistingStock(_asset);
-        //                 return _repo.AddStockOrderHistory(_sOrderHis);
-        //             }
-        //         }
-        //    }
-        //    catch (SqlException)
-        //    {
-
-        //        return null;
-        //    }
-        // }
-
-        // public CryptoOrderHistory SellOrderCrypto(CryptoAsset _asset, CryptoOrderHistory _cOrderHis, Account _balance, int _userID, int _cryptoID, decimal _cryptoPrice, decimal amount)
-        // {
-        //     throw new NotImplementedException();
-        // }
-
-        // public StockOrderHistory SellOrderStock(StockAsset _asset, StockOrderHistory _sOrderHis, Account _balance, int _userID, int _stockID, decimal _stockPrice, decimal amount)
-        // {
-        //     throw new NotImplementedException();
-        // }
     }
 }
