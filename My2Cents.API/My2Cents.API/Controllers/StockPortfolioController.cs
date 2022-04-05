@@ -44,10 +44,10 @@ namespace My2Cents.API.Controllers
             {
                 //Log.Warning("Route: " + RouteConfigs.StockPortfolioStocks);
                 //Log.Warning(e.Message);
-                return NotFound("Cannot find any post belongs in this group!");
+                return NotFound(e.Message);
             }
         }
-
+/*
         //PUT: api/Stock
         [HttpPut(RouteConfigs.StockPortfolioStocks)]
         public IActionResult UpdateStockPrice([FromQuery] string stockName, [FromQuery] decimal stockPrice)
@@ -64,6 +64,7 @@ namespace My2Cents.API.Controllers
                 return BadRequest(exe.Message);
             }
         }
+*/
 
 //         // DELETE: api/Stock/5
 //         [HttpDelete(RouteConfigs.Stock)]
@@ -213,15 +214,15 @@ namespace My2Cents.API.Controllers
                 decimal _totalStockPrice = _quantity * _currentPrice;
                 StockPortfolioStockInvestmentForm userStockData = new StockPortfolioStockInvestmentForm(){
                     Name =  tempStock.Name,
-                    SharePrice = _currentPrice,
+                    SharePrice = Math.Round(_currentPrice, 2, MidpointRounding.ToEven ),
                     
                     //information from stockorderhistory
                     //get user shares owned from a specific company
                     InitialInvestmentDate = aUserStock.BuyDate.ToString("MM/dd/yyyy"),
-                    CurrentInvestment = aUserStock.BuyPrice,
-                    OwnedShares = _quantity,
-                    Returns = ((_currentPrice - _currentInvestment) / (_currentInvestment) ) * 100,
-                    StockPrice = _totalStockPrice
+                    CurrentInvestment = Math.Round(aUserStock.BuyPrice, 2, MidpointRounding.ToEven ),
+                    OwnedShares = Math.Round(_quantity, 2, MidpointRounding.ToEven ),
+                    Returns = Math.Round(((_currentPrice - _currentInvestment) / (_currentInvestment) ) * 100, 2, MidpointRounding.ToEven),
+                    StockPrice = Math.Round(_totalStockPrice, 2, MidpointRounding.ToEven )
                 };
                 assetTableInformation.Add(userStockData);
             }
@@ -237,12 +238,11 @@ namespace My2Cents.API.Controllers
                 OrderHistoryPortfolioForm tempOrderHistoryPortfolioForm = new OrderHistoryPortfolioForm()
                 {
                     Name = _stockPortfolioBL.GetAStockFromId(_orderHistory.StockId).Name,
-                    CurrentInvestment = _orderHistory.OrderPrice * _orderHistory.Quantity,
+                    CurrentInvestment = Math.Round(_orderHistory.OrderPrice * _orderHistory.Quantity, 2, MidpointRounding.ToEven ),
                     InitialInvestmentDate = _orderHistory.OrderTime.ToString("MM/dd/yyyy") ,
-                    OwnedShares = _orderHistory.Quantity,
+                    OwnedShares = Math.Round(_orderHistory.Quantity, 2, MidpointRounding.ToEven),
                     TransactionType = _orderHistory.OrderType
                 };
-                Console.WriteLine(tempOrderHistoryPortfolioForm.Name);
                 _result.Add(tempOrderHistoryPortfolioForm);
             }
             return _result;

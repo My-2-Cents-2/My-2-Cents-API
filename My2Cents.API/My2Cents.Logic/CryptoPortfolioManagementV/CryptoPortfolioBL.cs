@@ -44,5 +44,10 @@ namespace My2Cents.Logic.Interfaces
         }
 
 
+        public decimal GetUserCryptoInvestmentSum(int userId)
+        {
+            return _repo.GetUserCryptoInvestmentSum(userId);
+        }
+
     }
 }

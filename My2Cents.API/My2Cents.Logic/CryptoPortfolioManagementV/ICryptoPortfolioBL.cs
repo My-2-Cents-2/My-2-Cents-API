@@ -18,5 +18,7 @@ namespace My2Cents.Logic.Interfaces
 
         List<CryptoAssetDto> GetCryptoAssetsByUser(int _userID);
 
+        decimal GetUserCryptoInvestmentSum(int userId);
+
     }
 }

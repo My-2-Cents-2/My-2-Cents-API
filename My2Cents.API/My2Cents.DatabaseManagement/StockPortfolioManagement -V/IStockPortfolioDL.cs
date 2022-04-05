@@ -6,12 +6,6 @@ namespace My2Cents.DatabaseManagement.Interfaces
     public interface IStockPortfolioManagementDL
     {
         /// <summary>
-        /// Adds the Stock into the database
-        /// </summary>
-        /// <param name="s_stock"></param>
-        /// <returns></returns>
-        StockDto AddStock(Stock s_stock);
-        /// <summary>
         /// Retrieves all of the Stocks in a list format
         /// </summary>
         /// <returns></returns>
@@ -34,6 +28,7 @@ namespace My2Cents.DatabaseManagement.Interfaces
         /// </summary>
         /// <param name="s_stock"></param>
         /// <returns></returns>
+        /*
         StockDto UpdateStock(Stock s_stock);
         /// <summary>
         /// Deletes a Stock in the database. Only manager can disable stock
@@ -41,6 +36,7 @@ namespace My2Cents.DatabaseManagement.Interfaces
         /// <param name="s_stock"></param>
         /// <returns></returns>
         StockDto UpdateStockPrice(int stockId, decimal stockPrice);
+        */
 
         // Stock Order Histories
 
@@ -54,6 +50,7 @@ namespace My2Cents.DatabaseManagement.Interfaces
         List<StockAssetDto> GetAllStockAssets();
         List<StockAssetDto> GetUserStockAssets(int userId);
 
-        StockAssetDto DeleteStockAsset(int stockAssetId); // need to consider if this should even be a thing because dependencies
+        //StockAssetDto DeleteStockAsset(int stockAssetId); // need to consider if this should even be a thing because dependencies
+        decimal GetUserStockInvestmentSum(int userId);
     }
 }
