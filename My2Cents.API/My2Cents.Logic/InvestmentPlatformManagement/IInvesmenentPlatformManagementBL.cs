@@ -11,7 +11,6 @@ namespace My2Cents.Logic
         Task<CryptoOrderHistoryDto> PlaceOrderCryptoFiat(int p_userID, int p_cryptoID, decimal amount);
         Task<StockOrderHistoryDto> PlaceOrderStockFiat(int p_userID, int p_stockID, decimal amount);
 
-
         //SELLING MANAGEMENT
         Task<CryptoOrderHistoryDto> SellCrypto(int p_userID, int p_cryptoID, decimal amount);
         Task<StockOrderHistoryDto> SellStock(int p_userID, int p_stockID, decimal amount);
@@ -24,14 +23,5 @@ namespace My2Cents.Logic
 
         //STOCK MANAGEMENT
         Task<List<StockDto>> UpdateStocksData();
-
-
-        // public CryptoOrderHistory SellOrderCrypto(CryptoAsset _asset, CryptoOrderHistory _cOrderHis, Account _balance, int _userID, int _cryptoID, decimal _cryptoPrice, decimal amount);
-
-        // public StockOrderHistory PlaceOrderStock(StockAsset _asset, StockOrderHistory _sOrderHis, Account _balance, int _userID, int _stockID, decimal _stockPrice, decimal amount);
-
-        // public StockOrderHistory SellOrderStock(StockAsset _asset, StockOrderHistory _sOrderHis, Account _balance, int _userID, int _stockID, decimal _stockPrice, decimal amount);
-
-
     }
 }
