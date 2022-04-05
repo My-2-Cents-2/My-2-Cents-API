@@ -28,7 +28,7 @@ namespace My2Cents.DatabaseManagement
         //     return _balance;
         // }
 
-        public CryptoOrderHistoryDto PlaceOrderCrypto(int _userID, int _cryptoID, decimal amount)
+        public async Task<CryptoOrderHistoryDto> PlaceOrderCrypto(int _userID, int _cryptoID, decimal amount)
         {
             //Try to get current asset with our crypto ID and user ID
             var currentAsset = _context.CryptoAssets.FirstOrDefault(p => p.CryptoId.Equals(_cryptoID) &&
@@ -57,7 +57,7 @@ namespace My2Cents.DatabaseManagement
             _newOrder.Quantity = amount;
             _newOrder.OrderType = "Buy";
             _newOrder.OrderTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time"));
-            _context.CryptoOrderHistories.Add(new CryptoOrderHistory()
+            await _context.CryptoOrderHistories.AddAsync(new CryptoOrderHistory()
             {
                 UserId = _newOrder.UserId,
                 CryptoId = _newOrder.CryptoId,
@@ -72,7 +72,7 @@ namespace My2Cents.DatabaseManagement
             {
                 currentAsset.Quantity += amount;
                 currentAsset.BuyCount += 1;
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
 
                 return _newOrder;
             }
@@ -90,15 +90,15 @@ namespace My2Cents.DatabaseManagement
                 BuyCount = 1,
 
             };
-            _context.CryptoAssets.Add(_newCrypAsset);
+            await _context.CryptoAssets.AddAsync(_newCrypAsset);
 
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return _newOrder;
         }
 
-        public CryptoOrderHistoryDto PlaceOrderCryptoFiat(int p_userID, int p_cryptoID, decimal amount)
+        public async Task<CryptoOrderHistoryDto> PlaceOrderCryptoFiat(int p_userID, int p_cryptoID, decimal amount)
         {
             // //Get the current crypto price
             var _currentCryptoPrice = _context.Cryptos.FirstOrDefault(p => p.CryptoId.Equals(p_cryptoID)).CurrentPrice;
@@ -119,10 +119,10 @@ namespace My2Cents.DatabaseManagement
 
 
 
-            return PlaceOrderCrypto(p_userID, p_cryptoID, _buyingQuantity);
+            return await PlaceOrderCrypto(p_userID, p_cryptoID, _buyingQuantity);
         }
 
-        public StockOrderHistoryDto PlaceOrderStock(int p_userID, int p_stockID, decimal amount)
+        public async Task<StockOrderHistoryDto> PlaceOrderStock(int p_userID, int p_stockID, decimal amount)
         {
             //Try to get current asset with our stock ID and user ID
             var currentAsset = _context.StockAssets.FirstOrDefault(p => p.StockId.Equals(p_stockID) &&
@@ -187,15 +187,15 @@ namespace My2Cents.DatabaseManagement
                 BuyCount = 1,
 
             };
-            _context.StockAssets.Add(_newStockAsset);
+            await _context.StockAssets.AddAsync(_newStockAsset);
 
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return _newOrder;
         }
 
-        public StockOrderHistoryDto PlaceOrderStockFiat(int p_userID, int p_stockID, decimal amount)
+        public async Task<StockOrderHistoryDto> PlaceOrderStockFiat(int p_userID, int p_stockID, decimal amount)
         {
             // //Get the current stock price
             var _currentStockPrice = _context.Stocks.FirstOrDefault(p => p.StockId.Equals(p_stockID)).CurrentPrice;
@@ -213,10 +213,10 @@ namespace My2Cents.DatabaseManagement
             //If have enough money
             var _buyingQuantity = amount / _currentStockPrice;
 
-            return PlaceOrderStock(p_userID, p_stockID, _buyingQuantity);
+            return await PlaceOrderStock(p_userID, p_stockID, _buyingQuantity);
         }
 
-        public CryptoOrderHistoryDto SellCrypto(int _userID, int _cryptoID, decimal amount)
+        public async Task<CryptoOrderHistoryDto> SellCrypto(int _userID, int _cryptoID, decimal amount)
         {
             var _AccountTypeId = _context.AccountTypes.FirstOrDefault(p => p.AccountType1.Equals("Checking")).AccountTypeId;
             var _CurrentAccount = _context.Accounts.FirstOrDefault(p => p.UserId.Equals(_userID)
@@ -239,7 +239,7 @@ namespace My2Cents.DatabaseManagement
 
                 //If the amount is less than so we start the transactions
                 //START TRANSACTIONS
-                _context.Database.BeginTransaction();
+                await _context.Database.BeginTransactionAsync();
 
                 //Subtract the amount out of the CryptoAsset
                 _currentCrypto.Quantity -= amount;
@@ -255,7 +255,7 @@ namespace My2Cents.DatabaseManagement
                     OrderType = "Sell",
                     OrderTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time"))
                 };
-                _context.Add(_newOrder);
+                await _context.AddAsync(_newOrder);
 
                 //Add the money to the wallet
                 var checkingacountID = _context.AccountTypes.FirstOrDefault(p => p.AccountType1.Equals("Checking"));
@@ -266,8 +266,8 @@ namespace My2Cents.DatabaseManagement
                 
 
                 //COMMIT TRANSACTIONS
-                _context.Database.CommitTransaction();
-                _context.SaveChanges();
+                await _context.Database.CommitTransactionAsync();
+                await _context.SaveChangesAsync();
 
                 CryptoOrderHistoryDto _order = new CryptoOrderHistoryDto()
                 {
@@ -286,7 +286,7 @@ namespace My2Cents.DatabaseManagement
             throw new Exception("You don't own any of this crypto!");
         }
 
-        public CryptoOrderHistoryDto SellCryptoFiat(int p_userID, int p_cryptoID, decimal amount)
+        public async Task<CryptoOrderHistoryDto> SellCryptoFiat(int p_userID, int p_cryptoID, decimal amount)
         {
             var _currentCrypto = _context.CryptoAssets.FirstOrDefault(p => p.UserId.Equals(p_userID)
                                                                         && p.CryptoId.Equals(p_cryptoID));
@@ -303,10 +303,10 @@ namespace My2Cents.DatabaseManagement
             //If have enough to sell
             var _sellingQuantity = amount / _cryptoPrice;
 
-            return SellCrypto(p_userID, p_cryptoID, _sellingQuantity);
+            return await SellCrypto(p_userID, p_cryptoID, _sellingQuantity);
         }
 
-        public StockOrderHistoryDto SellStock(int p_userID, int p_stockID, decimal amount)
+        public async Task<StockOrderHistoryDto> SellStock(int p_userID, int p_stockID, decimal amount)
         {
             var _AccountTypeId = _context.AccountTypes.FirstOrDefault(p => p.AccountType1.Equals("Checking")).AccountTypeId;
             var _CurrentAccount = _context.Accounts.FirstOrDefault(p => p.UserId.Equals(p_userID)
@@ -330,7 +330,7 @@ namespace My2Cents.DatabaseManagement
 
                 //If the amount is less than so we start the transactions
                 //START TRANSACTIONS
-                _context.Database.BeginTransaction();
+                await _context.Database.BeginTransactionAsync();
 
                 //Subtract the amount out of the CryptoAsset
                 _currentStock.Quantity -= amount;
@@ -345,7 +345,7 @@ namespace My2Cents.DatabaseManagement
                     OrderType = "Sell",
                     OrderTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time"))
                 };
-                _context.Add(_newOrder);
+                await _context.AddAsync(_newOrder);
 
                 //Add the money to the wallet
                 var checkingacountID = _context.AccountTypes.FirstOrDefault(p => p.AccountType1.Equals("Checking"));
@@ -354,8 +354,8 @@ namespace My2Cents.DatabaseManagement
                 _CurrentAccount.TotalBalance += _MoneySpent;
 
                 //COMMIT TRANSACTIONS
-                _context.Database.CommitTransaction();
-                _context.SaveChanges();
+                await _context.Database.CommitTransactionAsync();
+                await _context.SaveChangesAsync();
 
                 StockOrderHistoryDto _order = new StockOrderHistoryDto()
                 {
@@ -374,7 +374,7 @@ namespace My2Cents.DatabaseManagement
             throw new Exception("You don't own any of this crypto!");
         }
 
-        public StockOrderHistoryDto SellStockFiat(int p_userID, int p_stockID, decimal amount)
+        public async Task<StockOrderHistoryDto> SellStockFiat(int p_userID, int p_stockID, decimal amount)
         {
             var _currentStock = _context.StockAssets.FirstOrDefault(p => p.UserId.Equals(p_userID)
                                                                         && p.StockId.Equals(p_stockID));
@@ -391,7 +391,7 @@ namespace My2Cents.DatabaseManagement
             //If have enough to sell
             var _sellingQuantity = amount / _stockPrice;
 
-            return SellStock(p_userID, p_stockID, _sellingQuantity);
+            return await SellStock(p_userID, p_stockID, _sellingQuantity);
         }
 
         public async Task<List<CryptoDto>> UpdateCryptosData()
@@ -412,7 +412,7 @@ namespace My2Cents.DatabaseManagement
                 //If not in the database, add it
                 if (_currentcryto == null)
                 {
-                    _context.Cryptos.Add(new Crypto()
+                    await _context.Cryptos.AddAsync(new Crypto()
                     {
                         CurrentPrice = crypto.CurrentPrice,
                         LastUpdate = _dateTime.DateTime,
@@ -423,7 +423,7 @@ namespace My2Cents.DatabaseManagement
                         ShortenedName = crypto.Symbol,
                         CryptoNameId = crypto.Id
                     });
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
                 }
                 else
                 {
@@ -433,7 +433,7 @@ namespace My2Cents.DatabaseManagement
                     _currentcryto.PriceChangePercentage = crypto.PriceChangePercentage24H;
                     _currentcryto.CryptoNameId = crypto.Id;
                     _currentcryto.ImageURL = crypto.Image.ToString();
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
                 }
             }
 

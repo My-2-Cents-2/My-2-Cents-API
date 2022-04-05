@@ -22,11 +22,11 @@ namespace My2Cents.API.Controllers
 
         // POST: api/InvestmentPlatform/PlaceOrderCrypto
         [HttpPost("PlaceOrderCrypto")]
-        public IActionResult PlaceOrderCrypto(int _userID, int _cryptoID, decimal amount)
+        public async Task<IActionResult> PlaceOrderCrypto(int _userID, int _cryptoID, decimal amount)
         {
             try
             {
-                var _newOrder = _platformBL.PlaceOrderCrypto(_userID, _cryptoID, amount);
+                var _newOrder = await _platformBL.PlaceOrderCrypto(_userID, _cryptoID, amount);
                 return Created("Order successfully placed!", _newOrder);
             }
             catch (System.Exception e)
@@ -38,11 +38,11 @@ namespace My2Cents.API.Controllers
 
         // POST: api/InvestmentPlatform/PlaceOrderCryptoFiat
         [HttpPost("PlaceOrderCryptoFiat")]
-        public IActionResult PlaceOrderCryptoFiat(int p_userID, int p_cryptoID, decimal amount)
+        public async Task<IActionResult> PlaceOrderCryptoFiat(int p_userID, int p_cryptoID, decimal amount)
         {
             try
             {
-                var _newOrder = _platformBL.PlaceOrderCryptoFiat(p_userID, p_cryptoID, amount);
+                var _newOrder = await _platformBL.PlaceOrderCryptoFiat(p_userID, p_cryptoID, amount);
                 return Created("Order successfully placed!", _newOrder);
             }
             catch (System.Exception e)
@@ -54,11 +54,11 @@ namespace My2Cents.API.Controllers
 
         // POST: api/InvestmentPlatform/PlaceOrderStock
         [HttpPost("PlaceOrderStock")]
-        public IActionResult PlaceOrderStock(int p_userID, int p_stockID, decimal amount)
+        public async Task<IActionResult> PlaceOrderStock(int p_userID, int p_stockID, decimal amount)
         {
             try
             {
-                var _newOrder = _platformBL.PlaceOrderStock(p_userID, p_stockID, amount);
+                var _newOrder = await _platformBL.PlaceOrderStock(p_userID, p_stockID, amount);
                 return Created("Order successfully placed!", _newOrder);
             }
             catch (System.Exception e)
@@ -70,11 +70,11 @@ namespace My2Cents.API.Controllers
 
         // POST: api/InvestmentPlatform/PlaceOrderStockFiat
         [HttpPost("PlaceOrderStockFiat")]
-        public IActionResult PlaceOrderStockFiat(int p_userID, int p_stockID, decimal amount)
+        public async Task<IActionResult> PlaceOrderStockFiat(int p_userID, int p_stockID, decimal amount)
         {
             try
             {
-                var _newOrder = _platformBL.PlaceOrderStockFiat(p_userID, p_stockID, amount);
+                var _newOrder = await _platformBL.PlaceOrderStockFiat(p_userID, p_stockID, amount);
                 return Created("Order successfully placed!", _newOrder);
             }
             catch (System.Exception e)
@@ -86,11 +86,11 @@ namespace My2Cents.API.Controllers
 
         //POST: api/InvestmentPlatform/SellCrypto
         [HttpPost("SellCrypto")]
-        public IActionResult SellCrypto(int p_userID, int p_cryptoID, decimal amount)
+        public async Task<IActionResult> SellCrypto(int p_userID, int p_cryptoID, decimal amount)
         {
             try
             {
-                var _newOrder = _platformBL.SellCrypto(p_userID, p_cryptoID, amount);
+                var _newOrder = await _platformBL.SellCrypto(p_userID, p_cryptoID, amount);
                 return Created("Order successfully sold!", _newOrder);
 
             }
@@ -104,11 +104,11 @@ namespace My2Cents.API.Controllers
         //POST: api/InvestmentPlatform/SellCryptoFiat
         [HttpPost("SellCryptoFiat")]
 
-        public IActionResult SellCryptoFiat(int p_userID, int p_cryptoID, decimal amount)
+        public async Task<IActionResult> SellCryptoFiat(int p_userID, int p_cryptoID, decimal amount)
         {
             try
             {
-                var _newOrder = _platformBL.SellCryptoFiat(p_userID, p_cryptoID, amount);
+                var _newOrder = await _platformBL.SellCryptoFiat(p_userID, p_cryptoID, amount);
                 return Created("Order successfully sold!", _newOrder);
             }
             catch (System.Exception e)
@@ -121,11 +121,11 @@ namespace My2Cents.API.Controllers
         //POST: api/InvestmentPlatform/SellStock
         [HttpPost("SellStock")]
 
-        public IActionResult SellStock(int p_userID, int p_stockID, decimal amount)
+        public async Task<IActionResult> SellStock(int p_userID, int p_stockID, decimal amount)
         {
             try
             {
-                var _newOrder = _platformBL.SellStock(p_userID, p_stockID, amount);
+                var _newOrder = await _platformBL.SellStock(p_userID, p_stockID, amount);
                 return Created("Order successfully sold!", _newOrder);
             }
             catch (System.Exception e)
@@ -138,11 +138,11 @@ namespace My2Cents.API.Controllers
         //POST: api/InvestmentPlatform/SellStockFiat
         [HttpPost("SellStockFiat")]
 
-        public IActionResult SellStockFiat(int p_userID, int p_stockID, decimal amount)
+        public async Task<IActionResult> SellStockFiat(int p_userID, int p_stockID, decimal amount)
         {
             try
             {
-                var _newOrder = _platformBL.SellStockFiat(p_userID, p_stockID, amount);
+                var _newOrder = await _platformBL.SellStockFiat(p_userID, p_stockID, amount);
                 return Created("Order successfully sold!", _newOrder);
             }
             catch (System.Exception e)
@@ -173,16 +173,12 @@ namespace My2Cents.API.Controllers
         public async Task<IActionResult> GetAllStocks()
         {
             //StockApi = builder["StockApiKey"];
-
-             return Ok(await _platformBL.UpdateStocksData());
-             
             try
             {
-               
+               return Ok(await _platformBL.UpdateStocksData());
             }
             catch (System.Exception e)
             {
-                
                 return StatusCode(500, e.Message);
             }
         }

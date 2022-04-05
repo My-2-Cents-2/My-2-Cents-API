@@ -6,18 +6,18 @@ namespace My2Cents.Logic
     public interface IInvesmenentPlatformManagementBL
     {
         //BUYING MANAGEMENT
-        CryptoOrderHistoryDto PlaceOrderCrypto(int _userID, int _cryptoID, decimal amount);
-        StockOrderHistoryDto PlaceOrderStock(int p_userID, int p_stockID, decimal amount);
-        CryptoOrderHistoryDto PlaceOrderCryptoFiat(int p_userID, int p_cryptoID, decimal amount);
-        StockOrderHistoryDto PlaceOrderStockFiat(int p_userID, int p_stockID, decimal amount);
+        Task<CryptoOrderHistoryDto> PlaceOrderCrypto(int _userID, int _cryptoID, decimal amount);
+        Task<StockOrderHistoryDto> PlaceOrderStock(int p_userID, int p_stockID, decimal amount);
+        Task<CryptoOrderHistoryDto> PlaceOrderCryptoFiat(int p_userID, int p_cryptoID, decimal amount);
+        Task<StockOrderHistoryDto> PlaceOrderStockFiat(int p_userID, int p_stockID, decimal amount);
 
 
         //SELLING MANAGEMENT
-        CryptoOrderHistoryDto SellCrypto(int p_userID, int p_cryptoID, decimal amount);
-        StockOrderHistoryDto SellStock(int p_userID, int p_stockID, decimal amount);
+        Task<CryptoOrderHistoryDto> SellCrypto(int p_userID, int p_cryptoID, decimal amount);
+        Task<StockOrderHistoryDto> SellStock(int p_userID, int p_stockID, decimal amount);
 
-        CryptoOrderHistoryDto SellCryptoFiat(int p_userID, int p_cryptoID, decimal amount);
-        StockOrderHistoryDto SellStockFiat(int p_userID, int p_stockID, decimal amount);
+        Task<CryptoOrderHistoryDto> SellCryptoFiat(int p_userID, int p_cryptoID, decimal amount);
+        Task<StockOrderHistoryDto> SellStockFiat(int p_userID, int p_stockID, decimal amount);
 
         //CRYPTO MANAGEMENT
         Task<List<CryptoDto>> UpdateCryptosData();

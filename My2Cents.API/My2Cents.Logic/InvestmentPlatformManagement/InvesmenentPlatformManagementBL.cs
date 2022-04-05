@@ -13,11 +13,11 @@ namespace My2Cents.Logic
             _repo = p_repo;
         }
 
-        public CryptoOrderHistoryDto PlaceOrderCrypto(int _userID, int _cryptoID, decimal amount)
+        public async Task<CryptoOrderHistoryDto> PlaceOrderCrypto(int _userID, int _cryptoID, decimal amount)
         {
             try
             {
-               return _repo.PlaceOrderCrypto(_userID, _cryptoID, amount);
+               return await _repo.PlaceOrderCrypto(_userID, _cryptoID, amount);
             }
             catch (Exception e)
             {
@@ -25,11 +25,11 @@ namespace My2Cents.Logic
             }
         }
 
-        public CryptoOrderHistoryDto PlaceOrderCryptoFiat(int p_userID, int p_cryptoID, decimal amount)
+        public async Task<CryptoOrderHistoryDto> PlaceOrderCryptoFiat(int p_userID, int p_cryptoID, decimal amount)
         {
             try
             {
-                return _repo.PlaceOrderCryptoFiat(p_userID, p_cryptoID, amount);
+                return await _repo.PlaceOrderCryptoFiat(p_userID, p_cryptoID, amount);
             }
             catch (System.Exception e)
             {
@@ -37,11 +37,11 @@ namespace My2Cents.Logic
             }
         }
 
-        public StockOrderHistoryDto PlaceOrderStock(int p_userID, int p_stockID, decimal amount)
+        public async Task<StockOrderHistoryDto> PlaceOrderStock(int p_userID, int p_stockID, decimal amount)
         {
             try
             {
-                return _repo.PlaceOrderStock(p_userID, p_stockID, amount);
+                return await _repo.PlaceOrderStock(p_userID, p_stockID, amount);
             }
             catch (System.Exception e)
             {
@@ -49,11 +49,11 @@ namespace My2Cents.Logic
             }
         }
 
-        public StockOrderHistoryDto PlaceOrderStockFiat(int p_userID, int p_stockID, decimal amount)
+        public async Task<StockOrderHistoryDto> PlaceOrderStockFiat(int p_userID, int p_stockID, decimal amount)
         {
             try
             {
-                return _repo.PlaceOrderStockFiat(p_userID, p_stockID, amount);
+                return await _repo.PlaceOrderStockFiat(p_userID, p_stockID, amount);
             }
             catch (System.Exception e)
             {
@@ -61,11 +61,11 @@ namespace My2Cents.Logic
             }
         }
 
-        public CryptoOrderHistoryDto SellCrypto(int _userID, int _cryptoID, decimal amount)
+        public async Task<CryptoOrderHistoryDto> SellCrypto(int _userID, int _cryptoID, decimal amount)
         {
             try
             {
-                return _repo.SellCrypto(_userID, _cryptoID, amount);
+                return await _repo.SellCrypto(_userID, _cryptoID, amount);
             }
             catch (System.Exception e)
             {
@@ -73,11 +73,11 @@ namespace My2Cents.Logic
             }
         }
 
-        public CryptoOrderHistoryDto SellCryptoFiat(int p_userID, int p_cryptoID, decimal amount)
+        public async Task<CryptoOrderHistoryDto> SellCryptoFiat(int p_userID, int p_cryptoID, decimal amount)
         {
             try
             {
-                return _repo.SellCryptoFiat(p_userID, p_cryptoID, amount);
+                return await _repo.SellCryptoFiat(p_userID, p_cryptoID, amount);
             }
             catch (System.Exception e)
             {
@@ -85,11 +85,11 @@ namespace My2Cents.Logic
             }
         }
 
-        public StockOrderHistoryDto SellStock(int p_userID, int p_stockID, decimal amount)
+        public async Task<StockOrderHistoryDto> SellStock(int p_userID, int p_stockID, decimal amount)
         {
             try
             {
-                return _repo.SellStock(p_userID, p_stockID, amount);
+                return await _repo.SellStock(p_userID, p_stockID, amount);
             }
             catch (System.Exception e)
             {
@@ -97,11 +97,11 @@ namespace My2Cents.Logic
             }
         }
 
-        public StockOrderHistoryDto SellStockFiat(int p_userID, int p_stockID, decimal amount)
+        public async Task<StockOrderHistoryDto> SellStockFiat(int p_userID, int p_stockID, decimal amount)
         {
             try
             {
-                return _repo.SellStockFiat(p_userID, p_stockID, amount);
+                return await _repo.SellStockFiat(p_userID, p_stockID, amount);
             }
             catch (System.Exception e)
             {
