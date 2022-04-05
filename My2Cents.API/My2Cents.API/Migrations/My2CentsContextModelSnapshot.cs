@@ -284,6 +284,11 @@ namespace My2Cents.API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CryptoId"), 1L, 1);
 
+                    b.Property<string>("CryptoNameId")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
                     b.Property<decimal>("CurrentPrice")
                         .HasColumnType("decimal(18,8)");
 
