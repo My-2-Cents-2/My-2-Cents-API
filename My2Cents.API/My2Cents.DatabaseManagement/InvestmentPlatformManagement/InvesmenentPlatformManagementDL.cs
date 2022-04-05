@@ -10,23 +10,11 @@ namespace My2Cents.DatabaseManagement
     public class InvesmenentPlatformManagementDL : IInvesmenentPlatformManagementDL
     {
         private readonly My2CentsContext _context;
-        // private readonly HttpClient _httpClient;
-        // private readonly JsonSerializerSettings _serializerSettings;
 
         public InvesmenentPlatformManagementDL(My2CentsContext context)
         {
             _context = context;
-            // _httpClient = httpClient;
-            // _serializerSettings = serializerSettings;
         }
-
-        // public Account AddMoneytoAccount(Account _balance)
-        // {
-        //     _context.Accounts.Update(_balance);
-        //     _context.SaveChanges();
-
-        //     return _balance;
-        // }
 
         public async Task<CryptoOrderHistoryDto> PlaceOrderCrypto(int _userID, int _cryptoID, decimal amount)
         {
@@ -482,11 +470,8 @@ namespace My2Cents.DatabaseManagement
             request.Method = HttpMethod.Get;
             request.Headers.Add("X-API-KEY", "aTxpqYkQjC7BYnhL5IqZf2anrmzswvrM1bBb2xG6");
 
-
-
             var response = await _httpClient.SendAsync(request)
                 .ConfigureAwait(false);
-
 
             response.EnsureSuccessStatusCode();
 
@@ -533,7 +518,6 @@ namespace My2Cents.DatabaseManagement
 
         public async Task<List<StockDto>> UpdateStocksData()
         {
-            //string[] listOfRegions = {"us", "eu", "can", "jpn"};
             var _lastUpdated = _context.Stocks.FirstOrDefault().LastUpdate;
             _lastUpdated = _lastUpdated.AddHours(1);
             var _currentTime = DateTime.UtcNow;
@@ -544,9 +528,6 @@ namespace My2Cents.DatabaseManagement
             {
                 //Check if stock is already in the database
                 var _currentStock = _context.Stocks.FirstOrDefault(p => p.Name.Equals(stock.Attributes.LongName));
-
-                //DateTime _datetime = stock._dateTime;
-                //No LastUpdate time need to discuss what to do/what is needed
 
                 //If not in database, add it
                 if (_currentStock == null)
@@ -571,8 +552,6 @@ namespace My2Cents.DatabaseManagement
                     _context.SaveChanges();
                 }
             }
-            //}
-
 
             List<StockDto> _StocksData = _context.Stocks.Select(p => new StockDto
             {
@@ -593,8 +572,6 @@ namespace My2Cents.DatabaseManagement
             return new List<MarketDataStock>() {await GetAsyncStock<MarketDataStock>(QueryStringServiceStock.AppendQueryString("market/get-realtime-prices",
                 new Dictionary<string, object>
                 {
-                    // {"region", string.Join(",", Region)},
-                    // {"lang", string.Join(",", lang)},
                     {"symbols", symbols}
                 })).ConfigureAwait(false)};
         }
@@ -662,72 +639,7 @@ namespace My2Cents.DatabaseManagement
         public static class BaseApiEndPointUrl
         {
             public static readonly Uri ApiEndPoint = new Uri("https://api.coingecko.com/api/v3/");
-            // public static readonly Uri StockEndPoint = new Uri("https://yfapi.net/v6/");
             public static readonly Uri StockEndPoint = new Uri("https://alpha.financeapi.net/");
         }
-
-        // public CryptoAsset BuyExistingCrypto(CryptoAsset _asset)
-        // {
-        //     _context.CryptoAssets.Update(_asset);
-        //     _context.SaveChanges();
-
-        //     return _asset;
-        // }
-
-        // public StockAsset BuyExistingStock(StockAsset _asset)
-        // {
-        //     _context.StockAssets.Update(_asset);
-        //     _context.SaveChanges();
-
-        //     return _asset;
-        // }
-
-        // public StockAsset BuyStock(StockAsset _asset)
-        // {
-        //     var currentAsset = _context.StockAssets.FirstOrDefault(p => p.StockId.Equals(_asset.StockId) &&
-        //                                     p.UserId.Equals(_asset.UserId));
-        //     if (currentAsset != null)
-        //     {
-        //         _context.StockAssets.Update(_asset);
-        //         _context.SaveChanges();
-        //         return _asset;
-        //     }
-        //     _context.StockAssets.Add(_asset);
-        //     _context.SaveChanges();
-
-        //     return _asset;
-        // }
-
-        // public CryptoAsset SellCrypto(CryptoAsset _asset)
-        // {
-        //     _context.CryptoAssets.Update(_asset);
-        //     _context.SaveChanges();
-
-        //     return _asset;
-        // }
-
-        // public StockAsset SellStock(StockAsset _asset)
-        // {
-        //     var currentAsset = _context.CryptoAssets.FirstOrDefault(p => p.CryptoId.Equals(_cryptoID) &&
-        //                                 p.UserId.Equals(_userID));
-
-        //     if (currentAsset != null)
-        //     {
-        //         _context.StockAssets.Update(_asset);
-        //         _context.SaveChanges();
-
-        //         return _asset;
-        //     }
-
-
-        // }
-
-        // public Account SubtractFromAccount(Account _balance)
-        // {
-        //     _context.Accounts.Update(_balance);
-        //     _context.SaveChanges();
-
-        //     return _balance;
-        // }
     }
 }
