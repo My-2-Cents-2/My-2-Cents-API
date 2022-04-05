@@ -17,30 +17,6 @@ namespace My2Cents.API.Controllers
             _cryptoBL = cryptoBL;
         }
 
-        /*[HttpPost("AddCrypto")]
-        public IActionResult AddNewCrypto(string cryptoName, string shtName, decimal price)
-        {
-            try
-            {
-            
-                Crypto _newCrypto = new Crypto()
-                {
-                    CurrentPrice = price,
-                    LastUpdate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time")),
-                    Name = cryptoName,
-                    ShortenedName = shtName
-                };
-                var _result = _cryptoBL.AddCrypto(_newCrypto);
-                //Log.Information("Crypto sessfully added");
-                return Created("Has added ", _result);
-            }
-            catch (System.Exception exe)
-            {
-                //Log.Warning("Route:" + RouteConfigs.Stock + ": " + exe.Message);
-                return BadRequest(exe.Message);
-            }
-        }*/
-
         [HttpGet("GetAllCrypto")]
         public IActionResult GetAllCrypto()
         {
@@ -53,38 +29,11 @@ namespace My2Cents.API.Controllers
             }
             catch (System.Exception e)
             {
-                
                 //Log.Warning(e.Message);
                 return NotFound("Failed to get all Crypto");
             }
         
         }
-
-        /*[HttpPost("AddCryptoOrderHistory")]
-        public IActionResult AddCryptoOrderHistory(int userID, int cryptoID, decimal orderPrice, decimal quantity)
-        {
-            try
-            {
-            
-                CryptoOrderHistory _orderhis = new CryptoOrderHistory()
-                {
-                    UserId = userID,
-                    CryptoId = cryptoID,
-                    OrderPrice = orderPrice,
-                    Quantity = quantity,
-                    OrderType = "Buy",
-                    OrderTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time")),
-                };
-                var _result = _cryptoBL.AddCryptoOrderHistory(_orderhis);
-                //Log.Information("CryptoOrderhistory successfully added");
-                return Created("Has added ", _result);
-            }
-            catch (System.Exception exe)
-            {
-                //Log.Warning(exe.Message);
-                return BadRequest(exe.Message);
-            }
-        }*/
 
         [HttpGet("GetCryptoOrderhistorybyUser")]
         public IActionResult GetCryptoOrderHistorybyUser(int _userID)
@@ -104,44 +53,6 @@ namespace My2Cents.API.Controllers
             }
         
         }
-
-        /*[HttpGet("GetCryptoAssetsbyUser")]
-        public IActionResult GetCryptoAssetsbyUser(int _userID)
-        {
-            try
-            {
-                var _result = _cryptoBL.GetCryptoAssetsByUser(_userID);
-                //Log.Information("Getting all crypto.");
-
-                return Ok(_result);
-            }
-            catch (System.Exception e)
-            {
-                
-                //Log.Warning(e.Message);
-                return NotFound("Failed to get CryptoAssets");
-            }
-        
-        }
-
-        [HttpGet("GetAllCryptoAssets")]
-        public IActionResult GetAllCryptoAssets()
-        {
-            try
-            {
-                var _result = _cryptoBL.GetAllCryptoAssets();
-                //Log.Information("Getting all crypto.");
-
-                return Ok(_result);
-            }
-            catch (System.Exception e)
-            {
-                
-                //Log.Warning(e.Message);
-                return NotFound("Failed to get all CryptoAssets");
-            }
-        
-        }*/
 
         [HttpGet("GetCryptoAssetTable")]
         public IActionResult GetCryptoAssetTable(int _userID)
@@ -206,6 +117,7 @@ namespace My2Cents.API.Controllers
                 };
                 assetTable.Add(_userCryptoData);
             }
+            
             return assetTable;
         }
 
@@ -226,8 +138,6 @@ namespace My2Cents.API.Controllers
             }
 
             return _result;
-
         }
-
     }
 }
