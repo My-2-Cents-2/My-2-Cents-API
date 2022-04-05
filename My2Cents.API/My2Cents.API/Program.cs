@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using My2Cents.API.AuthenticationService.Interfaces;
 using My2Cents.API.AuthenticationService.Implements;
 using My2Cents.API.Middlewares.Implements;
+using My2Cents.Logic;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -56,7 +57,8 @@ builder.Services.AddDbContext<My2CentsContext>(options =>
 
 builder.Services.AddScoped<IRepository, EfRepository>();
 
-
+builder.Services.AddScoped<IInvesmenentPlatformManagementDL, InvesmenentPlatformManagementDL>();
+builder.Services.AddScoped<IInvesmenentPlatformManagementBL, InvesmenentPlatformManagementBL>();
 builder.Services.AddCors(options =>
 {
     // here you put all the origins that websites making requests to this API via JS are hosted at
