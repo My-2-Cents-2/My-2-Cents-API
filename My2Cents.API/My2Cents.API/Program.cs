@@ -59,7 +59,6 @@ builder.Services.AddDbContext<My2CentsContext>(options =>
     options.UseSqlServer(connectionString, b => b.MigrationsAssembly("My2Cents.API"));
 });
 
-
 builder.Services.AddScoped<IRepository, EfRepository>();
 
 builder.Services.AddScoped<IStockPortfolioManagementDL, StockPortfolioManagementDL>();
