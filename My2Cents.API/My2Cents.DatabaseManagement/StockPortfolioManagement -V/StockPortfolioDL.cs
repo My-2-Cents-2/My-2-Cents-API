@@ -84,60 +84,6 @@ namespace My2Cents.DatabaseManagement.Implements
             }
         }
 
-/*
-        public StockDto UpdateStock(Stock s_stock)
-        {
-            Stock stockToUpdate = _context.Stocks.Where(g => g.StockId == s_stock.StockId).FirstOrDefault();
-            if (stockToUpdate != null)
-            {
-                if (stockToUpdate.CurrentPrice != s_stock.CurrentPrice)
-                    stockToUpdate.LastUpdate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time"));
-                if (s_stock.CurrentPrice != null)
-                    stockToUpdate.CurrentPrice = s_stock.CurrentPrice;
-                //if (s_stock.Name != "")
-                //    stockToUpdate.Name = s_stock.Name;
-                //stockToUpdate.ShortenedName = s_stock.ShortenedName;
-            }
-            else
-            {
-                throw new Exception("No stock able to update");
-            }
-            _context.SaveChanges();
-
-            StockDto _result = StockToDto(stockToUpdate);
-            return _result;
-        }
-        public StockDto UpdateStockPrice(int stockId, decimal stockPrice)
-        {
-            Stock stockToUpdate = _context.Stocks.Where(g => g.StockId == stockId).FirstOrDefault();
-            if (stockToUpdate != null)
-            {
-                if(stockPrice == 0)
-                {
-                    throw new Exception("price cannot be changed to 0");
-                }
-                if(stockPrice < 0)
-                {
-                    throw new Exception("price cannot be less than 0");
-                }
-                if (stockToUpdate.CurrentPrice != stockPrice)
-                    stockToUpdate.LastUpdate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time"));
-                if (stockPrice != 0)
-                    stockToUpdate.CurrentPrice = stockPrice;
-                
-            }
-            else
-            {
-                throw new Exception("No stock able to update");
-            }
-
-            _context.SaveChanges();
-
-            StockDto _result = StockToDto(stockToUpdate);
-            return _result;
-        }
-
-*/
         public List<StockOrderHistoryDto> GetAllStockOrderHistory()
         {
             List<StockOrderHistoryDto> _result = _context.StockOrderHistories
@@ -232,23 +178,6 @@ namespace My2Cents.DatabaseManagement.Implements
                 return _result;
             }
         }
-
-        // public StockAssetDto DeleteStockAsset(int stockAssetId)
-        // {
-        //     StockAsset stockAssetToRemove = _context.StockAssets.Where(s => (s.StockAssetId == stockAssetId)).FirstOrDefault();
-        //     if (stockAssetToRemove != null)
-        //     {
-        //         _context.Remove(stockAssetToRemove);
-        //         _context.SaveChanges();
-        //         StockAssetDto _result = StockAssetToDto(stockAssetToRemove);
-        //         return _result;
-        //     }
-        //     else
-        //     {
-        //         throw new Exception("Stock asset not found. Stock asset could not be deleted.");
-        //     }
-        // }
-
 
         private StockDto StockToDto(Stock c_stock)
         {
