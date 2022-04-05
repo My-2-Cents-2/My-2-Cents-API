@@ -108,12 +108,16 @@ namespace My2Cents.DatabaseManagement.Interfaces
 
 
 
-        public decimal GetUserCryptoInvestmentSum(int userId)
+        public async Task<Decimal> GetUserCryptoInvestmentSum(int userId)
         {
-            decimal _result = _context.CryptoAssets
+            //for everyone looking at this in the future, this is converted 
+            //into double back into decimal because we used SQL Lite for unit
+            //testing and SQL lite cannot run the sum function using decimals
+            double _result = await _context.CryptoAssets
                                             .Where(s => s.UserId == userId)
-                                            .Sum(i => i.BuyPrice);
-            return _result;
+                                            .SumAsync(i => (double)i.BuyPrice);
+            decimal _decimalResult = Convert.ToDecimal(_result);
+            return _decimalResult;
         }
         
     }

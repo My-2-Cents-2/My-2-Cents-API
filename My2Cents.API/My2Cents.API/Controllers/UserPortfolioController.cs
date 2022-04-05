@@ -31,24 +31,24 @@ namespace My2Cents.API.Controllers
 
         // GET: api/UserPortfolio
         [HttpGet(RouteConfigs.UserInvestmentSum)]
-        public IActionResult GetUserInvestmentSum(int userId)
+        public async Task<IActionResult> GetUserInvestmentSum(int userId)
         {
             try
             {
-                decimal _result = _cryptoBL.GetUserCryptoInvestmentSum(userId) + _stockPortfolioBL.GetUserStockInvestmentSum(userId);
+                decimal _result = (await _cryptoBL.GetUserCryptoInvestmentSum(userId)) + (await _stockPortfolioBL.GetUserStockInvestmentSum(userId));
                 UserInvestmentInfoForm _userInvestmentResult = new UserInvestmentInfoForm()
                 {
                     UserInvestmentSum = _result
                 };
-                //Log.Information("Route: " + RouteConfigs.StockPortfolioStocks);
-                //Log.Information("Get All Stocks);
+                Log.Information("Route: " + RouteConfigs.UserInvestmentSum);
+                Log.Information("Get User Investment Sum");
 
                 return Ok(_userInvestmentResult);
             }
             catch (System.Exception e)
             {
-                //Log.Warning("Route: " + RouteConfigs.StockPortfolioStocks);
-                //Log.Warning(e.Message);
+                Log.Warning("Route: " + RouteConfigs.UserInvestmentSum);
+                Log.Warning(e.Message);
                 return NotFound(e.Message);
             }
         }

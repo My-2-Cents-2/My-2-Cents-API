@@ -11,6 +11,7 @@ using My2Cents.Logic.Interfaces;
 using My2Cents.DataInfrastructure;
 using My2Cents.DataInfrastructure.Models ;
 using My2Cents.DatabaseManagement;
+using System.Threading.Tasks;
 
 namespace StockPortfolioManagementTest
 {
@@ -28,7 +29,7 @@ namespace StockPortfolioManagementTest
         }
 
         [Fact]
-        void GetAllStocks()
+        async Task GetAllStocks()
         {
             using (My2CentsContext context = new My2CentsContext(options))
             {
@@ -36,7 +37,7 @@ namespace StockPortfolioManagementTest
                 IStockPortfolioManagementDL _repo = new StockPortfolioManagementDL(context);
 
                 //Act
-                List<StockDto> listOfStocks = _repo.GetAllStocks();
+                List<StockDto> listOfStocks = await _repo.GetAllStocks();
 
                 //Assert
                 Assert.Equal(2, listOfStocks.Count);
@@ -50,7 +51,7 @@ namespace StockPortfolioManagementTest
             }
         }
         [Fact]
-        void Fail_Get_All_Stocks()
+        async Task Fail_Get_All_Stocks()
         {
             using (My2CentsContext context = new My2CentsContext(options2))
             {
@@ -58,12 +59,12 @@ namespace StockPortfolioManagementTest
                 IStockPortfolioManagementDL _repo = new StockPortfolioManagementDL(context);
 
                 //Act & Assert
-                Assert.Throws<Exception>(() => _repo.GetAllStocks() );
+                Assert.ThrowsAsync<Exception>(() => _repo.GetAllStocks() );
             }
         }
 
         [Fact]
-        void Get_A_Stock_From_Stock_Id()
+        async Task Get_A_Stock_From_Stock_Id()
         {
             using (My2CentsContext context = new My2CentsContext(options))
             {
@@ -71,7 +72,7 @@ namespace StockPortfolioManagementTest
                 IStockPortfolioManagementDL _repo = new StockPortfolioManagementDL(context);
 
                 //Act
-                StockDto _stock = _repo.GetAStockFromStockId(2);
+                StockDto _stock = await _repo.GetAStockFromStockId(2);
 
                 //Assert
                 Assert.Equal(2, _stock.StockId);
@@ -84,7 +85,7 @@ namespace StockPortfolioManagementTest
         }
 
         [Fact]
-        void Fail_Get_A_Stock_From_Stock_Id_Because_Id_DNE()
+        async Task Fail_Get_A_Stock_From_Stock_Id_Because_Id_DNE()
         {
             using (My2CentsContext context = new My2CentsContext(options))
             {
@@ -92,12 +93,12 @@ namespace StockPortfolioManagementTest
                 IStockPortfolioManagementDL _repo = new StockPortfolioManagementDL(context);
 
                 //Act & Assert
-                Assert.Throws<Exception>( () => _repo.GetAStockFromStockId(3) );
+                Assert.ThrowsAsync<Exception>( () => _repo.GetAStockFromStockId(3) );
             }
         }
 
         [Fact]
-        void Get_A_Stock_From_Stock_Name()
+        void Get_A_Stock_From_Stock_Id_NonAsync()
         {
             using (My2CentsContext context = new My2CentsContext(options))
             {
@@ -105,7 +106,28 @@ namespace StockPortfolioManagementTest
                 IStockPortfolioManagementDL _repo = new StockPortfolioManagementDL(context);
 
                 //Act
-                StockDto _stock = _repo.GetAStockFromStockName("Rhongobongo");
+                StockDto _stock = _repo.GetAStockFromStockIdNonAsync(2);
+
+                //Assert
+                Assert.Equal(2, _stock.StockId);
+                Assert.Equal(200, _stock.CurrentPrice);
+                Assert.Equal(2, _stock.PriceChange);
+                Assert.Equal(2, _stock.PriceChangePercentage);
+                Assert.Equal("VeryFunDragonsactions", _stock.Name);
+                Assert.Equal("VFDS", _stock.ShortenedName);
+            }
+        }
+
+        [Fact]
+        async Task Get_A_Stock_From_Stock_Name()
+        {
+            using (My2CentsContext context = new My2CentsContext(options))
+            {
+                //Arrange
+                IStockPortfolioManagementDL _repo = new StockPortfolioManagementDL(context);
+
+                //Act
+                StockDto _stock = await _repo.GetAStockFromStockName("Rhongobongo");
 
                 //Assert
                 Assert.Equal(1, _stock.StockId);
@@ -118,7 +140,7 @@ namespace StockPortfolioManagementTest
         }
 
         [Fact]
-        void Fail_Get_A_Stock_Because_DNE()
+        async Task Fail_Get_A_Stock_Because_DNE()
         {
             using (My2CentsContext context = new My2CentsContext(options))
             {
@@ -126,12 +148,12 @@ namespace StockPortfolioManagementTest
                 IStockPortfolioManagementDL _repo = new StockPortfolioManagementDL(context);
 
                 //Act & Assert
-                Assert.Throws<Exception>( () => _repo.GetAStockFromStockName("DDDynamite") );
+                Assert.ThrowsAsync<Exception>( () => _repo.GetAStockFromStockName("DDDynamite") );
             }
         }
 
         [Fact]
-        void Get_All_Order_History()
+        async Task Get_All_Order_History()
         {
             using (My2CentsContext context = new My2CentsContext(options))
             {
@@ -139,7 +161,7 @@ namespace StockPortfolioManagementTest
                 IStockPortfolioManagementDL _repo = new StockPortfolioManagementDL(context);
 
                 //Act
-                List<StockOrderHistoryDto> listOfOrderHistories = _repo.GetAllStockOrderHistory();
+                List<StockOrderHistoryDto> listOfOrderHistories = await _repo.GetAllStockOrderHistory();
 
                 //Assert
                 Assert.Equal(2, listOfOrderHistories.Count);
@@ -152,7 +174,7 @@ namespace StockPortfolioManagementTest
         }
         
         [Fact]
-        void Fail_Get_All_Order_History()
+        async Task Fail_Get_All_Order_History()
         {
             using (My2CentsContext context = new My2CentsContext(options2))
             {
@@ -160,12 +182,12 @@ namespace StockPortfolioManagementTest
                 IStockPortfolioManagementDL _repo = new StockPortfolioManagementDL(context);
 
                 //Act & Assert
-                Assert.Throws<Exception>(() => _repo.GetAllStockOrderHistory() );
+                Assert.ThrowsAsync<Exception>(() => _repo.GetAllStockOrderHistory() );
             }
         }
 
         [Fact]
-        void Get_User_Stock_Order()
+        async Task Get_User_Stock_Order()
         {
             using (My2CentsContext context = new My2CentsContext(options))
             {
@@ -173,20 +195,20 @@ namespace StockPortfolioManagementTest
                 IStockPortfolioManagementDL _repo = new StockPortfolioManagementDL(context);
 
                 //Act
-                var asdf = _repo.GetUserStockOrders(1);
+                var stockOrders = await _repo.GetUserStockOrders(1);
 
                 //Assert
-                Assert.Equal(1,asdf[0].StockOrderId);
-                Assert.Equal(1,asdf[0].UserId);
-                Assert.Equal(1,asdf[0].StockId);
-                Assert.Equal(100,asdf[0].OrderPrice);
-                Assert.Equal(2,asdf[0].Quantity);
-                Assert.Equal("buy",asdf[0].OrderType);
+                Assert.Equal(1,stockOrders[0].StockOrderId);
+                Assert.Equal(1,stockOrders[0].UserId);
+                Assert.Equal(1,stockOrders[0].StockId);
+                Assert.Equal(100,stockOrders[0].OrderPrice);
+                Assert.Equal(2,stockOrders[0].Quantity);
+                Assert.Equal("buy",stockOrders[0].OrderType);
             }
         }
 
         [Fact]
-        void Fail_Get_User_Stock_Order()
+        async Task Fail_Get_User_Stock_Order()
         {
             using (My2CentsContext context = new My2CentsContext(options))
             {
@@ -194,12 +216,12 @@ namespace StockPortfolioManagementTest
                 IStockPortfolioManagementDL _repo = new StockPortfolioManagementDL(context);
 
                 //Act & Assert
-                Assert.Throws<Exception>( () => _repo.GetUserStockOrders(2) );
+                Assert.ThrowsAsync<Exception>( () => _repo.GetUserStockOrders(2) );
             }
         }
 
         [Fact]
-        void Get_Stock_Assests()
+        void Get_User_Stock_Order_NonAsync()
         {
             using (My2CentsContext context = new My2CentsContext(options))
             {
@@ -207,7 +229,41 @@ namespace StockPortfolioManagementTest
                 IStockPortfolioManagementDL _repo = new StockPortfolioManagementDL(context);
 
                 //Act
-                List<StockAssetDto> _result = _repo.GetAllStockAssets();
+                var stockOrders = _repo.GetUserStockOrdersNonAsync(1);
+
+                //Assert
+                Assert.Equal(1,stockOrders[0].StockOrderId);
+                Assert.Equal(1,stockOrders[0].UserId);
+                Assert.Equal(1,stockOrders[0].StockId);
+                Assert.Equal(100,stockOrders[0].OrderPrice);
+                Assert.Equal(2,stockOrders[0].Quantity);
+                Assert.Equal("buy",stockOrders[0].OrderType);
+            }
+        }
+
+        [Fact]
+        void Fail_Get_User_Stock_Order_NonAsync()
+        {
+            using (My2CentsContext context = new My2CentsContext(options))
+            {
+                //Arrange
+                IStockPortfolioManagementDL _repo = new StockPortfolioManagementDL(context);
+
+                //Act & Assert
+                Assert.Throws<Exception>( () => _repo.GetUserStockOrdersNonAsync(2) );
+            }
+        }
+
+        [Fact]
+        async Task Get_Stock_Assests()
+        {
+            using (My2CentsContext context = new My2CentsContext(options))
+            {
+                //Arrange
+                IStockPortfolioManagementDL _repo = new StockPortfolioManagementDL(context);
+
+                //Act
+                List<StockAssetDto> _result = await _repo.GetAllStockAssets();
 
                 //Assert
                 Assert.Equal(2,_result.Count);
@@ -222,7 +278,7 @@ namespace StockPortfolioManagementTest
         }
 
         [Fact]
-        void Fail_Get_Stock_Assets()
+        async Task Fail_Get_Stock_Assets()
         {
             using(My2CentsContext context = new My2CentsContext(options2))
             {
@@ -230,12 +286,12 @@ namespace StockPortfolioManagementTest
                 IStockPortfolioManagementDL _repo = new StockPortfolioManagementDL(context);
 
                 //Act & Assert
-                Assert.Throws<Exception>( () => _repo.GetAllStockAssets());
+                Assert.ThrowsAsync<Exception>( () => _repo.GetAllStockAssets());
             }
         }
         
         [Fact]
-        void Get_User_Stock_Assets()
+        async Task Get_User_Stock_Assets()
         {
             using (My2CentsContext context = new My2CentsContext(options))
             {
@@ -243,7 +299,7 @@ namespace StockPortfolioManagementTest
                 IStockPortfolioManagementDL _repo = new StockPortfolioManagementDL(context);
 
                 //Act
-                List<StockAssetDto> _result = _repo.GetUserStockAssets(1);
+                List<StockAssetDto> _result = await _repo.GetUserStockAssets(1);
 
                 //Assert
                 Assert.Equal(2,_result[1].StockAssetId);
@@ -257,7 +313,7 @@ namespace StockPortfolioManagementTest
         }
 
         [Fact]
-        void Fail_Get_User_Stock_Assets()
+        async Task Fail_Get_User_Stock_Assets()
         {
             using(My2CentsContext context = new My2CentsContext(options2))
             {
@@ -265,39 +321,132 @@ namespace StockPortfolioManagementTest
                 IStockPortfolioManagementDL _repo = new StockPortfolioManagementDL(context);
 
                 //Act & Assert
-                Assert.Throws<Exception>( () => _repo.GetUserStockAssets(2));
+                Assert.ThrowsAsync<Exception>( () => _repo.GetUserStockAssets(2));
             }
         }       
-        
-        /*
+
+
         [Fact]
-        void Pass_Stock_To_Dto()
+        public void Stock_To_Dto()
         {
-            using(My2CentsContext context = new My2CentsContext(options2))
+            using(My2CentsContext context = new My2CentsContext(options))
             {
-                //Act
-                Stock testStock = new Stock()
+                //Arrange
+                IStockPortfolioManagementDL _repo = new StockPortfolioManagementDL(context);
+
+                Stock _testStock = new Stock
                 {
-                    StockId = 2,
-                    CurrentPrice = 200,
+                    StockId = 0,
+                    CurrentPrice = 100,
                     LastUpdate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time")),
-                    PriceChange = 2,
-                    PriceChangePercentage = 2,
-                    Name = "VeryFunDragonsactions",
-                    ShortenedName = "VFDS"
+                    PriceChange = 1,
+                    PriceChangePercentage = 1,
+                    Name = "Rhongobongo",
+                    ShortenedName = "RHBO"
+                };
+                StockDto _testStockDto = new StockDto
+                {
+                    StockId = _testStock.StockId,
+                    CurrentPrice = _testStock.CurrentPrice,
+                    LastUpdate = _testStock.LastUpdate,
+                    PriceChange = _testStock.PriceChange,
+                    PriceChangePercentage = _testStock.PriceChangePercentage,
+                    Name = _testStock.Name,
+                    ShortenedName = _testStock.ShortenedName
                 };
 
                 //Act
-                IStockPortfolioManagementDL _repo = new StockPortfolioManagementDL(context);
-                StockDto _result =  _repo.StockToDto(testStock);
-
+                StockDto _actualStockDto = _repo.StockToDto(_testStock);
+                
                 //Assert
-                Assert.IsType(StockDto, _result);
+                Assert.Equal(_testStockDto.Name, _actualStockDto.Name); 
             }
-        }*/
-/*
+        }
+
         [Fact]
-        void Get_User_Investment_Sum()
+        public void OrderHistory_To_Dto()
+        {
+            using(My2CentsContext context = new My2CentsContext(options))
+            {
+                //Arrange
+                IStockPortfolioManagementDL _repo = new StockPortfolioManagementDL(context);
+
+                StockOrderHistory _testStockOrderHistory = new StockOrderHistory{
+                    StockOrderId = 0,
+                    UserId = 1,
+                    StockId = 1,
+                    OrderPrice = 100,
+                    Quantity = 2,
+                    OrderType = "buy",
+                    OrderTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time"))
+                };
+
+                StockOrderHistoryDto _testStockOrderHistoryDto = new StockOrderHistoryDto{
+                    StockOrderId = 0,
+                    UserId = 1,
+                    StockId = 1,
+                    OrderPrice = 100,
+                    Quantity = 2,
+                    OrderType = "buy",
+                    OrderTime = _testStockOrderHistory.OrderTime
+                };
+
+                //Act
+                StockOrderHistoryDto _actualStockOrderHistoryDto = _repo.OrderHistoryToDto(_testStockOrderHistory);
+                
+                //Assert
+                Assert.Equal(_testStockOrderHistoryDto.StockId, _actualStockOrderHistoryDto.StockId); 
+            }
+        }
+
+
+        [Fact]
+        public void Stock_Asset_To_Dto()
+        {
+            using(My2CentsContext context = new My2CentsContext(options))
+            {
+                //Arrange
+                IStockPortfolioManagementDL _repo = new StockPortfolioManagementDL(context);
+
+                
+
+                StockAsset _testStockAsset = new StockAsset
+                {
+                    StockAssetId = 0,
+                    StockId = 1,
+                    UserId = 1,
+                    BuyPrice = 100,
+                    BuyDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time")),
+                    StopLoss = 0,
+                    TakeProfit = 9001,
+                    Quantity = 2                        
+                };
+
+                StockAssetDto _testStockAssetDto = new StockAssetDto
+                {
+                    StockAssetId = 0,
+                    StockId = 1,
+                    UserId = 1,
+                    BuyPrice = 100,
+                    BuyDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time")),
+                    StopLoss = 0,
+                    TakeProfit = 9001,
+                    Quantity = 2                        
+                };
+
+
+
+                //Act
+                StockAssetDto _actualStockAssetDto = _repo.StockAssetToDto(_testStockAsset);
+                
+                //Assert
+                Assert.Equal(_testStockAssetDto.StockId, _actualStockAssetDto.StockId);
+            }
+        }
+
+        
+        [Fact]
+        async Task Get_User_Investment_Sum()
         {
             using (My2CentsContext context = new My2CentsContext(options))
             {
@@ -305,13 +454,13 @@ namespace StockPortfolioManagementTest
                 IStockPortfolioManagementDL _repo = new StockPortfolioManagementDL(context);
 
                 //Act
-                decimal _result = _repo.GetUserStockInvestmentSum(1);
+                decimal _result = await _repo.GetUserStockInvestmentSum(1);
 
                 //Assert
-                Assert.Equal(2,_result);
+                Assert.Equal(300,_result);
             }
         }
-*/
+
         private void SeedStockPortfolioDL()
         {
             using(My2CentsContext context = new My2CentsContext(options))

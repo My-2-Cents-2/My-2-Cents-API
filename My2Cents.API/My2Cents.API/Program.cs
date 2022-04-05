@@ -1,3 +1,4 @@
+global using Serilog;
 using My2Cents.DataInfrastructure;
 using Microsoft.EntityFrameworkCore;
 using My2Cents.DatabaseManagement;
@@ -12,6 +13,7 @@ using My2Cents.Logic.Implements;
 using My2Cents.DatabaseManagement.Implements;
 
 var builder = WebApplication.CreateBuilder(args);
+Log.Logger = new LoggerConfiguration().WriteTo.File("./logs/server.txt").CreateLogger();
 
 string connectionString = builder.Configuration.GetConnectionString("connectionString");
 var key = builder.Configuration["Token:Key"];

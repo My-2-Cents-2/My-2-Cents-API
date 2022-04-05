@@ -44,7 +44,7 @@ namespace My2Cents.Logic.Interfaces
         }
 
 
-        public decimal GetUserCryptoInvestmentSum(int userId)
+        public Task<Decimal> GetUserCryptoInvestmentSum(int userId)
         {
             return _repo.GetUserCryptoInvestmentSum(userId);
         }

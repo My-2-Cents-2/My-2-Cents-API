@@ -15,9 +15,32 @@ namespace My2Cents.DatabaseManagement.Implements
         }
 
 
-        public List<StockDto> GetAllStocks()
+        public async Task<List<StockDto>> GetAllStocks()
         {
-            List<StockDto> _result = _context.Stocks
+            List<StockDto> _result = await (_context.Stocks
+                                                .Select(p => new StockDto
+                                                {
+                                                    StockId = p.StockId,
+                                                    CurrentPrice = p.CurrentPrice,
+                                                    LastUpdate = p.LastUpdate,
+                                                    PriceChange = p.PriceChange,
+                                                    PriceChangePercentage = p.PriceChangePercentage,
+                                                    Name = p.Name,
+                                                    ShortenedName = p.ShortenedName
+                                                })).ToListAsync();
+            if(!_result.Any())
+            {
+                throw new Exception("Stocks Asset DNE");
+            }
+            else
+            {
+                return _result;
+            }
+        }
+
+        public async Task<StockDto> GetAStockFromStockId(int stockId)
+        {
+            StockDto? _result = await _context.Stocks
                                             .Select(p => new StockDto
                                             {
                                                 StockId = p.StockId,
@@ -27,7 +50,80 @@ namespace My2Cents.DatabaseManagement.Implements
                                                 PriceChangePercentage = p.PriceChangePercentage,
                                                 Name = p.Name,
                                                 ShortenedName = p.ShortenedName
-                                            }).ToList();
+                                            }).FirstOrDefaultAsync(s => s.StockId == stockId);
+            // Stock _currentStock = await _context.Stocks.FirstOrDefaultAsync(p => p.StockId.Equals(stockId));
+            // return new StockDto(){
+            //     StockId = _currentStock.StockId,
+            //     CurrentPrice = _currentStock.CurrentPrice,
+            //     LastUpdate = _currentStock.LastUpdate,
+            //     PriceChange = _currentStock.PriceChange,
+            //     PriceChangePercentage = _currentStock.PriceChangePercentage,
+            //     Name = _currentStock.Name,
+            //     ShortenedName = _currentStock.ShortenedName
+            // };
+            if(_result == null)
+            {
+                throw new Exception("Stocks Asset DNE");
+            }
+            else
+            {
+                return _result;
+            }
+        }
+
+        public StockDto GetAStockFromStockIdNonAsync(int stockId)
+        {
+            StockDto? _result = _context.Stocks
+                                            .Select(p => new StockDto
+                                            {
+                                                StockId = p.StockId,
+                                                CurrentPrice = p.CurrentPrice,
+                                                LastUpdate = p.LastUpdate,
+                                                PriceChange = p.PriceChange,
+                                                PriceChangePercentage = p.PriceChangePercentage,
+                                                Name = p.Name,
+                                                ShortenedName = p.ShortenedName
+                                            }).FirstOrDefault(s => s.StockId == stockId);
+            return _result;
+        }
+
+        public async Task<StockDto> GetAStockFromStockName(string stockName)
+        {
+            StockDto? _result = await _context.Stocks
+                                            .Select(p => new StockDto
+                                            {
+                                                StockId = p.StockId,
+                                                CurrentPrice = p.CurrentPrice,
+                                                LastUpdate = p.LastUpdate,
+                                                PriceChange = p.PriceChange,
+                                                PriceChangePercentage = p.PriceChangePercentage,
+                                                Name = p.Name,
+                                                ShortenedName = p.ShortenedName
+                                            }).FirstOrDefaultAsync(s => s.Name == stockName);
+            if(_result == null)
+            {
+                throw new Exception("Stocks Asset DNE");
+            }
+            else
+            {
+                return _result;
+            }
+        }
+
+
+        public async Task<List<StockOrderHistoryDto>> GetAllStockOrderHistory()
+        {
+            List<StockOrderHistoryDto> _result = await (_context.StockOrderHistories
+                                                            .Select(p => new StockOrderHistoryDto()
+                                                            {
+                                                                StockOrderId = p.StockOrderId,
+                                                                UserId = p.UserId,
+                                                                StockId = p.StockId,
+                                                                OrderPrice = p.OrderPrice,
+                                                                Quantity = p.Quantity,
+                                                                OrderType = p.OrderType,
+                                                                OrderTime = p.OrderTime
+                                                            })).ToListAsync();
             if(!_result.Any())
             {
                 throw new Exception("Stocks Asset DNE");
@@ -38,20 +134,21 @@ namespace My2Cents.DatabaseManagement.Implements
             }
         }
 
-        public StockDto GetAStockFromStockId(int stockId)
+        public async Task<List<StockOrderHistoryDto>> GetUserStockOrders(int userId)
         {
-            StockDto? _result = _context.Stocks
-                                        .Select(p => new StockDto
-                                        {
-                                            StockId = p.StockId,
-                                            CurrentPrice = p.CurrentPrice,
-                                            LastUpdate = p.LastUpdate,
-                                            PriceChange = p.PriceChange,
-                                            PriceChangePercentage = p.PriceChangePercentage,
-                                            Name = p.Name,
-                                            ShortenedName = p.ShortenedName
-                                        }).FirstOrDefault(s => s.StockId == stockId);
-            if(_result == null)
+            List<StockOrderHistoryDto> _result = await _context.StockOrderHistories
+                                                            .Where(s => s.UserId == userId)
+                                                            .Select(p => new StockOrderHistoryDto()
+                                                            {
+                                                                StockOrderId = p.StockOrderId,
+                                                                UserId = p.UserId,
+                                                                StockId = p.StockId,
+                                                                OrderPrice = p.OrderPrice,
+                                                                Quantity = p.Quantity,
+                                                                OrderType = p.OrderType,
+                                                                OrderTime = p.OrderTime
+                                                            }).ToListAsync();
+            if(!_result.Any())
             {
                 throw new Exception("Stocks Asset DNE");
             }
@@ -61,196 +158,80 @@ namespace My2Cents.DatabaseManagement.Implements
             }
         }
 
-        public StockDto GetAStockFromStockName(string stockName)
-        {
-            StockDto? _result = _context.Stocks
-                                        .Select(p => new StockDto
-                                        {
-                                            StockId = p.StockId,
-                                            CurrentPrice = p.CurrentPrice,
-                                            LastUpdate = p.LastUpdate,
-                                            PriceChange = p.PriceChange,
-                                            PriceChangePercentage = p.PriceChangePercentage,
-                                            Name = p.Name,
-                                            ShortenedName = p.ShortenedName
-                                        }).FirstOrDefault(s => s.Name == stockName);
-            if(_result == null)
-            {
-                throw new Exception("Stocks Asset DNE");
-            }
-            else
-            {
-                return _result;
-            }
-        }
-
-/*
-        public StockDto UpdateStock(Stock s_stock)
-        {
-            Stock stockToUpdate = _context.Stocks.Where(g => g.StockId == s_stock.StockId).FirstOrDefault();
-            if (stockToUpdate != null)
-            {
-                if (stockToUpdate.CurrentPrice != s_stock.CurrentPrice)
-                    stockToUpdate.LastUpdate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time"));
-                if (s_stock.CurrentPrice != null)
-                    stockToUpdate.CurrentPrice = s_stock.CurrentPrice;
-                //if (s_stock.Name != "")
-                //    stockToUpdate.Name = s_stock.Name;
-                //stockToUpdate.ShortenedName = s_stock.ShortenedName;
-            }
-            else
-            {
-                throw new Exception("No stock able to update");
-            }
-            _context.SaveChanges();
-
-            StockDto _result = StockToDto(stockToUpdate);
-            return _result;
-        }
-        public StockDto UpdateStockPrice(int stockId, decimal stockPrice)
-        {
-            Stock stockToUpdate = _context.Stocks.Where(g => g.StockId == stockId).FirstOrDefault();
-            if (stockToUpdate != null)
-            {
-                if(stockPrice == 0)
-                {
-                    throw new Exception("price cannot be changed to 0");
-                }
-                if(stockPrice < 0)
-                {
-                    throw new Exception("price cannot be less than 0");
-                }
-                if (stockToUpdate.CurrentPrice != stockPrice)
-                    stockToUpdate.LastUpdate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time"));
-                if (stockPrice != 0)
-                    stockToUpdate.CurrentPrice = stockPrice;
-                
-            }
-            else
-            {
-                throw new Exception("No stock able to update");
-            }
-
-            _context.SaveChanges();
-
-            StockDto _result = StockToDto(stockToUpdate);
-            return _result;
-        }
-
-*/
-        public List<StockOrderHistoryDto> GetAllStockOrderHistory()
+        public List<StockOrderHistoryDto> GetUserStockOrdersNonAsync(int userId)
         {
             List<StockOrderHistoryDto> _result = _context.StockOrderHistories
-                                                        .Select(p => new StockOrderHistoryDto()
+                                                            .Where(s => s.UserId == userId)
+                                                            .Select(p => new StockOrderHistoryDto()
+                                                            {
+                                                                StockOrderId = p.StockOrderId,
+                                                                UserId = p.UserId,
+                                                                StockId = p.StockId,
+                                                                OrderPrice = p.OrderPrice,
+                                                                Quantity = p.Quantity,
+                                                                OrderType = p.OrderType,
+                                                                OrderTime = p.OrderTime
+                                                            }).ToList();
+            if(!_result.Any())
+            {
+                throw new Exception("Stocks Asset DNE");
+            }
+            else
+            {
+                return _result;
+            }
+        }
+
+        public async Task<List<StockAssetDto>> GetAllStockAssets()
+        {
+            List<StockAssetDto> _result = await _context.StockAssets
+                                                        .Select(p => new StockAssetDto()
                                                         {
-                                                            StockOrderId = p.StockOrderId,
-                                                            UserId = p.UserId,
+                                                            StockAssetId = p.StockAssetId,
                                                             StockId = p.StockId,
-                                                            OrderPrice = p.OrderPrice,
-                                                            Quantity = p.Quantity,
-                                                            OrderType = p.OrderType,
-                                                            OrderTime = p.OrderTime
-                                                        }).ToList();
-            if(!_result.Any())
-            {
-                throw new Exception("Stocks Asset DNE");
-            }
-            else
-            {
+                                                            UserId = p.UserId,
+                                                            BuyPrice = p.BuyPrice,
+                                                            BuyDate = p.BuyDate,
+                                                            StopLoss = p.StopLoss,
+                                                            TakeProfit = p.TakeProfit,
+                                                            Quantity = p.Quantity
+                                                        }).ToListAsync();
+            // if(!_result.Any())
+            // {
+            //     throw new Exception("Stocks Asset DNE");
+            // }
+            // else
+            // {
                 return _result;
-            }
+            // }
         }
-
-        public List<StockOrderHistoryDto> GetUserStockOrders(int userId)
+        public async Task<List<StockAssetDto>> GetUserStockAssets(int userId)
         {
-            List<StockOrderHistoryDto> _result = _context.StockOrderHistories
+            List<StockAssetDto> _result = await _context.StockAssets
                                                         .Where(s => s.UserId == userId)
-                                                        .Select(p => new StockOrderHistoryDto()
+                                                        .Select(p => new StockAssetDto()
                                                         {
-                                                            StockOrderId = p.StockOrderId,
-                                                            UserId = p.UserId,
+                                                            StockAssetId = p.StockAssetId,
                                                             StockId = p.StockId,
-                                                            OrderPrice = p.OrderPrice,
-                                                            Quantity = p.Quantity,
-                                                            OrderType = p.OrderType,
-                                                            OrderTime = p.OrderTime
-                                                        }).ToList();
-            if(!_result.Any())
-            {
-                throw new Exception("Stocks Asset DNE");
-            }
-            else
-            {
+                                                            UserId = p.UserId,
+                                                            BuyPrice = p.BuyPrice,
+                                                            BuyDate = p.BuyDate,
+                                                            StopLoss = p.StopLoss,
+                                                            TakeProfit = p.TakeProfit,
+                                                            Quantity = p.Quantity
+                                                        }).ToListAsync();
+            // if(!_result.Any())
+            // {
+            //     throw new Exception("Stocks Asset DNE");
+            // }
+            // else
+            // {
                 return _result;
-            }
+            // }
         }
 
-        public List<StockAssetDto> GetAllStockAssets()
-        {
-            List<StockAssetDto> _result = _context.StockAssets
-                                                    .Select(p => new StockAssetDto()
-                                                    {
-                                                        StockAssetId = p.StockAssetId,
-                                                        StockId = p.StockId,
-                                                        UserId = p.UserId,
-                                                        BuyPrice = p.BuyPrice,
-                                                        BuyDate = p.BuyDate,
-                                                        StopLoss = p.StopLoss,
-                                                        TakeProfit = p.TakeProfit,
-                                                        Quantity = p.Quantity
-                                                    }).ToList();
-            if(!_result.Any())
-            {
-                throw new Exception("Stocks Asset DNE");
-            }
-            else
-            {
-                return _result;
-            }
-        }
-        public List<StockAssetDto> GetUserStockAssets(int userId)
-        {
-            List<StockAssetDto> _result = _context.StockAssets
-                                                    .Where(s => s.UserId == userId)
-                                                    .Select(p => new StockAssetDto()
-                                                    {
-                                                        StockAssetId = p.StockAssetId,
-                                                        StockId = p.StockId,
-                                                        UserId = p.UserId,
-                                                        BuyPrice = p.BuyPrice,
-                                                        BuyDate = p.BuyDate,
-                                                        StopLoss = p.StopLoss,
-                                                        TakeProfit = p.TakeProfit,
-                                                        Quantity = p.Quantity
-                                                    }).ToList();
-            if(!_result.Any())
-            {
-                throw new Exception("Stocks Asset DNE");
-            }
-            else
-            {
-                return _result;
-            }
-        }
-
-        // public StockAssetDto DeleteStockAsset(int stockAssetId)
-        // {
-        //     StockAsset stockAssetToRemove = _context.StockAssets.Where(s => (s.StockAssetId == stockAssetId)).FirstOrDefault();
-        //     if (stockAssetToRemove != null)
-        //     {
-        //         _context.Remove(stockAssetToRemove);
-        //         _context.SaveChanges();
-        //         StockAssetDto _result = StockAssetToDto(stockAssetToRemove);
-        //         return _result;
-        //     }
-        //     else
-        //     {
-        //         throw new Exception("Stock asset not found. Stock asset could not be deleted.");
-        //     }
-        // }
-
-
-        private StockDto StockToDto(Stock c_stock)
+        //should these next 3 be public????
+        public StockDto StockToDto(Stock c_stock)
         {
             StockDto _stockDto = new StockDto(){
                 StockId = c_stock.StockId,
@@ -262,11 +243,12 @@ namespace My2Cents.DatabaseManagement.Implements
             };
             return _stockDto;
         }
-        private StockOrderHistoryDto OrderHistoryToDto(StockOrderHistory c_stockOrderHistory)
+        public StockOrderHistoryDto OrderHistoryToDto(StockOrderHistory c_stockOrderHistory)
         {
             StockOrderHistoryDto _stockOrderHistoryDto = new StockOrderHistoryDto(){
                 StockOrderId = c_stockOrderHistory.StockOrderId,
                 UserId = c_stockOrderHistory.UserId,
+                StockId = c_stockOrderHistory.StockId,
                 OrderPrice = c_stockOrderHistory.OrderPrice,
                 Quantity = c_stockOrderHistory.Quantity,
                 OrderType = c_stockOrderHistory.OrderType,
@@ -276,7 +258,7 @@ namespace My2Cents.DatabaseManagement.Implements
             return _stockOrderHistoryDto;
         }
 
-        private StockAssetDto StockAssetToDto(StockAsset a_stockAsset)
+        public StockAssetDto StockAssetToDto(StockAsset a_stockAsset)
         {
             StockAssetDto _stockAssetDto = new StockAssetDto(){
                 StockAssetId = a_stockAsset.StockAssetId,
@@ -291,12 +273,16 @@ namespace My2Cents.DatabaseManagement.Implements
             return _stockAssetDto;
         }
 
-        public decimal GetUserStockInvestmentSum(int userId)
+        public async Task<decimal> GetUserStockInvestmentSum(int userId)
         {
-            decimal _result = _context.StockAssets
+            //for everyone looking at this in the future, this is converted 
+            //into double back into decimal because we used SQL Lite for unit
+            //testing and SQL lite cannot run the sum function using decimals
+            double _result = await _context.StockAssets
                                             .Where(s => s.UserId == userId)
-                                            .Sum(i => i.BuyPrice);
-            return _result; 
+                                            .SumAsync(i => (double)i.BuyPrice);
+            decimal _decimalResult = Convert.ToDecimal(_result);
+            return _decimalResult; 
         }
         
     }

@@ -17,7 +17,7 @@ namespace My2Cents.DatabaseManagement.Interfaces
 
         List<CryptoAssetDto> GetCryptoAssetsByUser(int _userID);
 
-        decimal GetUserCryptoInvestmentSum(int userId);
+        Task<Decimal> GetUserCryptoInvestmentSum(int userId);
 
     }
 }

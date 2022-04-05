@@ -9,48 +9,39 @@ namespace My2Cents.DatabaseManagement.Interfaces
         /// Retrieves all of the Stocks in a list format
         /// </summary>
         /// <returns></returns>
-        List<StockDto> GetAllStocks();
+        Task<List<StockDto>> GetAllStocks();
         /// <summary>
         /// Retrives the information of the specifed stock from the Id
         /// </summary>
         /// <param name="stockId"></param>
         /// <returns></returns>
-        StockDto GetAStockFromStockId(int stockId);
+        Task<StockDto> GetAStockFromStockId(int stockId);
+        StockDto GetAStockFromStockIdNonAsync(int stockId);
         /// <summary>
         /// Gets the information of a specificed stock from the name
         /// in case of multiple stocks with a similar naming convention 
         /// </summary>
         /// <param name="stockName"></param>
         /// <returns></returns>
-        StockDto GetAStockFromStockName (string stockName);
-        /// <summary
-        /// Updates the information of the Stock in the database
-        /// </summary>
-        /// <param name="s_stock"></param>
-        /// <returns></returns>
-        /*
-        StockDto UpdateStock(Stock s_stock);
-        /// <summary>
-        /// Deletes a Stock in the database. Only manager can disable stock
-        /// </summary>
-        /// <param name="s_stock"></param>
-        /// <returns></returns>
-        StockDto UpdateStockPrice(int stockId, decimal stockPrice);
-        */
+        Task<StockDto> GetAStockFromStockName (string stockName);
+
 
         // Stock Order Histories
 
-        List<StockOrderHistoryDto> GetAllStockOrderHistory();
-        List<StockOrderHistoryDto> GetUserStockOrders(int userId);
-        
+        Task<List<StockOrderHistoryDto>> GetAllStockOrderHistory();
+        Task<List<StockOrderHistoryDto>> GetUserStockOrders(int userId);
+        List<StockOrderHistoryDto> GetUserStockOrdersNonAsync(int userId);
         
         // Stock Assets
 
 
-        List<StockAssetDto> GetAllStockAssets();
-        List<StockAssetDto> GetUserStockAssets(int userId);
-
-        //StockAssetDto DeleteStockAsset(int stockAssetId); // need to consider if this should even be a thing because dependencies
-        decimal GetUserStockInvestmentSum(int userId);
+        Task<List<StockAssetDto>> GetAllStockAssets();
+        Task<List<StockAssetDto>> GetUserStockAssets(int userId);
+//may not be public in the future(start)
+        StockDto StockToDto(Stock c_stock);
+        StockOrderHistoryDto OrderHistoryToDto(StockOrderHistory c_stockOrderHistory);
+        StockAssetDto StockAssetToDto(StockAsset a_stockAsset);
+//may not be public in the future(end)
+        Task<decimal> GetUserStockInvestmentSum(int userId);
     }
 }

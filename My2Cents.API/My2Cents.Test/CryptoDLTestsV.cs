@@ -5,6 +5,8 @@ using My2Cents.DatabaseManagement.Interfaces;
 using My2Cents.DataInfrastructure;
 using My2Cents.DataInfrastructure.Models;
 using Xunit;
+using System.Threading.Tasks;
+
 namespace My2Cents.Test
 {
     public class CryptoDLTestsV
@@ -170,6 +172,22 @@ namespace My2Cents.Test
                 Assert.Equal(100, listofcrypto[0].OrderPrice);
                 Assert.Equal("Buy", listofcrypto[0].OrderType);
                 Assert.Equal(1, listofcrypto[0].Quantity);
+            }
+        }
+
+        [Fact]
+        async Task Get_User_Investment_Sum()
+        {
+            using (My2CentsContext context = new My2CentsContext(options))
+            {
+                //Arrange
+                ICryptoPortfolioDL _repo = new CryptoPortfolioDL(context);
+
+                //Act
+                decimal _result = await _repo.GetUserCryptoInvestmentSum(1);
+
+                //Assert
+                Assert.Equal(230,_result);
             }
         }
 

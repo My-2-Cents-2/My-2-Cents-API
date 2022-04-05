@@ -16,9 +16,9 @@ namespace My2Cents.Logic.Implements
             _repo = repo;
         }
 
-        public List<StockDto> GetAllStocks()
+        public async Task<List<StockDto>> GetAllStocks()
         {
-            List<StockDto> allStocks = _repo.GetAllStocks();
+            List<StockDto> allStocks = await _repo.GetAllStocks();
             if (!allStocks.Any())
             {
                 throw new Exception("No one has any stocks");
@@ -29,9 +29,25 @@ namespace My2Cents.Logic.Implements
             }
         }
 
-        public StockDto GetAStockFromId(int stockId)
+        public async Task<List<StockDto>> GetUserStocks(int userId)
         {
-            StockDto allStocks = _repo.GetAStockFromStockId(stockId);
+            List<StockAssetDto> userAssets = await _repo.GetUserStockAssets(userId);
+            HashSet<StockDto> userStocks = new HashSet<StockDto> ();
+            foreach (StockAssetDto asset in userAssets){
+                userStocks.Add( await _repo.GetAStockFromStockId(asset.StockId));
+            }
+            if (!userStocks.Any())
+            {
+                throw new Exception("No one has any stocks");
+            }
+            else
+            {
+                return userStocks.ToList();
+            }
+        }
+        public async Task<StockDto> GetAStockFromId(int stockId)
+        {
+            StockDto allStocks = await _repo.GetAStockFromStockId(stockId);
             if (allStocks == null)
             {
                 throw new Exception("No one has any stocks");
@@ -41,12 +57,20 @@ namespace My2Cents.Logic.Implements
                 return allStocks;
             }
         }
-        public List<StockDto> GetUserStocks(int userId)
+
+        public StockDto GetAStockFromIdNonAsync(int stockId)
         {
-            List<StockAssetDto> userAssets = _repo.GetUserStockAssets(userId);
+            StockDto allStocks = _repo.GetAStockFromStockIdNonAsync(stockId);
+            return allStocks;
+        }
+        
+
+        public async Task<List<StockDto>> GetUserStocksFromOrderHistory(int userId) 
+        {
+            List<StockOrderHistoryDto> userAssets = await _repo.GetUserStockOrders(userId);
             HashSet<StockDto> userStocks = new HashSet<StockDto> ();
-            foreach (StockAssetDto asset in userAssets){
-                userStocks.Add( _repo.GetAStockFromStockId(asset.StockId));
+            foreach (StockOrderHistoryDto asset in userAssets){
+                userStocks.Add( await _repo.GetAStockFromStockId(asset.StockId));
             }
             if (!userStocks.Any())
             {
@@ -58,37 +82,10 @@ namespace My2Cents.Logic.Implements
             }
         }
 
-        public List<StockDto> GetUserStocksFromOrderHistory(int userId) 
+
+        public async Task<bool> CheckDuplicateStock(string stockName)
         {
-            List<StockOrderHistoryDto> userAssets = _repo.GetUserStockOrders(userId);
-            HashSet<StockDto> userStocks = new HashSet<StockDto> ();
-            foreach (StockOrderHistoryDto asset in userAssets){
-                userStocks.Add( _repo.GetAStockFromStockId(asset.StockId));
-            }
-            if (!userStocks.Any())
-            {
-                throw new Exception("No one has any stocks");
-            }
-            else
-            {
-                return userStocks.ToList();
-            }
-        }
-/*        public StockDto UpdateStockPrice(string stockName, decimal stockPrice)
-        {
-            try
-            {
-                int stockId = GetStockIdFromName(stockName);
-                return _repo.UpdateStockPrice(stockId, stockPrice);
-            }
-            catch (System.Exception exe)
-            {
-                throw new Exception(exe.Message);
-            }
-        }*/
-        public bool CheckDuplicateStock(string stockName)
-        {
-            List<StockDto> _result = _repo.GetAllStocks();
+            List<StockDto> _result = await _repo.GetAllStocks();
             if (_result.FirstOrDefault(s => s.Name.ToLower() == stockName.ToLower()) == null)
             {
                 return true;
@@ -98,9 +95,9 @@ namespace My2Cents.Logic.Implements
                 throw new Exception(stockName + " is a duplicate Stock");
             }
         }
-        public StockDto CheckStockId(int stockId)
+        public async Task<StockDto> CheckStockId(int stockId)
         {
-            List<StockDto> _result = _repo.GetAllStocks();
+            List<StockDto> _result = await _repo.GetAllStocks();
             StockDto? stock = _result.FirstOrDefault(s => (s.StockId == stockId));
             if (stock == null)
             {
@@ -111,14 +108,12 @@ namespace My2Cents.Logic.Implements
                 return stock;
             }
         }
-        public int GetStockIdFromName(string stockName)
+        /*
+        public async Task<int> GetStockIdFromName(string stockName)
         {
             try
             {
-                int stockId = (_repo.GetAllStocks()
-                                .FirstOrDefault(s => (s.Name == stockName))
-                                .StockId);
-                Console.WriteLine("Test:" + stockName + " " + stockId);
+                int stockId = (await _repo.GetAStockFromStockName(stockName)).StockId;
                 return stockId;
             }
             catch(System.Exception exe)
@@ -126,14 +121,14 @@ namespace My2Cents.Logic.Implements
                 throw new Exception("Stock Name " + stockName + " DNE");
             }
             
-        }
+        }*/
 
 
 
         //StockOrderHistory
-        public List<StockOrderHistoryDto> GetAllStockOrderHistories()
+        public async Task<List<StockOrderHistoryDto>> GetAllStockOrderHistories()
         {
-            List<StockOrderHistoryDto> stockOrderHistories = _repo.GetAllStockOrderHistory();
+            List<StockOrderHistoryDto> stockOrderHistories = await _repo.GetAllStockOrderHistory();
             if (!stockOrderHistories.Any())
             {
                 throw new Exception("No one has any stock orders");
@@ -144,34 +139,40 @@ namespace My2Cents.Logic.Implements
             }
         }
 
-        public List<StockOrderHistoryDto> GetUserStockOrderHistory(int userId)
+        public async Task<List<StockOrderHistoryDto>> GetUserStockOrderHistory(int userId)
         {
             try
             {
-                return _repo.GetUserStockOrders(userId);
+                return await _repo.GetUserStockOrders(userId);
             }
             catch(SystemException exe){
                 throw new Exception(exe.Message);
             }
         }
+        
+
+        public List<StockOrderHistoryDto> GetUserStockOrderHistoryNonAsync(int userId)
+        {
+            return _repo.GetUserStockOrdersNonAsync(userId);
+        }
 
         
-        public List<StockAssetDto> GetAllStockAssets()
+        public async Task<List<StockAssetDto>> GetAllStockAssets()
         {
             try
             {
-                return _repo.GetAllStockAssets();
+                return await _repo.GetAllStockAssets();
             }
             catch(System.Exception exe )
             {
                 throw new Exception(exe.Message);
             }
         }
-        public List<StockAssetDto> GetUserStockAssets(int userId)
+        public async Task<List<StockAssetDto>> GetUserStockAssets(int userId)
         {
             try
             {
-                return _repo.GetUserStockAssets(userId);
+                return await _repo.GetUserStockAssets(userId);
             }
             catch(System.Exception exe )
             {
@@ -179,9 +180,9 @@ namespace My2Cents.Logic.Implements
             }
         }
 
-        public decimal GetUserStockInvestmentSum(int userId)
+        public async Task<Decimal> GetUserStockInvestmentSum(int userId)
         {
-            return _repo.GetUserStockInvestmentSum(userId);
+            return await _repo.GetUserStockInvestmentSum(userId);
         }
 
     }

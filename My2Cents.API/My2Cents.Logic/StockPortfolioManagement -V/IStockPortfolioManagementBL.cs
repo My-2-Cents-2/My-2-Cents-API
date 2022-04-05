@@ -6,9 +6,10 @@ namespace My2Cents.Logic.Interfaces
 {
     public interface IStockPortfolioManagementBL
     {
-        List<StockDto> GetAllStocks();
-        List<StockDto> GetUserStocks(int userId);
-        StockDto GetAStockFromId(int stockId);
+        Task<List<StockDto>> GetAllStocks();
+        Task<List<StockDto>> GetUserStocks(int userId);
+        Task<StockDto> GetAStockFromId(int stockId);
+        StockDto GetAStockFromIdNonAsync(int stockId);
         /*
         /// <summary>
         /// gets stock info from the stock's name
@@ -30,20 +31,23 @@ namespace My2Cents.Logic.Interfaces
         /// </summary>
         /// <param name="stockId"></param>
         /// <returns></returns>
-        bool CheckDuplicateStock(string stockName);
-        StockDto CheckStockId(int stockId);
-        int GetStockIdFromName(string stockName);
+        Task<bool> CheckDuplicateStock(string stockName);
+        Task<StockDto> CheckStockId(int stockId);
+        //Task<int> GetStockIdFromName(string stockName);
 
         // Stock User
 
-        List<StockOrderHistoryDto> GetAllStockOrderHistories();
-        List<StockOrderHistoryDto> GetUserStockOrderHistory(int userId);
-        List<StockDto> GetUserStocksFromOrderHistory(int userId);
+        Task<List<StockOrderHistoryDto>> GetAllStockOrderHistories();
+        Task<List<StockOrderHistoryDto>> GetUserStockOrderHistory(int userId);
+        Task<List<StockDto>> GetUserStocksFromOrderHistory(int userId);
+        
+        //
+        List<StockOrderHistoryDto> GetUserStockOrderHistoryNonAsync(int userId);
 
         //StockAssets
-        List<StockAssetDto> GetAllStockAssets();
-        List<StockAssetDto> GetUserStockAssets(int userId);
+        Task<List<StockAssetDto>> GetAllStockAssets();
+        Task<List<StockAssetDto>> GetUserStockAssets(int userId);
 
-        Decimal GetUserStockInvestmentSum(int userId);
+        Task<Decimal> GetUserStockInvestmentSum(int userId);
     }
 }

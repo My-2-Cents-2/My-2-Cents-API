@@ -12,12 +12,13 @@ using My2Cents.Logic.Interfaces;
 using My2Cents.DataInfrastructure;
 using My2Cents.DataInfrastructure.Models ;
 using My2Cents.DatabaseManagement;
+using System.Threading.Tasks;
 
 
 public class StockPortfolioManagementBLTest
 {
     [Fact]
-    public void Should_Get_All_Stocks()
+    public async Task Should_Get_All_Stocks()
     {
         //Arrange
         Stock _testStock = new Stock
@@ -45,32 +46,32 @@ public class StockPortfolioManagementBLTest
         _expectedListOfStocksDto.Add(_testStockDto);
 
         Mock<IStockPortfolioManagementDL> _mockRepo = new Mock<IStockPortfolioManagementDL>();
-        _mockRepo.Setup(repo => repo.GetAllStocks()).Returns(_expectedListOfStocksDto);
+        _mockRepo.Setup(repo => repo.GetAllStocks()).ReturnsAsync(_expectedListOfStocksDto);
         IStockPortfolioManagementBL _stockBL = new StockPortfolioManagementBL(_mockRepo.Object);
 
         //Act
-        List<StockDto> _actualListOfStockDto = _stockBL.GetAllStocks();
+        List<StockDto> _actualListOfStockDto = await _stockBL.GetAllStocks();
         
         //Assert
         Assert.Same(_expectedListOfStocksDto, _actualListOfStockDto);
     }
 
     [Fact]
-    public void Should_Fail_Get_All_Stocks()
+    public async Task Should_Fail_Get_All_Stocks()
     {
         //Arrange
         List<StockDto> _expectedListOfStocksDto = new List<StockDto>();
 
         Mock<IStockPortfolioManagementDL> _mockRepo = new Mock<IStockPortfolioManagementDL>();
-        _mockRepo.Setup(repo => repo.GetAllStocks()).Returns(_expectedListOfStocksDto);
+        _mockRepo.Setup(repo => repo.GetAllStocks()).ReturnsAsync(_expectedListOfStocksDto);
         IStockPortfolioManagementBL _stockBL = new StockPortfolioManagementBL(_mockRepo.Object);
 
         //Act & Assert 
-        Assert.Throws<Exception>( ()=> _stockBL.GetAllStocks() );
+        Assert.ThrowsAsync<Exception>( ()=> _stockBL.GetAllStocks() );
     }
     
     [Fact]
-    public void Should_Get_A_Stock_From_Stock_Id()
+    public async Task Should_Get_A_Stock_From_Stock_Id()
     {
         //Arrange
         Stock _testStock = new Stock
@@ -95,18 +96,18 @@ public class StockPortfolioManagementBLTest
         };
 
         Mock<IStockPortfolioManagementDL> _mockRepo = new Mock<IStockPortfolioManagementDL>();
-        _mockRepo.Setup(repo => repo.GetAStockFromStockId(1)).Returns(_testStockDto);
+        _mockRepo.Setup(repo => repo.GetAStockFromStockId(1)).ReturnsAsync(_testStockDto);
         IStockPortfolioManagementBL _stockBL = new StockPortfolioManagementBL(_mockRepo.Object);
 
         //Act
-        StockDto _actualStockDto = _stockBL.GetAStockFromId(1);
+        StockDto _actualStockDto = await _stockBL.GetAStockFromId(1);
         
         //Assert
         Assert.Same(_testStockDto, _actualStockDto);
     }
 
     [Fact]
-    public void Should_Fail_Get_A_Stock_From_Stock_Id()
+    public async Task Should_Fail_Get_A_Stock_From_Stock_Id()
     {
         //Arrange
         Stock _testStock = new Stock
@@ -131,15 +132,15 @@ public class StockPortfolioManagementBLTest
         };
 
         Mock<IStockPortfolioManagementDL> _mockRepo = new Mock<IStockPortfolioManagementDL>();
-        _mockRepo.Setup(repo => repo.GetAStockFromStockId(1)).Returns(_testStockDto);
+        _mockRepo.Setup(repo => repo.GetAStockFromStockId(1)).ReturnsAsync(_testStockDto);
         IStockPortfolioManagementBL _stockBL = new StockPortfolioManagementBL(_mockRepo.Object);
 
         //Act & Assert
-        Assert.Throws<Exception>( () => _stockBL.GetAStockFromId(3) );
+        Assert.ThrowsAsync<Exception>( () => _stockBL.GetAStockFromId(3) );
     }
 
     [Fact]
-    public void Should_Get_A_User_Stocks()
+    public async Task Should_Get_A_User_Stocks()
     {
         //Arrange
         Stock _testStock = new Stock
@@ -194,20 +195,20 @@ public class StockPortfolioManagementBLTest
         _expectedListOfStocksAssetsDto.Add(_testStockAssetDto);
 
         Mock<IStockPortfolioManagementDL> _mockRepo = new Mock<IStockPortfolioManagementDL>();
-        _mockRepo.Setup(repo => repo.GetAllStocks()).Returns(_expectedListOfStocksDto);
-        _mockRepo.Setup(repo => repo.GetAStockFromStockId(1)).Returns(_testStockDto);
-        _mockRepo.Setup(repo => repo.GetUserStockAssets(1)).Returns(_expectedListOfStocksAssetsDto);
+        _mockRepo.Setup(repo => repo.GetAllStocks()).ReturnsAsync(_expectedListOfStocksDto);
+        _mockRepo.Setup(repo => repo.GetAStockFromStockId(1)).ReturnsAsync(_testStockDto);
+        _mockRepo.Setup(repo => repo.GetUserStockAssets(1)).ReturnsAsync(_expectedListOfStocksAssetsDto);
         IStockPortfolioManagementBL _stockBL = new StockPortfolioManagementBL(_mockRepo.Object);
 
         //Act
-        List<StockDto> _actualListOfStockDto = _stockBL.GetUserStocks(1);
+        List<StockDto> _actualListOfStockDto = await _stockBL.GetUserStocks(1);
         
         //Assert
         Assert.Equal(_expectedListOfStocksDto, _actualListOfStockDto);
     }
 
     [Fact]
-    public void Should_Fail_Get_A_User_Stocks()
+    public async Task Should_Fail_Get_A_User_Stocks()
     {
         //Arrange
         Stock _testStock = new Stock
@@ -262,19 +263,19 @@ public class StockPortfolioManagementBLTest
         //_expectedListOfStocksAssetsDto.Add(_testStockAssetDto);
 
         Mock<IStockPortfolioManagementDL> _mockRepo = new Mock<IStockPortfolioManagementDL>();
-        _mockRepo.Setup(repo => repo.GetAllStocks()).Returns(_expectedListOfStocksDto);
-        _mockRepo.Setup(repo => repo.GetAStockFromStockId(1)).Returns(_testStockDto);
-        _mockRepo.Setup(repo => repo.GetUserStockAssets(1)).Returns(_expectedListOfStocksAssetsDto);
+        _mockRepo.Setup(repo => repo.GetAllStocks()).ReturnsAsync(_expectedListOfStocksDto);
+        _mockRepo.Setup(repo => repo.GetAStockFromStockId(1)).ReturnsAsync(_testStockDto);
+        _mockRepo.Setup(repo => repo.GetUserStockAssets(1)).ReturnsAsync(_expectedListOfStocksAssetsDto);
         IStockPortfolioManagementBL _stockBL = new StockPortfolioManagementBL(_mockRepo.Object);
 
         //Act & Assert
-        Assert.Throws<Exception>(() => _stockBL.GetUserStocks(1));
+        Assert.ThrowsAsync<Exception>(() => _stockBL.GetUserStocks(1));
     }
 
     
 
     [Fact]
-    public void Should_Get_User_Stocks_From_Order_History()
+    public async Task Should_Get_User_Stocks_From_Order_History()
     {
         //Arrange
         Stock _testStock = new Stock
@@ -352,21 +353,21 @@ public class StockPortfolioManagementBLTest
         _expectedListOfStocksAssetsDto.Add(_testStockAssetDto);
 
         Mock<IStockPortfolioManagementDL> _mockRepo = new Mock<IStockPortfolioManagementDL>();
-        _mockRepo.Setup(repo => repo.GetAllStocks()).Returns(_expectedListOfStocksDto);
-        _mockRepo.Setup(repo => repo.GetAStockFromStockId(1)).Returns(_testStockDto);
-        _mockRepo.Setup(repo => repo.GetUserStockOrders(1)).Returns(_expectedListOfStockOrderHistoryDto);
-        _mockRepo.Setup(repo => repo.GetUserStockAssets(1)).Returns(_expectedListOfStocksAssetsDto);
+        _mockRepo.Setup(repo => repo.GetAllStocks()).ReturnsAsync(_expectedListOfStocksDto);
+        _mockRepo.Setup(repo => repo.GetAStockFromStockId(1)).ReturnsAsync(_testStockDto);
+        _mockRepo.Setup(repo => repo.GetUserStockOrders(1)).ReturnsAsync(_expectedListOfStockOrderHistoryDto);
+        _mockRepo.Setup(repo => repo.GetUserStockAssets(1)).ReturnsAsync(_expectedListOfStocksAssetsDto);
         IStockPortfolioManagementBL _stockBL = new StockPortfolioManagementBL(_mockRepo.Object);
 
         //Act
-        List<StockDto> _actualListOfStockDto = _stockBL.GetUserStocksFromOrderHistory(1);
+        List<StockDto> _actualListOfStockDto = await _stockBL.GetUserStocksFromOrderHistory(1);
         
         //Assert
         Assert.Equal(_expectedListOfStocksDto, _actualListOfStockDto);
     }
 
     [Fact]
-    public void Should_Fail_Get_A_User_Stock_Order_History()
+    public async Task Should_Fail_Get_A_User_Stock_Order_History()
     {
         //Arrange
         Stock _testStock = new Stock
@@ -444,20 +445,134 @@ public class StockPortfolioManagementBLTest
         _expectedListOfStocksAssetsDto.Add(_testStockAssetDto);
 
         Mock<IStockPortfolioManagementDL> _mockRepo = new Mock<IStockPortfolioManagementDL>();
-        _mockRepo.Setup(repo => repo.GetAllStocks()).Returns(_expectedListOfStocksDto);
-        _mockRepo.Setup(repo => repo.GetAStockFromStockId(1)).Returns(_testStockDto);
-        _mockRepo.Setup(repo => repo.GetUserStockOrders(1)).Returns(_expectedListOfStockOrderHistoryDto);
-        _mockRepo.Setup(repo => repo.GetUserStockAssets(1)).Returns(_expectedListOfStocksAssetsDto);
+        _mockRepo.Setup(repo => repo.GetAllStocks()).ReturnsAsync(_expectedListOfStocksDto);
+        _mockRepo.Setup(repo => repo.GetAStockFromStockId(1)).ReturnsAsync(_testStockDto);
+        _mockRepo.Setup(repo => repo.GetUserStockOrders(1)).ReturnsAsync(_expectedListOfStockOrderHistoryDto);
+        _mockRepo.Setup(repo => repo.GetUserStockAssets(1)).ReturnsAsync(_expectedListOfStocksAssetsDto);
         IStockPortfolioManagementBL _stockBL = new StockPortfolioManagementBL(_mockRepo.Object);
  
         //Act & Assert
-        Assert.Throws<Exception>(() => _stockBL.GetUserStocksFromOrderHistory(1));
+        Assert.ThrowsAsync<Exception>(() => _stockBL.GetUserStocksFromOrderHistory(1));
+    }
+
+    [Fact]
+    public async Task Should_Get_User_Order_History()
+    {
+        //Arrange
+        StockOrderHistory _testStockOrderHistory = new StockOrderHistory{
+            StockOrderId = 1,
+            UserId = 1,
+            StockId = 1,
+            OrderPrice = 100,
+            Quantity = 2,
+            OrderType = "buy",
+            OrderTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time"))
+        };
+
+        StockOrderHistoryDto _testStockOrderHistoryDto = new StockOrderHistoryDto{
+            StockOrderId = 1,
+            UserId = 1,
+            StockId = 1,
+            OrderPrice = 100,
+            Quantity = 2,
+            OrderType = "buy",
+            OrderTime = _testStockOrderHistory.OrderTime
+        };
+
+        
+
+        List<StockOrderHistoryDto> _expectedListOfStockOrderHistoryDto = new List<StockOrderHistoryDto>();
+        _expectedListOfStockOrderHistoryDto.Add(_testStockOrderHistoryDto);
+
+        Mock<IStockPortfolioManagementDL> _mockRepo = new Mock<IStockPortfolioManagementDL>();
+        _mockRepo.Setup(repo => repo.GetUserStockOrders(1)).ReturnsAsync(_expectedListOfStockOrderHistoryDto);
+        IStockPortfolioManagementBL _stockBL = new StockPortfolioManagementBL(_mockRepo.Object);
+
+        //Act
+        List<StockOrderHistoryDto> _actualListOfStockOrderHistory = await _stockBL.GetUserStockOrderHistory(1);
+        
+        //Assert
+        Assert.Equal(_expectedListOfStockOrderHistoryDto, _actualListOfStockOrderHistory);
+    }
+/*
+    [Fact]
+    public void Should_Fail_Get_User_Stock_Order_History()
+    {
+        //Arrange
+
+        StockOrderHistory _testStockOrderHistory = new StockOrderHistory{
+            StockOrderId = 1,
+            UserId = 1,
+            StockId = 1,
+            OrderPrice = 100,
+            Quantity = 2,
+            OrderType = "buy",
+            OrderTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time"))
+        };
+
+        StockOrderHistoryDto _testStockOrderHistoryDto = new StockOrderHistoryDto{
+            StockOrderId = 1,
+            UserId = 1,
+            StockId = 1,
+            OrderPrice = 100,
+            Quantity = 2,
+            OrderType = "buy",
+            OrderTime = _testStockOrderHistory.OrderTime
+        };
+
+        List<StockOrderHistoryDto> _expectedListOfStockOrderHistoryDto = new List<StockOrderHistoryDto>();
+        //_expectedListOfStockOrderHistoryDto.Add(_testStockOrderHistoryDto);
+
+
+        Mock<IStockPortfolioManagementDL> _mockRepo = new Mock<IStockPortfolioManagementDL>();
+        _mockRepo.Setup(repo => repo.GetUserStockOrders(1)).ReturnsAsync(_expectedListOfStockOrderHistoryDto);
+        IStockPortfolioManagementBL _stockBL = new StockPortfolioManagementBL(_mockRepo.Object);
+ 
+        //Act & Assert
+        Assert.Throws<Exception>(() => _stockBL.GetUserStockOrderHistoryNonAsync(1));
+    } */
+
+    [Fact]
+    public void Should_Get_User_Order_History_NonAsync()
+    {
+        //Arrange
+        StockOrderHistory _testStockOrderHistory = new StockOrderHistory{
+            StockOrderId = 1,
+            UserId = 1,
+            StockId = 1,
+            OrderPrice = 100,
+            Quantity = 2,
+            OrderType = "buy",
+            OrderTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time"))
+        };
+
+        StockOrderHistoryDto _testStockOrderHistoryDto = new StockOrderHistoryDto{
+            StockOrderId = 1,
+            UserId = 1,
+            StockId = 1,
+            OrderPrice = 100,
+            Quantity = 2,
+            OrderType = "buy",
+            OrderTime = _testStockOrderHistory.OrderTime
+        };
+
+        List<StockOrderHistoryDto> _expectedListOfStockOrderHistoryDto = new List<StockOrderHistoryDto>();
+        _expectedListOfStockOrderHistoryDto.Add(_testStockOrderHistoryDto);
+
+        Mock<IStockPortfolioManagementDL> _mockRepo = new Mock<IStockPortfolioManagementDL>();
+        _mockRepo.Setup(repo => repo.GetUserStockOrdersNonAsync(1)).Returns(_expectedListOfStockOrderHistoryDto);
+        IStockPortfolioManagementBL _stockBL = new StockPortfolioManagementBL(_mockRepo.Object);
+
+        //Act
+        List<StockOrderHistoryDto> _actualListOfStockOrderHistory = _stockBL.GetUserStockOrderHistoryNonAsync(1);
+        
+        //Assert
+        Assert.Equal(_expectedListOfStockOrderHistoryDto, _actualListOfStockOrderHistory);
     }
 
 
-
     [Fact]
-    public void Check_Duplicate_Stock()
+    public async Task Check_Duplicate_Stock()
     {
         //Arrange
         Stock _testStock = new Stock
@@ -485,18 +600,18 @@ public class StockPortfolioManagementBLTest
         _expectedListOfStocksDto.Add(_testStockDto);
 
         Mock<IStockPortfolioManagementDL> _mockRepo = new Mock<IStockPortfolioManagementDL>();
-        _mockRepo.Setup(repo => repo.GetAllStocks()).Returns(_expectedListOfStocksDto);
+        _mockRepo.Setup(repo => repo.GetAllStocks()).ReturnsAsync(_expectedListOfStocksDto);
         IStockPortfolioManagementBL _stockBL = new StockPortfolioManagementBL(_mockRepo.Object);
 
         //Act
-        bool _result = _stockBL.CheckDuplicateStock("NotADupe");
+        bool _result = await _stockBL.CheckDuplicateStock("NotADupe");
         
         //Assert
         Assert.True(_result);
     }
 
     [Fact]
-    public void Fail_Check_Duplicate_Stock()
+    public async Task Fail_Check_Duplicate_Stock()
     {
         //Arrange
         Stock _testStock = new Stock
@@ -524,15 +639,15 @@ public class StockPortfolioManagementBLTest
         _expectedListOfStocksDto.Add(_testStockDto);
 
         Mock<IStockPortfolioManagementDL> _mockRepo = new Mock<IStockPortfolioManagementDL>();
-        _mockRepo.Setup(repo => repo.GetAllStocks()).Returns(_expectedListOfStocksDto);
+        _mockRepo.Setup(repo => repo.GetAllStocks()).ReturnsAsync(_expectedListOfStocksDto);
         IStockPortfolioManagementBL _stockBL = new StockPortfolioManagementBL(_mockRepo.Object);
 
         //Act & Assert 
-        Assert.Throws<Exception>( ()=> _stockBL.CheckDuplicateStock("Rhongobongo") );
+        Assert.ThrowsAsync<Exception>( ()=> _stockBL.CheckDuplicateStock("Rhongobongo") );
     }
-
+/*
     [Fact]
-    public void Get_Stock_Id_From_Name()
+    public async Task Get_Stock_Id_From_Name()
     {
         //Arrange
         Stock _testStock = new Stock
@@ -560,18 +675,18 @@ public class StockPortfolioManagementBLTest
         _expectedListOfStocksDto.Add(_testStockDto);
 
         Mock<IStockPortfolioManagementDL> _mockRepo = new Mock<IStockPortfolioManagementDL>();
-        _mockRepo.Setup(repo => repo.GetAllStocks()).Returns(_expectedListOfStocksDto);
+        _mockRepo.Setup(repo => repo.GetAllStocks()).ReturnsAsync(_expectedListOfStocksDto);
         IStockPortfolioManagementBL _stockBL = new StockPortfolioManagementBL(_mockRepo.Object);
 
         //Act
-        int _result = _stockBL.GetStockIdFromName("Rhongobongo");
+        int _result = await _stockBL.GetStockIdFromName("Rhongobongo");
         
         //Assert
         Assert.Equal(1, _result);
     }
 
     [Fact]
-    public void Fail_Get_Stock_Id_From_Name()
+    public async Task Fail_Get_Stock_Id_From_Name()
     {
         //Arrange
         Stock _testStock = new Stock
@@ -599,17 +714,17 @@ public class StockPortfolioManagementBLTest
         _expectedListOfStocksDto.Add(_testStockDto);
 
         Mock<IStockPortfolioManagementDL> _mockRepo = new Mock<IStockPortfolioManagementDL>();
-        _mockRepo.Setup(repo => repo.GetAllStocks()).Returns(_expectedListOfStocksDto);
+        _mockRepo.Setup(repo => repo.GetAllStocks()).ReturnsAsync(_expectedListOfStocksDto);
         IStockPortfolioManagementBL _stockBL = new StockPortfolioManagementBL(_mockRepo.Object);
 
         //Act & Assert 
-        Assert.Throws<Exception>( ()=> _stockBL.GetStockIdFromName("NonexistantStock") );
+        Assert.ThrowsAsync<Exception>( ()=> _stockBL.GetStockIdFromName("NonexistantStock") );
     }
-    
+    */
 
 
     [Fact]
-    public void Should_Get_All_Stock_Order_History()
+    public async Task Should_Get_All_Stock_Order_History()
     {
         //Arrange
         Stock _testStock = new Stock
@@ -662,12 +777,12 @@ public class StockPortfolioManagementBLTest
         _expectedListOfStockOrderHistoryDto.Add(_testStockOrderHistoryDto);
 
         Mock<IStockPortfolioManagementDL> _mockRepo = new Mock<IStockPortfolioManagementDL>();
-        _mockRepo.Setup(repo => repo.GetAllStocks()).Returns(_expectedListOfStocksDto);
-        _mockRepo.Setup(repo => repo.GetAllStockOrderHistory()).Returns(_expectedListOfStockOrderHistoryDto);
+        _mockRepo.Setup(repo => repo.GetAllStocks()).ReturnsAsync(_expectedListOfStocksDto);
+        _mockRepo.Setup(repo => repo.GetAllStockOrderHistory()).ReturnsAsync(_expectedListOfStockOrderHistoryDto);
         IStockPortfolioManagementBL _stockBL = new StockPortfolioManagementBL(_mockRepo.Object);
 
         //Act
-        List<StockOrderHistoryDto> _actualListOfStockDto = _stockBL.GetAllStockOrderHistories();
+        List<StockOrderHistoryDto> _actualListOfStockDto = await _stockBL.GetAllStockOrderHistories();
         
         //Assert
         Assert.Same(_expectedListOfStockOrderHistoryDto, _actualListOfStockDto);
@@ -700,15 +815,15 @@ public class StockPortfolioManagementBLTest
         List<StockOrderHistoryDto> _expectedListOfStockOrderHistoryDto = new List<StockOrderHistoryDto>();
         
         Mock<IStockPortfolioManagementDL> _mockRepo = new Mock<IStockPortfolioManagementDL>();
-        _mockRepo.Setup(repo => repo.GetAllStockOrderHistory()).Returns(_expectedListOfStockOrderHistoryDto);
+        _mockRepo.Setup(repo => repo.GetAllStockOrderHistory()).ReturnsAsync(_expectedListOfStockOrderHistoryDto);
         IStockPortfolioManagementBL _stockBL = new StockPortfolioManagementBL(_mockRepo.Object);
  
         //Act & Assert
-        Assert.Throws<Exception>(() => _stockBL.GetAllStockOrderHistories() );
+        Assert.ThrowsAsync<Exception>(() => _stockBL.GetAllStockOrderHistories() );
     }
 
     [Fact]
-    public void Should_Get_All_Stock_Assets()
+    public async Task Should_Get_All_Stock_Assets()
     {
         //Arrange
 
@@ -740,18 +855,18 @@ public class StockPortfolioManagementBLTest
         _expectedListOfStocksAssetsDto.Add(_testStockAssetDto);
 
         Mock<IStockPortfolioManagementDL> _mockRepo = new Mock<IStockPortfolioManagementDL>();
-        _mockRepo.Setup(repo => repo.GetAllStockAssets()).Returns(_expectedListOfStocksAssetsDto);
+        _mockRepo.Setup(repo => repo.GetAllStockAssets()).ReturnsAsync(_expectedListOfStocksAssetsDto);
         IStockPortfolioManagementBL _stockBL = new StockPortfolioManagementBL(_mockRepo.Object);
 
         //Act
-        List<StockAssetDto> _actualListOfStockAssetsDto = _stockBL.GetAllStockAssets();
+        List<StockAssetDto> _actualListOfStockAssetsDto = await _stockBL.GetAllStockAssets();
         
         //Assert
         Assert.Same(_expectedListOfStocksAssetsDto, _actualListOfStockAssetsDto);
     }
 /*
     [Fact]
-    public void Should_Fail_Get_All_Stock_Assets()
+    public async Task Should_Fail_Get_All_Stock_Assets()
     {
         //Arrange
 
@@ -786,11 +901,11 @@ public class StockPortfolioManagementBLTest
         IStockPortfolioManagementBL _stockBL = new StockPortfolioManagementBL(_mockRepo.Object);
 
         //Act & Assert
-        Assert.Throws<Exception>( () => _stockBL.GetAllStockAssets());
+        Assert.ThrowsAsync<Exception>( () => _stockBL.GetAllStockAssets());
     }
 */
     [Fact]
-    public void Should_Get_User_Stock_Assets()
+    public async Task Should_Get_User_Stock_Assets()
     {
         //Arrange
 
@@ -822,18 +937,18 @@ public class StockPortfolioManagementBLTest
         _expectedListOfStocksAssetsDto.Add(_testStockAssetDto);
 
         Mock<IStockPortfolioManagementDL> _mockRepo = new Mock<IStockPortfolioManagementDL>();
-        _mockRepo.Setup(repo => repo.GetUserStockAssets(1)).Returns(_expectedListOfStocksAssetsDto);
+        _mockRepo.Setup(repo => repo.GetUserStockAssets(1)).ReturnsAsync(_expectedListOfStocksAssetsDto);
         IStockPortfolioManagementBL _stockBL = new StockPortfolioManagementBL(_mockRepo.Object);
 
         //Act
-        List<StockAssetDto> _actualListOfStockAssetsDto = _stockBL.GetUserStockAssets(1);
+        List<StockAssetDto> _actualListOfStockAssetsDto = await _stockBL.GetUserStockAssets(1);
         
         //Assert
         Assert.Same(_expectedListOfStocksAssetsDto, _actualListOfStockAssetsDto);
     }
 /*
     [Fact]
-    public void Should_Fail_Get_User_Stock_Assets()
+    public async Task Should_Fail_Get_User_Stock_Assets()
     {
         //Arrange
         Stock _testStock = new Stock
@@ -892,11 +1007,11 @@ public class StockPortfolioManagementBLTest
         IStockPortfolioManagementBL _stockBL = new StockPortfolioManagementBL(_mockRepo.Object);
 
         //Act & Assert
-        Assert.Throws<Exception>( () => _stockBL.GetUserStockAssets(1));
+        Assert.ThrowsAsync<Exception>( () => _stockBL.GetUserStockAssets(1));
     }
 */
     [Fact]
-    public void Should_Get_User_Stock_Investment_Sum()
+    public async Task Should_Get_User_Stock_Investment_Sum()
     {
         //Arrange
 
@@ -928,11 +1043,11 @@ public class StockPortfolioManagementBLTest
         _expectedListOfStocksAssetsDto.Add(_testStockAssetDto);
 
         Mock<IStockPortfolioManagementDL> _mockRepo = new Mock<IStockPortfolioManagementDL>();
-        _mockRepo.Setup(repo => repo.GetUserStockInvestmentSum(1)).Returns(200);
+        _mockRepo.Setup(repo => repo.GetUserStockInvestmentSum(1)).ReturnsAsync(200);
         IStockPortfolioManagementBL _stockBL = new StockPortfolioManagementBL(_mockRepo.Object);
 
         //Act
-        decimal _result = _stockBL.GetUserStockInvestmentSum(1);
+        decimal _result = await _stockBL.GetUserStockInvestmentSum(1);
         
         //Assert
         Assert.Equal(200, _result);

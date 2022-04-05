@@ -5,6 +5,7 @@ using My2Cents.DataInfrastructure;
 using My2Cents.DataInfrastructure.Models;
 using My2Cents.Logic.Interfaces;
 using Xunit;
+using System.Threading.Tasks;
 
 namespace My2Cents.Test
 {
@@ -223,6 +224,48 @@ namespace My2Cents.Test
             Assert.Equal(crypto.CryptoId, actualCustList.CryptoId);
             Assert.Equal(crypto.OrderType, actualCustList.OrderType);
             Assert.Equal(crypto.Quantity, actualCustList.Quantity);
+        }
+        
+
+        [Fact]
+        public async Task Should_Get_User_Crypto_Investment_Sum()
+        {
+            //Arrange
+
+            CryptoAsset _testCryptoAsset = new CryptoAsset
+            {
+                CryptoAssetId = 1,
+                CryptoId = 1,
+                UserId = 1,
+                BuyPrice = 100,
+                StopLoss = 0,
+                TakeProfit = 9001,
+                Quantity = 2                        
+            };
+
+            CryptoAssetDto _testCryptoAssetDto = new CryptoAssetDto
+            {
+                CryptoAssetId = 1,
+                CryptoId = 1,
+                UserId = 1,
+                BuyPrice = 100,
+                StopLoss = 0,
+                TakeProfit = 9001,
+                Quantity = 2                        
+            };
+
+            List<CryptoAssetDto> _expectedListOfCryptosAssetsDto = new List<CryptoAssetDto>();
+            _expectedListOfCryptosAssetsDto.Add(_testCryptoAssetDto);
+
+            Mock<ICryptoPortfolioDL> _mockRepo = new Mock<ICryptoPortfolioDL>();
+            _mockRepo.Setup(repo => repo.GetUserCryptoInvestmentSum(1)).ReturnsAsync(200);
+            ICryptoPortfolioBL _stockBL = new CryptoPortfolioBL(_mockRepo.Object);
+
+            //Act
+            decimal _result = await _stockBL.GetUserCryptoInvestmentSum(1);
+            
+            //Assert
+            Assert.Equal(200, _result);
         }
     }
 
