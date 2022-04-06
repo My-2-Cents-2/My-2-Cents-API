@@ -48,11 +48,14 @@ namespace My2Cents.Test
             int userId,
             int accountTypeId)
         {
-            // arrange
+            // Arrange
             AccountDto accountDto = new()
             {
+                AccountId = 1,
                 UserId = userId,
-                AccountTypeId = accountTypeId
+                TotalBalance = 100,
+                AccountTypeId = accountTypeId,
+                Interest = 1
             };
 
             ActionResult<IEnumerable<AccountTypeDto>> accountListDto = new AccountTypeDto[]
