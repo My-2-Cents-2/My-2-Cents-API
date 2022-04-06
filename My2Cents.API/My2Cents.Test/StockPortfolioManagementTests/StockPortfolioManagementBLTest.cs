@@ -10,7 +10,7 @@ using My2Cents.DatabaseManagement.Implements;
 using My2Cents.Logic.Implements;
 using My2Cents.Logic.Interfaces;
 using My2Cents.DataInfrastructure;
-using My2Cents.DataInfrastructure.Models ;
+using My2Cents.DataInfrastructure.Models;
 using My2Cents.DatabaseManagement;
 
 
@@ -50,7 +50,7 @@ public class StockPortfolioManagementBLTest
 
         //Act
         List<StockDto> _actualListOfStockDto = _stockBL.GetAllStocks();
-        
+
         //Assert
         Assert.Same(_expectedListOfStocksDto, _actualListOfStockDto);
     }
@@ -66,9 +66,9 @@ public class StockPortfolioManagementBLTest
         IStockPortfolioManagementBL _stockBL = new StockPortfolioManagementBL(_mockRepo.Object);
 
         //Act & Assert 
-        Assert.Throws<Exception>( ()=> _stockBL.GetAllStocks() );
+        Assert.Throws<Exception>(() => _stockBL.GetAllStocks());
     }
-    
+
     [Fact]
     public void Should_Get_A_Stock_From_Stock_Id()
     {
@@ -100,7 +100,7 @@ public class StockPortfolioManagementBLTest
 
         //Act
         StockDto _actualStockDto = _stockBL.GetAStockFromId(1);
-        
+
         //Assert
         Assert.Same(_testStockDto, _actualStockDto);
     }
@@ -135,7 +135,7 @@ public class StockPortfolioManagementBLTest
         IStockPortfolioManagementBL _stockBL = new StockPortfolioManagementBL(_mockRepo.Object);
 
         //Act & Assert
-        Assert.Throws<Exception>( () => _stockBL.GetAStockFromId(3) );
+        Assert.Throws<Exception>(() => _stockBL.GetAStockFromId(3));
     }
 
     [Fact]
@@ -172,7 +172,7 @@ public class StockPortfolioManagementBLTest
             BuyDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time")),
             StopLoss = 0,
             TakeProfit = 9001,
-            Quantity = 2                        
+            Quantity = 2
         };
 
         StockAssetDto _testStockAssetDto = new StockAssetDto
@@ -184,7 +184,7 @@ public class StockPortfolioManagementBLTest
             BuyDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time")),
             StopLoss = 0,
             TakeProfit = 9001,
-            Quantity = 2                        
+            Quantity = 2
         };
 
         List<StockDto> _expectedListOfStocksDto = new List<StockDto>();
@@ -201,7 +201,7 @@ public class StockPortfolioManagementBLTest
 
         //Act
         List<StockDto> _actualListOfStockDto = _stockBL.GetUserStocks(1);
-        
+
         //Assert
         Assert.Equal(_expectedListOfStocksDto, _actualListOfStockDto);
     }
@@ -240,7 +240,7 @@ public class StockPortfolioManagementBLTest
             BuyDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time")),
             StopLoss = 0,
             TakeProfit = 9001,
-            Quantity = 2                        
+            Quantity = 2
         };
 
         StockAssetDto _testStockAssetDto = new StockAssetDto
@@ -252,7 +252,7 @@ public class StockPortfolioManagementBLTest
             BuyDate = _testStockAsset.BuyDate,
             StopLoss = 0,
             TakeProfit = 9001,
-            Quantity = 2                        
+            Quantity = 2
         };
 
         List<StockDto> _expectedListOfStocksDto = new List<StockDto>();
@@ -271,7 +271,7 @@ public class StockPortfolioManagementBLTest
         Assert.Throws<Exception>(() => _stockBL.GetUserStocks(1));
     }
 
-    
+
 
     [Fact]
     public void Should_Get_User_Stocks_From_Order_History()
@@ -298,7 +298,8 @@ public class StockPortfolioManagementBLTest
             ShortenedName = "RHBO"
         };
 
-        StockOrderHistory _testStockOrderHistory = new StockOrderHistory{
+        StockOrderHistory _testStockOrderHistory = new StockOrderHistory
+        {
             StockOrderId = 1,
             UserId = 1,
             StockId = 1,
@@ -308,7 +309,8 @@ public class StockPortfolioManagementBLTest
             OrderTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time"))
         };
 
-        StockOrderHistoryDto _testStockOrderHistoryDto = new StockOrderHistoryDto{
+        StockOrderHistoryDto _testStockOrderHistoryDto = new StockOrderHistoryDto
+        {
             StockOrderId = 1,
             UserId = 1,
             StockId = 1,
@@ -327,7 +329,8 @@ public class StockPortfolioManagementBLTest
             BuyDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time")),
             StopLoss = 0,
             TakeProfit = 9001,
-            Quantity = 2                        
+            Quantity = 2,
+            BuyCount = 1
         };
 
         StockAssetDto _testStockAssetDto = new StockAssetDto
@@ -339,7 +342,8 @@ public class StockPortfolioManagementBLTest
             BuyDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time")),
             StopLoss = 0,
             TakeProfit = 9001,
-            Quantity = 2                        
+            Quantity = 2,
+            BuyCount = 1
         };
 
         List<StockDto> _expectedListOfStocksDto = new List<StockDto>();
@@ -360,7 +364,7 @@ public class StockPortfolioManagementBLTest
 
         //Act
         List<StockDto> _actualListOfStockDto = _stockBL.GetUserStocksFromOrderHistory(1);
-        
+
         //Assert
         Assert.Equal(_expectedListOfStocksDto, _actualListOfStockDto);
     }
@@ -390,7 +394,8 @@ public class StockPortfolioManagementBLTest
             ShortenedName = "RHBO"
         };
 
-        StockOrderHistory _testStockOrderHistory = new StockOrderHistory{
+        StockOrderHistory _testStockOrderHistory = new StockOrderHistory
+        {
             StockOrderId = 1,
             UserId = 1,
             StockId = 1,
@@ -400,7 +405,8 @@ public class StockPortfolioManagementBLTest
             OrderTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time"))
         };
 
-        StockOrderHistoryDto _testStockOrderHistoryDto = new StockOrderHistoryDto{
+        StockOrderHistoryDto _testStockOrderHistoryDto = new StockOrderHistoryDto
+        {
             StockOrderId = 1,
             UserId = 1,
             StockId = 1,
@@ -419,7 +425,7 @@ public class StockPortfolioManagementBLTest
             BuyDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time")),
             StopLoss = 0,
             TakeProfit = 9001,
-            Quantity = 2                        
+            Quantity = 2
         };
 
         StockAssetDto _testStockAssetDto = new StockAssetDto
@@ -431,7 +437,7 @@ public class StockPortfolioManagementBLTest
             BuyDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time")),
             StopLoss = 0,
             TakeProfit = 9001,
-            Quantity = 2                        
+            Quantity = 2
         };
 
         List<StockDto> _expectedListOfStocksDto = new List<StockDto>();
@@ -449,7 +455,7 @@ public class StockPortfolioManagementBLTest
         _mockRepo.Setup(repo => repo.GetUserStockOrders(1)).Returns(_expectedListOfStockOrderHistoryDto);
         _mockRepo.Setup(repo => repo.GetUserStockAssets(1)).Returns(_expectedListOfStocksAssetsDto);
         IStockPortfolioManagementBL _stockBL = new StockPortfolioManagementBL(_mockRepo.Object);
- 
+
         //Act & Assert
         Assert.Throws<Exception>(() => _stockBL.GetUserStocksFromOrderHistory(1));
     }
@@ -490,7 +496,7 @@ public class StockPortfolioManagementBLTest
 
         //Act
         bool _result = _stockBL.CheckDuplicateStock("NotADupe");
-        
+
         //Assert
         Assert.True(_result);
     }
@@ -528,7 +534,7 @@ public class StockPortfolioManagementBLTest
         IStockPortfolioManagementBL _stockBL = new StockPortfolioManagementBL(_mockRepo.Object);
 
         //Act & Assert 
-        Assert.Throws<Exception>( ()=> _stockBL.CheckDuplicateStock("Rhongobongo") );
+        Assert.Throws<Exception>(() => _stockBL.CheckDuplicateStock("Rhongobongo"));
     }
 
     [Fact]
@@ -565,7 +571,7 @@ public class StockPortfolioManagementBLTest
 
         //Act
         int _result = _stockBL.GetStockIdFromName("Rhongobongo");
-        
+
         //Assert
         Assert.Equal(1, _result);
     }
@@ -603,9 +609,9 @@ public class StockPortfolioManagementBLTest
         IStockPortfolioManagementBL _stockBL = new StockPortfolioManagementBL(_mockRepo.Object);
 
         //Act & Assert 
-        Assert.Throws<Exception>( ()=> _stockBL.GetStockIdFromName("NonexistantStock") );
+        Assert.Throws<Exception>(() => _stockBL.GetStockIdFromName("NonexistantStock"));
     }
-    
+
 
 
     [Fact]
@@ -633,7 +639,8 @@ public class StockPortfolioManagementBLTest
             ShortenedName = "RHBO"
         };
 
-        StockOrderHistory _testStockOrderHistory = new StockOrderHistory{
+        StockOrderHistory _testStockOrderHistory = new StockOrderHistory
+        {
             StockOrderId = 1,
             UserId = 1,
             StockId = 1,
@@ -643,7 +650,8 @@ public class StockPortfolioManagementBLTest
             OrderTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time"))
         };
 
-        StockOrderHistoryDto _testStockOrderHistoryDto = new StockOrderHistoryDto{
+        StockOrderHistoryDto _testStockOrderHistoryDto = new StockOrderHistoryDto
+        {
             StockOrderId = 1,
             UserId = 1,
             StockId = 1,
@@ -653,7 +661,7 @@ public class StockPortfolioManagementBLTest
             OrderTime = _testStockOrderHistory.OrderTime
         };
 
-        
+
 
         List<StockDto> _expectedListOfStocksDto = new List<StockDto>();
         _expectedListOfStocksDto.Add(_testStockDto);
@@ -668,7 +676,7 @@ public class StockPortfolioManagementBLTest
 
         //Act
         List<StockOrderHistoryDto> _actualListOfStockDto = _stockBL.GetAllStockOrderHistories();
-        
+
         //Assert
         Assert.Same(_expectedListOfStockOrderHistoryDto, _actualListOfStockDto);
     }
@@ -677,7 +685,8 @@ public class StockPortfolioManagementBLTest
     public void Should_Fail_Get_All_Stock_Order_History()
     {
 
-        StockOrderHistory _testStockOrderHistory = new StockOrderHistory{
+        StockOrderHistory _testStockOrderHistory = new StockOrderHistory
+        {
             StockOrderId = 1,
             UserId = 1,
             StockId = 1,
@@ -687,7 +696,8 @@ public class StockPortfolioManagementBLTest
             OrderTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time"))
         };
 
-        StockOrderHistoryDto _testStockOrderHistoryDto = new StockOrderHistoryDto{
+        StockOrderHistoryDto _testStockOrderHistoryDto = new StockOrderHistoryDto
+        {
             StockOrderId = 1,
             UserId = 1,
             StockId = 1,
@@ -698,13 +708,13 @@ public class StockPortfolioManagementBLTest
         };
 
         List<StockOrderHistoryDto> _expectedListOfStockOrderHistoryDto = new List<StockOrderHistoryDto>();
-        
+
         Mock<IStockPortfolioManagementDL> _mockRepo = new Mock<IStockPortfolioManagementDL>();
         _mockRepo.Setup(repo => repo.GetAllStockOrderHistory()).Returns(_expectedListOfStockOrderHistoryDto);
         IStockPortfolioManagementBL _stockBL = new StockPortfolioManagementBL(_mockRepo.Object);
- 
+
         //Act & Assert
-        Assert.Throws<Exception>(() => _stockBL.GetAllStockOrderHistories() );
+        Assert.Throws<Exception>(() => _stockBL.GetAllStockOrderHistories());
     }
 
     [Fact]
@@ -721,7 +731,7 @@ public class StockPortfolioManagementBLTest
             BuyDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time")),
             StopLoss = 0,
             TakeProfit = 9001,
-            Quantity = 2                        
+            Quantity = 2
         };
 
         StockAssetDto _testStockAssetDto = new StockAssetDto
@@ -733,7 +743,7 @@ public class StockPortfolioManagementBLTest
             BuyDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time")),
             StopLoss = 0,
             TakeProfit = 9001,
-            Quantity = 2                        
+            Quantity = 2
         };
 
         List<StockAssetDto> _expectedListOfStocksAssetsDto = new List<StockAssetDto>();
@@ -745,50 +755,50 @@ public class StockPortfolioManagementBLTest
 
         //Act
         List<StockAssetDto> _actualListOfStockAssetsDto = _stockBL.GetAllStockAssets();
-        
+
         //Assert
         Assert.Same(_expectedListOfStocksAssetsDto, _actualListOfStockAssetsDto);
     }
-/*
-    [Fact]
-    public void Should_Fail_Get_All_Stock_Assets()
-    {
-        //Arrange
-
-        StockAsset _testStockAsset = new StockAsset
+    /*
+        [Fact]
+        public void Should_Fail_Get_All_Stock_Assets()
         {
-            StockAssetId = 1,
-            StockId = 1,
-            UserId = 1,
-            BuyPrice = 100,
-            BuyDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time")),
-            StopLoss = 0,
-            TakeProfit = 9001,
-            Quantity = 2                        
-        };
+            //Arrange
 
-        StockAssetDto _testStockAssetDto = new StockAssetDto
-        {
-            StockAssetId = 1,
-            StockId = 1,
-            UserId = 1,
-            BuyPrice = 100,
-            BuyDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time")),
-            StopLoss = 0,
-            TakeProfit = 9001,
-            Quantity = 2                        
-        };
+            StockAsset _testStockAsset = new StockAsset
+            {
+                StockAssetId = 1,
+                StockId = 1,
+                UserId = 1,
+                BuyPrice = 100,
+                BuyDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time")),
+                StopLoss = 0,
+                TakeProfit = 9001,
+                Quantity = 2                        
+            };
 
-        List<StockAssetDto> _expectedListOfStocksAssetsDto = new List<StockAssetDto>();
-        
-        Mock<IStockPortfolioManagementDL> _mockRepo = new Mock<IStockPortfolioManagementDL>();
-        _mockRepo.Setup(repo => repo.GetAllStockAssets()).Returns(_expectedListOfStocksAssetsDto);
-        IStockPortfolioManagementBL _stockBL = new StockPortfolioManagementBL(_mockRepo.Object);
+            StockAssetDto _testStockAssetDto = new StockAssetDto
+            {
+                StockAssetId = 1,
+                StockId = 1,
+                UserId = 1,
+                BuyPrice = 100,
+                BuyDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time")),
+                StopLoss = 0,
+                TakeProfit = 9001,
+                Quantity = 2                        
+            };
 
-        //Act & Assert
-        Assert.Throws<Exception>( () => _stockBL.GetAllStockAssets());
-    }
-*/
+            List<StockAssetDto> _expectedListOfStocksAssetsDto = new List<StockAssetDto>();
+
+            Mock<IStockPortfolioManagementDL> _mockRepo = new Mock<IStockPortfolioManagementDL>();
+            _mockRepo.Setup(repo => repo.GetAllStockAssets()).Returns(_expectedListOfStocksAssetsDto);
+            IStockPortfolioManagementBL _stockBL = new StockPortfolioManagementBL(_mockRepo.Object);
+
+            //Act & Assert
+            Assert.Throws<Exception>( () => _stockBL.GetAllStockAssets());
+        }
+    */
     [Fact]
     public void Should_Get_User_Stock_Assets()
     {
@@ -803,7 +813,7 @@ public class StockPortfolioManagementBLTest
             BuyDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time")),
             StopLoss = 0,
             TakeProfit = 9001,
-            Quantity = 2                        
+            Quantity = 2
         };
 
         StockAssetDto _testStockAssetDto = new StockAssetDto
@@ -815,7 +825,7 @@ public class StockPortfolioManagementBLTest
             BuyDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time")),
             StopLoss = 0,
             TakeProfit = 9001,
-            Quantity = 2                        
+            Quantity = 2
         };
 
         List<StockAssetDto> _expectedListOfStocksAssetsDto = new List<StockAssetDto>();
@@ -827,74 +837,74 @@ public class StockPortfolioManagementBLTest
 
         //Act
         List<StockAssetDto> _actualListOfStockAssetsDto = _stockBL.GetUserStockAssets(1);
-        
+
         //Assert
         Assert.Same(_expectedListOfStocksAssetsDto, _actualListOfStockAssetsDto);
     }
-/*
-    [Fact]
-    public void Should_Fail_Get_User_Stock_Assets()
-    {
-        //Arrange
-        Stock _testStock = new Stock
+    /*
+        [Fact]
+        public void Should_Fail_Get_User_Stock_Assets()
         {
-            StockId = 1,
-            CurrentPrice = 100,
-            LastUpdate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time")),
-            PriceChange = 1,
-            PriceChangePercentage = 1,
-            Name = "Rhongobongo",
-            ShortenedName = "RHBO"
-        };
-        StockDto _testStockDto = new StockDto
-        {
-            StockId = 1,
-            CurrentPrice = 100,
-            LastUpdate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time")),
-            PriceChange = 1,
-            PriceChangePercentage = 1,
-            Name = "Rhongobongo",
-            ShortenedName = "RHBO"
-        };
-        StockAsset _testStockAsset = new StockAsset
-        {
-            StockAssetId = 1,
-            StockId = 1,
-            UserId = 1,
-            BuyPrice = 100,
-            BuyDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time")),
-            StopLoss = 0,
-            TakeProfit = 9001,
-            Quantity = 2                        
-        }; 
+            //Arrange
+            Stock _testStock = new Stock
+            {
+                StockId = 1,
+                CurrentPrice = 100,
+                LastUpdate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time")),
+                PriceChange = 1,
+                PriceChangePercentage = 1,
+                Name = "Rhongobongo",
+                ShortenedName = "RHBO"
+            };
+            StockDto _testStockDto = new StockDto
+            {
+                StockId = 1,
+                CurrentPrice = 100,
+                LastUpdate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time")),
+                PriceChange = 1,
+                PriceChangePercentage = 1,
+                Name = "Rhongobongo",
+                ShortenedName = "RHBO"
+            };
+            StockAsset _testStockAsset = new StockAsset
+            {
+                StockAssetId = 1,
+                StockId = 1,
+                UserId = 1,
+                BuyPrice = 100,
+                BuyDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time")),
+                StopLoss = 0,
+                TakeProfit = 9001,
+                Quantity = 2                        
+            }; 
 
-        StockAssetDto _testStockAssetDto = new StockAssetDto
-        {
-            StockAssetId = 1,
-            StockId = 1,
-            UserId = 1,
-            BuyPrice = 100,
-            BuyDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time")),
-            StopLoss = 0,
-            TakeProfit = 9001,
-            Quantity = 2                        
-        }; 
+            StockAssetDto _testStockAssetDto = new StockAssetDto
+            {
+                StockAssetId = 1,
+                StockId = 1,
+                UserId = 1,
+                BuyPrice = 100,
+                BuyDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time")),
+                StopLoss = 0,
+                TakeProfit = 9001,
+                Quantity = 2                        
+            }; 
 
 
-        List<StockDto> _expectedListOfStocksDto = new List<StockDto>();
-        _expectedListOfStocksDto.Add(_testStockDto);
+            List<StockDto> _expectedListOfStocksDto = new List<StockDto>();
+            _expectedListOfStocksDto.Add(_testStockDto);
 
-        List<StockAssetDto> _expectedListOfStocksAssetsDto = new List<StockAssetDto>();
-        
-        Mock<IStockPortfolioManagementDL> _mockRepo = new Mock<IStockPortfolioManagementDL>();
-        _mockRepo.Setup(repo => repo.GetAllStocks()).Returns(_expectedListOfStocksDto);
-        _mockRepo.Setup(repo => repo.GetUserStockAssets(1)).Returns(_expectedListOfStocksAssetsDto);
-        IStockPortfolioManagementBL _stockBL = new StockPortfolioManagementBL(_mockRepo.Object);
+            List<StockAssetDto> _expectedListOfStocksAssetsDto = new List<StockAssetDto>();
 
-        //Act & Assert
-        Assert.Throws<Exception>( () => _stockBL.GetUserStockAssets(1));
-    }
-*/
+            Mock<IStockPortfolioManagementDL> _mockRepo = new Mock<IStockPortfolioManagementDL>();
+            _mockRepo.Setup(repo => repo.GetAllStocks()).Returns(_expectedListOfStocksDto);
+            _mockRepo.Setup(repo => repo.GetUserStockAssets(1)).Returns(_expectedListOfStocksAssetsDto);
+            IStockPortfolioManagementBL _stockBL = new StockPortfolioManagementBL(_mockRepo.Object);
+
+            //Act & Assert
+            Assert.Throws<Exception>( () => _stockBL.GetUserStockAssets(1));
+        }
+    */
     [Fact]
     public void Should_Get_User_Stock_Investment_Sum()
     {
@@ -909,7 +919,7 @@ public class StockPortfolioManagementBLTest
             BuyDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time")),
             StopLoss = 0,
             TakeProfit = 9001,
-            Quantity = 2                        
+            Quantity = 2
         };
 
         StockAssetDto _testStockAssetDto = new StockAssetDto
@@ -921,7 +931,7 @@ public class StockPortfolioManagementBLTest
             BuyDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time")),
             StopLoss = 0,
             TakeProfit = 9001,
-            Quantity = 2                        
+            Quantity = 2
         };
 
         List<StockAssetDto> _expectedListOfStocksAssetsDto = new List<StockAssetDto>();
@@ -933,48 +943,48 @@ public class StockPortfolioManagementBLTest
 
         //Act
         decimal _result = _stockBL.GetUserStockInvestmentSum(1);
-        
+
         //Assert
         Assert.Equal(200, _result);
     }
 
-    
-/*
-    [Fact]
-    public void Should_Fail_Get_A_Stock_From_Stock_Id()
-    {
-        //Arrange
-        Stock _testStock = new Stock
+
+    /*
+        [Fact]
+        public void Should_Fail_Get_A_Stock_From_Stock_Id()
         {
-            StockId = 1,
-            CurrentPrice = 100,
-            LastUpdate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time")),
-            PriceChange = 1,
-            PriceChangePercentage = 1,
-            Name = "Rhongobongo",
-            ShortenedName = "RHBO"
-        };
-        StockDto _testStockDto = new StockDto
-        {
-            StockId = 1,
-            CurrentPrice = 100,
-            LastUpdate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time")),
-            PriceChange = 1,
-            PriceChangePercentage = 1,
-            Name = "Rhongobongo",
-            ShortenedName = "RHBO"
-        };
+            //Arrange
+            Stock _testStock = new Stock
+            {
+                StockId = 1,
+                CurrentPrice = 100,
+                LastUpdate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time")),
+                PriceChange = 1,
+                PriceChangePercentage = 1,
+                Name = "Rhongobongo",
+                ShortenedName = "RHBO"
+            };
+            StockDto _testStockDto = new StockDto
+            {
+                StockId = 1,
+                CurrentPrice = 100,
+                LastUpdate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time")),
+                PriceChange = 1,
+                PriceChangePercentage = 1,
+                Name = "Rhongobongo",
+                ShortenedName = "RHBO"
+            };
 
-        List<StockDto> _expectedListOfStocksDto = new List<StockDto>();
-        _expectedListOfStocksDto.Add(_testStockDto);
+            List<StockDto> _expectedListOfStocksDto = new List<StockDto>();
+            _expectedListOfStocksDto.Add(_testStockDto);
 
-        Mock<IStockPortfolioManagementDL> _mockRepo = new Mock<IStockPortfolioManagementDL>();
-        _mockRepo.Setup(repo => repo.GetAStockFromStockId(1)).Returns(_testStockDto);
-        IStockPortfolioManagementBL _stockBL = new StockPortfolioManagementBL(_mockRepo.Object);
+            Mock<IStockPortfolioManagementDL> _mockRepo = new Mock<IStockPortfolioManagementDL>();
+            _mockRepo.Setup(repo => repo.GetAStockFromStockId(1)).Returns(_testStockDto);
+            IStockPortfolioManagementBL _stockBL = new StockPortfolioManagementBL(_mockRepo.Object);
 
-        //Act & Assert
-        Assert.Throws<Exception>( () => _stockBL.GetAStockFromId(3) );
-    }*/
+            //Act & Assert
+            Assert.Throws<Exception>( () => _stockBL.GetAStockFromId(3) );
+        }*/
 
 
 

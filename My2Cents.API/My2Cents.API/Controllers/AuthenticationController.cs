@@ -70,7 +70,7 @@ namespace My2Cents.API.Controllers
 
                 var callback = QueryHelpers.AddQueryString(registerFrom.ClientURI, param);
 
-                _emailSender.SendEmailAsync(_identity.Email, "Email Confirmation", EmailContent(registerFrom.ClientURI, callback));
+                await _emailSender.SendEmailAsync(_identity.Email, "Email Confirmation", EmailContent(registerFrom.ClientURI, callback));
 
                 var roles = await _userManager.GetRolesAsync(userFromDB);
                 return Created("Register successful!", new { Result = "Register successful! Please verify your email!" });
@@ -110,11 +110,42 @@ namespace My2Cents.API.Controllers
                 return BadRequest(new { Result = "Login Failed! Password didn't matched in the database!" });
             }
 
+            return await GenerateOTPFor2StepVerification(userFromDB);
+        }
+
+        private async Task<IActionResult> GenerateOTPFor2StepVerification(ApplicationUser user)
+        {
+            var providers = await _userManager.GetValidTwoFactorProvidersAsync(user);
+            if (!providers.Contains("Email"))
+            {
+                return Unauthorized(new { Result = "Invalid 2-Step Verification Provider." });
+            }
+
+            var token = await _userManager.GenerateTwoFactorTokenAsync(user, "Email");
+            await _emailSender.SendEmailAsync(user.Email, "Authentication Token", token);
+
+            return Ok();
+        }
+
+        [HttpPost("TwoStepVerification")]
+        public async Task<IActionResult> TwoStepVerification([FromBody] TwoFactorDto twoFactorDto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest();
+
+            var userFromDB = await _userManager.FindByNameAsync(twoFactorDto.Email);
+            if (userFromDB == null)
+                return BadRequest("Invalid Request");
+
+            var validVerification = await _userManager.VerifyTwoFactorTokenAsync(userFromDB, twoFactorDto.Provider, twoFactorDto.Token);
+            if (!validVerification)
+                return BadRequest("Invalid Token Verification");
+
             var roles = await _userManager.GetRolesAsync(userFromDB);
 
             return Ok(new
             {
-                Result = result,
+                Result = validVerification,
                 UserId = userFromDB.Id,
                 Username = userFromDB.UserName,
                 Email = userFromDB.Email,
@@ -136,6 +167,8 @@ namespace My2Cents.API.Controllers
             {
                 return BadRequest(new { Results = "Invalid Email Confirmation Request! Your token is not valid! Please request a new one!" });
             }
+
+            await _userManager.SetTwoFactorEnabledAsync(userFromDB, true);
 
             return Ok();
         }

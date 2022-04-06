@@ -28,7 +28,7 @@ namespace My2Cents.DatabaseManagement.Implements
                                                 Name = p.Name,
                                                 ShortenedName = p.ShortenedName
                                             }).ToList();
-            if(!_result.Any())
+            if (!_result.Any())
             {
                 throw new Exception("Stocks Asset DNE");
             }
@@ -51,7 +51,7 @@ namespace My2Cents.DatabaseManagement.Implements
                                             Name = p.Name,
                                             ShortenedName = p.ShortenedName
                                         }).FirstOrDefault(s => s.StockId == stockId);
-            if(_result == null)
+            if (_result == null)
             {
                 throw new Exception("Stocks Asset DNE");
             }
@@ -74,7 +74,7 @@ namespace My2Cents.DatabaseManagement.Implements
                                             Name = p.Name,
                                             ShortenedName = p.ShortenedName
                                         }).FirstOrDefault(s => s.Name == stockName);
-            if(_result == null)
+            if (_result == null)
             {
                 throw new Exception("Stocks Asset DNE");
             }
@@ -97,7 +97,7 @@ namespace My2Cents.DatabaseManagement.Implements
                                                             OrderType = p.OrderType,
                                                             OrderTime = p.OrderTime
                                                         }).ToList();
-            if(!_result.Any())
+            if (!_result.Any())
             {
                 throw new Exception("Stocks Asset DNE");
             }
@@ -121,7 +121,7 @@ namespace My2Cents.DatabaseManagement.Implements
                                                             OrderType = p.OrderType,
                                                             OrderTime = p.OrderTime
                                                         }).ToList();
-            if(!_result.Any())
+            if (!_result.Any())
             {
                 throw new Exception("Stocks Asset DNE");
             }
@@ -145,7 +145,7 @@ namespace My2Cents.DatabaseManagement.Implements
                                                         TakeProfit = p.TakeProfit,
                                                         Quantity = p.Quantity
                                                     }).ToList();
-            if(!_result.Any())
+            if (!_result.Any())
             {
                 throw new Exception("Stocks Asset DNE");
             }
@@ -169,7 +169,7 @@ namespace My2Cents.DatabaseManagement.Implements
                                                         TakeProfit = p.TakeProfit,
                                                         Quantity = p.Quantity
                                                     }).ToList();
-            if(!_result.Any())
+            if (!_result.Any())
             {
                 throw new Exception("Stocks Asset DNE");
             }
@@ -181,7 +181,8 @@ namespace My2Cents.DatabaseManagement.Implements
 
         private StockDto StockToDto(Stock c_stock)
         {
-            StockDto _stockDto = new StockDto(){
+            StockDto _stockDto = new StockDto()
+            {
                 StockId = c_stock.StockId,
                 CurrentPrice = c_stock.CurrentPrice,
                 LastUpdate = c_stock.LastUpdate,
@@ -193,7 +194,8 @@ namespace My2Cents.DatabaseManagement.Implements
         }
         private StockOrderHistoryDto OrderHistoryToDto(StockOrderHistory c_stockOrderHistory)
         {
-            StockOrderHistoryDto _stockOrderHistoryDto = new StockOrderHistoryDto(){
+            StockOrderHistoryDto _stockOrderHistoryDto = new StockOrderHistoryDto()
+            {
                 StockOrderId = c_stockOrderHistory.StockOrderId,
                 UserId = c_stockOrderHistory.UserId,
                 OrderPrice = c_stockOrderHistory.OrderPrice,
@@ -207,7 +209,8 @@ namespace My2Cents.DatabaseManagement.Implements
 
         private StockAssetDto StockAssetToDto(StockAsset a_stockAsset)
         {
-            StockAssetDto _stockAssetDto = new StockAssetDto(){
+            StockAssetDto _stockAssetDto = new StockAssetDto()
+            {
                 StockAssetId = a_stockAsset.StockAssetId,
                 StockId = a_stockAsset.StockId,
                 UserId = a_stockAsset.UserId,
@@ -225,8 +228,7 @@ namespace My2Cents.DatabaseManagement.Implements
             decimal _result = _context.StockAssets
                                             .Where(s => s.UserId == userId)
                                             .Sum(i => i.BuyPrice);
-            return _result; 
+            return _result;
         }
-        
     }
 }
