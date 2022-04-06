@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using My2Cents.API.AuthenticationService.Interfaces;
 using My2Cents.API.AuthenticationService.Implements;
 using My2Cents.API.Middlewares.Implements;
+using Microsoft.AspNetCore.Identity;
 using My2Cents.Logic.Interfaces;
 using My2Cents.DatabaseManagement.Interfaces;
 using My2Cents.Logic.Implements;
@@ -27,12 +28,26 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<IAccessTokenManager, AccessTokenManager>();
 builder.Services.AddDistributedMemoryCache();
 
+builder.Services.AddTransient<IEmailSender, EmailSender>();
+
+builder.Services.ConfigureApplicationCookie(o =>
+{
+    o.ExpireTimeSpan = TimeSpan.FromDays(5);
+    o.SlidingExpiration = true;
+});
+
+builder.Services.Configure<DataProtectionTokenProviderOptions>(o =>
+       o.TokenLifespan = TimeSpan.FromHours(3));
+
 //Identity Role
 builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(x =>
 {
     x.User.RequireUniqueEmail = true;
+
+    x.SignIn.RequireConfirmedEmail = true;
 })
-.AddEntityFrameworkStores<My2CentsContext>();
+.AddEntityFrameworkStores<My2CentsContext>()
+.AddDefaultTokenProviders();
 
 //Authentication
 builder.Services.AddAuthentication(x =>
