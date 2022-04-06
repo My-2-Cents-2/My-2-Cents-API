@@ -73,14 +73,7 @@ namespace My2Cents.API.Controllers
                 _emailSender.SendEmailAsync(_identity.Email, "Email Confirmation", EmailContent(registerFrom.ClientURI, callback));
 
                 var roles = await _userManager.GetRolesAsync(userFromDB);
-                return Ok(new
-                {
-                    Result = result,
-                    UserId = userFromDB.Id,
-                    Username = userFromDB.UserName,
-                    Email = userFromDB.Email,
-                    Token = _accessTokenManager.GenerateToken(userFromDB, roles)
-                });
+                return Created("Register successful!", new { Result = "Register successful! Please verify your email!" });
             }
             else
             {
