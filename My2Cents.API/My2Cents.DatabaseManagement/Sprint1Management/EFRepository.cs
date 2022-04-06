@@ -178,7 +178,7 @@ namespace My2Cents.DatabaseManagement
             Account account = new()
             {
                 UserId = userId,
-                TotalBalance = 100,
+                TotalBalance = 100000,
                 AccountTypeId = accountTypeId,
                 Interest = 1
             };

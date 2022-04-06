@@ -135,11 +135,11 @@ namespace My2Cents.API.Controllers
 
             var userFromDB = await _userManager.FindByNameAsync(twoFactorDto.Email);
             if (userFromDB == null)
-                return BadRequest("Invalid Request");
+                return BadRequest(new { Result = "Invalid Request" });
 
             var validVerification = await _userManager.VerifyTwoFactorTokenAsync(userFromDB, twoFactorDto.Provider, twoFactorDto.Token);
             if (!validVerification)
-                return BadRequest("Invalid Token Verification");
+                return BadRequest(new { Result = "Invalid Token Verification" });
 
             var roles = await _userManager.GetRolesAsync(userFromDB);
 
