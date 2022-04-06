@@ -55,6 +55,6 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         shell: powershell
         run: |
-          .\.sonar\scanner\dotnet-sonarscanner begin /k:"My-2-Cents-2_My-2-Cents-API" /o:"my-2-cents-2" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.coverage.exclusions=**/My2Cents.API/wwwroot/lib/**,**/My2Cents.API/Program.cs,**/My2Cents.DatabaseManagement/**/*.cs,**/My2Cents.DataInfrastructure/ScaffoldModel/*.cs /d:sonar.cs.opencover.reportsPaths="D:\a\My-2-Cents-API\My-2-Cents-API\My2Cents.API\My2Cents.Test\coverage.opencover.xml"
+          .\.sonar\scanner\dotnet-sonarscanner begin /k:"My-2-Cents-2_My-2-Cents-API" /o:"my-2-cents-2" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.coverage.exclusions=**/My2Cents.API/wwwroot/lib/**,**/My2Cents.API/Program.cs,**/My2Cents.API/**/*.cs,**/My2Cents.DatabaseManagement/**/*.cs,**/My2Cents.DataInfrastructure/ScaffoldModel/*.cs /d:sonar.cs.opencover.reportsPaths="D:\a\My-2-Cents-API\My-2-Cents-API\My2Cents.API\My2Cents.Test\coverage.opencover.xml"
           dotnet build ./My2Cents.API/My2Cents.API.sln
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
