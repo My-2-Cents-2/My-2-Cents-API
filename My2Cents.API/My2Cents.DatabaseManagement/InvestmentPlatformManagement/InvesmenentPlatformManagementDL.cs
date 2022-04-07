@@ -209,7 +209,7 @@ namespace My2Cents.DatabaseManagement
             var _AccountTypeId = _context.AccountTypes.FirstOrDefault(p => p.AccountType1.Equals("Checking")).AccountTypeId;
             var _CurrentAccount = _context.Accounts.FirstOrDefault(p => p.UserId.Equals(_userID)
             && p.AccountTypeId.Equals(_AccountTypeId));
-            
+
             //Try to get the current Crypto if available
             var _currentCrypto = _context.CryptoAssets.FirstOrDefault(p => p.CryptoId.Equals(_cryptoID)
                                                                         && p.UserId.Equals(_userID));
@@ -251,7 +251,7 @@ namespace My2Cents.DatabaseManagement
                                                                                     && p.AccountTypeId.Equals(checkingacountID));
                 var _MoneySpent = amount * _context.Cryptos.FirstOrDefault(p => p.CryptoId == _cryptoID).CurrentPrice;
                 _CurrentAccount.TotalBalance += _MoneySpent;
-                
+
 
                 //COMMIT TRANSACTIONS
                 await _context.Database.CommitTransactionAsync();
@@ -384,44 +384,42 @@ namespace My2Cents.DatabaseManagement
 
         public async Task<List<CryptoDto>> UpdateCryptosData()
         {
-            string[] listCryptoID = { "bitcoin", "ethereum", "tether", "binancecoin" };
-            if (DateTime.UtcNow.Minute % 10 == 0)
+            var lastUpdateCrypto = _context.Cryptos.FirstOrDefault().LastUpdate;
+            if (lastUpdateCrypto.AddMinutes(10).CompareTo(DateTime.UtcNow) == -1)
             {
+                List<CoinMarkets> _listOfCoinMarkets = await GetCoinMarkets("usd", new string[] { }, "market_cap_desc", 50, 1, false, "1h", null);
 
-            }
-            List<CoinMarkets> _listOfCoinMarkets = await GetCoinMarkets("usd", new string[] { }, "market_cap_desc", 50, 1, false, "1h", null);
-
-
-            foreach (var crypto in _listOfCoinMarkets)
-            {
-                //Check if the the crypto is already in the database
-                var _currentcryto = _context.Cryptos.FirstOrDefault(p => p.Name.Equals(crypto.Name));
-                DateTimeOffset _dateTime = crypto.LastUpdated;
-                //If not in the database, add it
-                if (_currentcryto == null)
+                foreach (var crypto in _listOfCoinMarkets)
                 {
-                    await _context.Cryptos.AddAsync(new Crypto()
+                    //Check if the the crypto is already in the database
+                    var _currentcryto = _context.Cryptos.FirstOrDefault(p => p.Name.Equals(crypto.Name));
+                    DateTimeOffset _dateTime = crypto.LastUpdated;
+                    //If not in the database, add it
+                    if (_currentcryto == null)
                     {
-                        CurrentPrice = crypto.CurrentPrice,
-                        LastUpdate = _dateTime.DateTime,
-                        Name = crypto.Name,
-                        PriceChange = crypto.PriceChange24H,
-                        PriceChangePercentage = crypto.PriceChangePercentage24H,
-                        ImageURL = crypto.Image.ToString(),
-                        ShortenedName = crypto.Symbol,
-                        CryptoNameId = crypto.Id
-                    });
-                    await _context.SaveChangesAsync();
-                }
-                else
-                {
-                    _currentcryto.CurrentPrice = crypto.CurrentPrice;
-                    _currentcryto.LastUpdate = _dateTime.DateTime;
-                    _currentcryto.PriceChange = crypto.PriceChange24H;
-                    _currentcryto.PriceChangePercentage = crypto.PriceChangePercentage24H;
-                    _currentcryto.CryptoNameId = crypto.Id;
-                    _currentcryto.ImageURL = crypto.Image.ToString();
-                    await _context.SaveChangesAsync();
+                        await _context.Cryptos.AddAsync(new Crypto()
+                        {
+                            CurrentPrice = crypto.CurrentPrice,
+                            LastUpdate = _dateTime.DateTime,
+                            Name = crypto.Name,
+                            PriceChange = crypto.PriceChange24H,
+                            PriceChangePercentage = crypto.PriceChangePercentage24H,
+                            ImageURL = crypto.Image.ToString(),
+                            ShortenedName = crypto.Symbol,
+                            CryptoNameId = crypto.Id
+                        });
+                        await _context.SaveChangesAsync();
+                    }
+                    else
+                    {
+                        _currentcryto.CurrentPrice = crypto.CurrentPrice;
+                        _currentcryto.LastUpdate = _dateTime.DateTime;
+                        _currentcryto.PriceChange = crypto.PriceChange24H;
+                        _currentcryto.PriceChangePercentage = crypto.PriceChangePercentage24H;
+                        _currentcryto.CryptoNameId = crypto.Id;
+                        _currentcryto.ImageURL = crypto.Image.ToString();
+                        await _context.SaveChangesAsync();
+                    }
                 }
             }
 
@@ -518,38 +516,38 @@ namespace My2Cents.DatabaseManagement
 
         public async Task<List<StockDto>> UpdateStocksData()
         {
-            var _lastUpdated = _context.Stocks.FirstOrDefault().LastUpdate;
-            _lastUpdated = _lastUpdated.AddHours(1);
-            var _currentTime = DateTime.UtcNow;
-            //if (DateTime.UtcNow.Minute == 0 || _lastUpdated.CompareTo(_currentTime) == 1){
-            string stockList = "TSLA,AAPL,AMZN,MSFT,NIO,NVDA,MRNA,NKLA,FB,AMD";
-            List<MarketDataStock> _listOfStockMarkets = await GetStockMarket(new string[] { }, new string[] { }, stockList);
-            foreach (var stock in _listOfStockMarkets[0].Datas)
+            var lastUpdateStock = _context.Stocks.FirstOrDefault().LastUpdate;
+            if (lastUpdateStock.AddMinutes(10).CompareTo(DateTime.UtcNow) == -1)
             {
-                //Check if stock is already in the database
-                var _currentStock = _context.Stocks.FirstOrDefault(p => p.Name.Equals(stock.Attributes.LongName));
+                string stockList = "TSLA,AAPL,AMZN,MSFT,NIO,NVDA,MRNA,NKLA,FB,AMD";
+                List<MarketDataStock> _listOfStockMarkets = await GetStockMarket(new string[] { }, new string[] { }, stockList);
+                foreach (var stock in _listOfStockMarkets[0].Datas)
+                {
+                    //Check if stock is already in the database
+                    var _currentStock = _context.Stocks.FirstOrDefault(p => p.Name.Equals(stock.Attributes.LongName));
 
-                //If not in database, add it
-                if (_currentStock == null)
-                {
-                    _context.Stocks.Add(new Stock()
+                    //If not in database, add it
+                    if (_currentStock == null)
                     {
-                        CurrentPrice = stock.Attributes.RegMarketPrice,
-                        Name = stock.Attributes.LongName,
-                        ShortenedName = stock.ID,
-                        PriceChange = stock.Attributes.RegMarketChange,
-                        PriceChangePercentage = stock.Attributes.RegMarketChangePecent,
-                        LastUpdate = DateTime.UtcNow
-                    });
-                    _context.SaveChanges();
-                }
-                else
-                {
-                    _currentStock.CurrentPrice = stock.Attributes.RegMarketPrice;
-                    _currentStock.PriceChange = stock.Attributes.RegMarketChange;
-                    _currentStock.PriceChangePercentage = stock.Attributes.RegMarketChangePecent;
-                    _currentStock.LastUpdate = DateTime.UtcNow;
-                    _context.SaveChanges();
+                        _context.Stocks.Add(new Stock()
+                        {
+                            CurrentPrice = stock.Attributes.RegMarketPrice,
+                            Name = stock.Attributes.LongName,
+                            ShortenedName = stock.ID,
+                            PriceChange = stock.Attributes.RegMarketChange,
+                            PriceChangePercentage = stock.Attributes.RegMarketChangePecent,
+                            LastUpdate = DateTime.UtcNow
+                        });
+                        _context.SaveChanges();
+                    }
+                    else
+                    {
+                        _currentStock.CurrentPrice = stock.Attributes.RegMarketPrice;
+                        _currentStock.PriceChange = stock.Attributes.RegMarketChange;
+                        _currentStock.PriceChangePercentage = stock.Attributes.RegMarketChangePecent;
+                        _currentStock.LastUpdate = DateTime.UtcNow;
+                        _context.SaveChanges();
+                    }
                 }
             }
 
