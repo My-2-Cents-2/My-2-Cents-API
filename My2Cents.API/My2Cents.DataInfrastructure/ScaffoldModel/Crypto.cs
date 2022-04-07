@@ -19,6 +19,8 @@ namespace My2Cents.DataInfrastructure
         public double PriceChangePercentage { get; set; }
         public string Name { get; set; } = null!;
         public string ShortenedName { get; set; } = null!;
+        public string CryptoNameId { get; set; }
+
 
         public virtual ICollection<CryptoAsset> CryptoAssets { get; set; }
         public virtual ICollection<CryptoOrderHistory> CryptoOrderHistories { get; set; }

@@ -28,6 +28,7 @@ namespace My2Cents.Test
             var transactionDto = new List<TransactionDto>();
             TransactionDto T = new TransactionDto();
             transactionDto.Add(new TransactionDto());
+            transactionDto[0].TransactionId = 1;
             transactionDto[0].AccountId = 1;
             transactionDto[0].Amount = 306;
             transactionDto[0].TransactionDate = DateTime.Now;

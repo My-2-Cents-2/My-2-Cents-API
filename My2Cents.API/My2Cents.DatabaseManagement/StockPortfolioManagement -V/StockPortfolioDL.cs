@@ -28,7 +28,7 @@ namespace My2Cents.DatabaseManagement.Implements
                                                 Name = p.Name,
                                                 ShortenedName = p.ShortenedName
                                             }).ToList();
-            if(!_result.Any())
+            if (!_result.Any())
             {
                 throw new Exception("Stocks Asset DNE");
             }
@@ -51,7 +51,7 @@ namespace My2Cents.DatabaseManagement.Implements
                                             Name = p.Name,
                                             ShortenedName = p.ShortenedName
                                         }).FirstOrDefault(s => s.StockId == stockId);
-            if(_result == null)
+            if (_result == null)
             {
                 throw new Exception("Stocks Asset DNE");
             }
@@ -74,7 +74,7 @@ namespace My2Cents.DatabaseManagement.Implements
                                             Name = p.Name,
                                             ShortenedName = p.ShortenedName
                                         }).FirstOrDefault(s => s.Name == stockName);
-            if(_result == null)
+            if (_result == null)
             {
                 throw new Exception("Stocks Asset DNE");
             }
@@ -84,60 +84,6 @@ namespace My2Cents.DatabaseManagement.Implements
             }
         }
 
-/*
-        public StockDto UpdateStock(Stock s_stock)
-        {
-            Stock stockToUpdate = _context.Stocks.Where(g => g.StockId == s_stock.StockId).FirstOrDefault();
-            if (stockToUpdate != null)
-            {
-                if (stockToUpdate.CurrentPrice != s_stock.CurrentPrice)
-                    stockToUpdate.LastUpdate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time"));
-                if (s_stock.CurrentPrice != null)
-                    stockToUpdate.CurrentPrice = s_stock.CurrentPrice;
-                //if (s_stock.Name != "")
-                //    stockToUpdate.Name = s_stock.Name;
-                //stockToUpdate.ShortenedName = s_stock.ShortenedName;
-            }
-            else
-            {
-                throw new Exception("No stock able to update");
-            }
-            _context.SaveChanges();
-
-            StockDto _result = StockToDto(stockToUpdate);
-            return _result;
-        }
-        public StockDto UpdateStockPrice(int stockId, decimal stockPrice)
-        {
-            Stock stockToUpdate = _context.Stocks.Where(g => g.StockId == stockId).FirstOrDefault();
-            if (stockToUpdate != null)
-            {
-                if(stockPrice == 0)
-                {
-                    throw new Exception("price cannot be changed to 0");
-                }
-                if(stockPrice < 0)
-                {
-                    throw new Exception("price cannot be less than 0");
-                }
-                if (stockToUpdate.CurrentPrice != stockPrice)
-                    stockToUpdate.LastUpdate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time"));
-                if (stockPrice != 0)
-                    stockToUpdate.CurrentPrice = stockPrice;
-                
-            }
-            else
-            {
-                throw new Exception("No stock able to update");
-            }
-
-            _context.SaveChanges();
-
-            StockDto _result = StockToDto(stockToUpdate);
-            return _result;
-        }
-
-*/
         public List<StockOrderHistoryDto> GetAllStockOrderHistory()
         {
             List<StockOrderHistoryDto> _result = _context.StockOrderHistories
@@ -151,7 +97,7 @@ namespace My2Cents.DatabaseManagement.Implements
                                                             OrderType = p.OrderType,
                                                             OrderTime = p.OrderTime
                                                         }).ToList();
-            if(!_result.Any())
+            if (!_result.Any())
             {
                 throw new Exception("Stocks Asset DNE");
             }
@@ -175,7 +121,7 @@ namespace My2Cents.DatabaseManagement.Implements
                                                             OrderType = p.OrderType,
                                                             OrderTime = p.OrderTime
                                                         }).ToList();
-            if(!_result.Any())
+            if (!_result.Any())
             {
                 throw new Exception("Stocks Asset DNE");
             }
@@ -199,7 +145,7 @@ namespace My2Cents.DatabaseManagement.Implements
                                                         TakeProfit = p.TakeProfit,
                                                         Quantity = p.Quantity
                                                     }).ToList();
-            if(!_result.Any())
+            if (!_result.Any())
             {
                 throw new Exception("Stocks Asset DNE");
             }
@@ -223,7 +169,7 @@ namespace My2Cents.DatabaseManagement.Implements
                                                         TakeProfit = p.TakeProfit,
                                                         Quantity = p.Quantity
                                                     }).ToList();
-            if(!_result.Any())
+            if (!_result.Any())
             {
                 throw new Exception("Stocks Asset DNE");
             }
@@ -233,26 +179,10 @@ namespace My2Cents.DatabaseManagement.Implements
             }
         }
 
-        // public StockAssetDto DeleteStockAsset(int stockAssetId)
-        // {
-        //     StockAsset stockAssetToRemove = _context.StockAssets.Where(s => (s.StockAssetId == stockAssetId)).FirstOrDefault();
-        //     if (stockAssetToRemove != null)
-        //     {
-        //         _context.Remove(stockAssetToRemove);
-        //         _context.SaveChanges();
-        //         StockAssetDto _result = StockAssetToDto(stockAssetToRemove);
-        //         return _result;
-        //     }
-        //     else
-        //     {
-        //         throw new Exception("Stock asset not found. Stock asset could not be deleted.");
-        //     }
-        // }
-
-
         private StockDto StockToDto(Stock c_stock)
         {
-            StockDto _stockDto = new StockDto(){
+            StockDto _stockDto = new StockDto()
+            {
                 StockId = c_stock.StockId,
                 CurrentPrice = c_stock.CurrentPrice,
                 LastUpdate = c_stock.LastUpdate,
@@ -264,7 +194,8 @@ namespace My2Cents.DatabaseManagement.Implements
         }
         private StockOrderHistoryDto OrderHistoryToDto(StockOrderHistory c_stockOrderHistory)
         {
-            StockOrderHistoryDto _stockOrderHistoryDto = new StockOrderHistoryDto(){
+            StockOrderHistoryDto _stockOrderHistoryDto = new StockOrderHistoryDto()
+            {
                 StockOrderId = c_stockOrderHistory.StockOrderId,
                 UserId = c_stockOrderHistory.UserId,
                 OrderPrice = c_stockOrderHistory.OrderPrice,
@@ -278,7 +209,8 @@ namespace My2Cents.DatabaseManagement.Implements
 
         private StockAssetDto StockAssetToDto(StockAsset a_stockAsset)
         {
-            StockAssetDto _stockAssetDto = new StockAssetDto(){
+            StockAssetDto _stockAssetDto = new StockAssetDto()
+            {
                 StockAssetId = a_stockAsset.StockAssetId,
                 StockId = a_stockAsset.StockId,
                 UserId = a_stockAsset.UserId,
@@ -296,8 +228,7 @@ namespace My2Cents.DatabaseManagement.Implements
             decimal _result = _context.StockAssets
                                             .Where(s => s.UserId == userId)
                                             .Sum(i => i.BuyPrice);
-            return _result; 
+            return _result;
         }
-        
     }
 }

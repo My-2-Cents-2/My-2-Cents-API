@@ -47,51 +47,6 @@ namespace My2Cents.API.Controllers
                 return NotFound(e.Message);
             }
         }
-/*
-        //PUT: api/Stock
-        [HttpPut(RouteConfigs.StockPortfolioStocks)]
-        public IActionResult UpdateStockPrice([FromQuery] string stockName, [FromQuery] decimal stockPrice)
-        {
-            try
-            {
-                var _result = _stockPortfolioBL.UpdateStockPrice(stockName, stockPrice);
-                //Log.Information("Stock Successfully updated");
-                return Ok("Stock Updated");
-            }
-            catch (System.Exception exe)
-            {
-                //Log.Warning("Route:" + RouteConfigs.Stock + ": " + exe.Message);
-                return BadRequest(exe.Message);
-            }
-        }
-*/
-
-//         // DELETE: api/Stock/5
-//         [HttpDelete(RouteConfigs.Stock)]
-//         public IActionResult DeleteStock(Guid StockID)
-//         {
-//             try
-//             {
-//                 Stock _stock = new Stock()
-//                 {
-//                     StockId = StockID.ToString(),
-//                     StockName = ""
-//                 };
-//                 _stockBL.DeleteStock(_stock);
-//                 Log.Information("Stock Successfully deleted");
-//                 return Ok("Stock Deleted");
-//             }
-//             catch (System.Exception exe)
-//             {
-//                 Log.Warning("Route:" + RouteConfigs.Stock + ": " + exe.Message);
-//                 return Conflict(exe.Message);
-//             }
-//         }
-
-
-
-
-        
 
         // GET: api/GroupPost
         [HttpGet(RouteConfigs.StockPortfolioOrders)]

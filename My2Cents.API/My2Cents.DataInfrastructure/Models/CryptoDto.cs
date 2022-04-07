@@ -10,5 +10,6 @@ namespace My2Cents.DataInfrastructure.Models
         public double PriceChangePercentage { get; set; }
         public string Name { get; set; } = null!;
         public string ShortenedName { get; set; } = null!;
+        public string CryptoNameId { get; set; }
     }
 }

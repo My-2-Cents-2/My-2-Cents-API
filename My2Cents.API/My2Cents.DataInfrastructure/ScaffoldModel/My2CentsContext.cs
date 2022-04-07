@@ -106,6 +106,8 @@ namespace My2Cents.DataInfrastructure
                 entity.Property(e => e.Name).HasMaxLength(255);
 
                 entity.Property(e => e.ShortenedName).HasMaxLength(255);
+
+                entity.Property(e => e.CryptoNameId).HasMaxLength(255);
             });
 
             modelBuilder.Entity<CryptoAsset>(entity =>

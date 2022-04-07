@@ -3,7 +3,6 @@ using My2Cents.DatabaseManagement.Implements;
 using My2Cents.Logic.Interfaces;
 using My2Cents.DataInfrastructure;
 using My2Cents.DataInfrastructure.Models;
-// using My2Cents.API.DataTransferObjects;
 
 namespace My2Cents.Logic.Implements
 {
@@ -41,6 +40,7 @@ namespace My2Cents.Logic.Implements
                 return allStocks;
             }
         }
+        
         public List<StockDto> GetUserStocks(int userId)
         {
             List<StockAssetDto> userAssets = _repo.GetUserStockAssets(userId);
@@ -74,18 +74,7 @@ namespace My2Cents.Logic.Implements
                 return userStocks.ToList();
             }
         }
-/*        public StockDto UpdateStockPrice(string stockName, decimal stockPrice)
-        {
-            try
-            {
-                int stockId = GetStockIdFromName(stockName);
-                return _repo.UpdateStockPrice(stockId, stockPrice);
-            }
-            catch (System.Exception exe)
-            {
-                throw new Exception(exe.Message);
-            }
-        }*/
+
         public bool CheckDuplicateStock(string stockName)
         {
             List<StockDto> _result = _repo.GetAllStocks();
@@ -98,6 +87,7 @@ namespace My2Cents.Logic.Implements
                 throw new Exception(stockName + " is a duplicate Stock");
             }
         }
+        
         public StockDto CheckStockId(int stockId)
         {
             List<StockDto> _result = _repo.GetAllStocks();
@@ -111,6 +101,7 @@ namespace My2Cents.Logic.Implements
                 return stock;
             }
         }
+        
         public int GetStockIdFromName(string stockName)
         {
             try
@@ -127,8 +118,6 @@ namespace My2Cents.Logic.Implements
             }
             
         }
-
-
 
         //StockOrderHistory
         public List<StockOrderHistoryDto> GetAllStockOrderHistories()
@@ -154,7 +143,6 @@ namespace My2Cents.Logic.Implements
                 throw new Exception(exe.Message);
             }
         }
-
         
         public List<StockAssetDto> GetAllStockAssets()
         {
@@ -167,6 +155,7 @@ namespace My2Cents.Logic.Implements
                 throw new Exception(exe.Message);
             }
         }
+        
         public List<StockAssetDto> GetUserStockAssets(int userId)
         {
             try

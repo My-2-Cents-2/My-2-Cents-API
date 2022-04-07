@@ -9,27 +9,6 @@ namespace My2Cents.Logic.Interfaces
         List<StockDto> GetAllStocks();
         List<StockDto> GetUserStocks(int userId);
         StockDto GetAStockFromId(int stockId);
-        /*
-        /// <summary>
-        /// gets stock info from the stock's name
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <returns></returns>
-        Task<Stock> GetStockFromName(string stockName);
-        */
-        
-/*        /// <summary>
-        /// updates the stock 
-        /// </summary>
-        /// <param name="s_stock"></param>
-        /// <returns></returns>
-        StockDto UpdateStockPrice(string stockName, decimal stockPrice); */
-
-        /// <summary>
-        /// deletes the stock
-        /// </summary>
-        /// <param name="stockId"></param>
-        /// <returns></returns>
         bool CheckDuplicateStock(string stockName);
         StockDto CheckStockId(int stockId);
         int GetStockIdFromName(string stockName);

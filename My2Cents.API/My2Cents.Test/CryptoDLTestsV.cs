@@ -91,33 +91,6 @@ namespace My2Cents.Test
             }
         }
 
-        /*[Fact]
-        void ShouldAddCrypto()
-        {
-            using (My2CentsContext context = new My2CentsContext(options))
-            {
-                //Arrange
-                string name = "dodgecoin";
-                decimal price = 200;
-                string namee = "BTC";
-                Crypto _newCrypto = new Crypto()
-                {
-                    Name=name,
-                    CurrentPrice=price,
-                    ShortenedName=namee
-                };
-
-                ICryptoPortfolioDL repo = new CryptoPortfolioDL(context);
-                //Act
-
-                repo.AddCrypto(_newCrypto);
-
-                //Assert
-                Crypto actualCrypto = context.Cryptos.First(c => c.Name == name);
-                Assert.Equal(price, actualCrypto.CurrentPrice);
-                Assert.Equal(namee, actualCrypto.ShortenedName);
-            }
-        }*/
 
         [Fact]
         void ShouldAddCryptoOrderHis()
@@ -198,6 +171,7 @@ namespace My2Cents.Test
                    new Crypto
                    {
                        CryptoId = 1,
+                       CryptoNameId = "bitcoin",
                        CurrentPrice = 100,
                        LastUpdate = System.DateTime.Now,
                        Name = "bitcoin",
@@ -207,6 +181,7 @@ namespace My2Cents.Test
                     new Crypto
                    {
                        CryptoId = 2,
+                       CryptoNameId = "ethereum",
                        CurrentPrice = 100,
                        LastUpdate = System.DateTime.Now,
                        Name = "ethereum",
